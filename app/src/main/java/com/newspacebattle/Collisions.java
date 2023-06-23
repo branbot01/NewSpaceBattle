@@ -38,6 +38,7 @@ class Collisions {
                 if (!GameScreen.paused) {
                     bulletCollision();
                     missileCollision();
+                    laserCollision();
                 } else {
                     Utilities.delay(50);
                 }
@@ -251,6 +252,23 @@ class Collisions {
                     if (GameScreen.missiles.get(ii).exists && GameScreen.missiles.get(ii).team != GameScreen.objects.get(i).team) {
                         if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, GameScreen.missiles.get(ii).centerPosX, GameScreen.missiles.get(ii).centerPosY) <= GameScreen.objects.get(i).radius + GameScreen.missiles.get(ii).radius) {
                             collisionEvent(GameScreen.objects.get(i), GameScreen.missiles.get(ii));
+                        }
+                    }
+                } catch (IndexOutOfBoundsException | NullPointerException e) {
+                    break;
+                }
+            }
+        }
+    }
+
+    //Runs through all missiles to see if they collide with any objects
+    private void laserCollision() {
+        for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
+            for (int ii = 0; ii <= GameScreen.lasers.size() - 1; ii++) {
+                try {
+                    if (GameScreen.lasers.get(ii).exists && GameScreen.lasers.get(ii).team != GameScreen.objects.get(i).team) {
+                        if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, GameScreen.lasers.get(ii).centerPosX, GameScreen.lasers.get(ii).centerPosY) <= GameScreen.objects.get(i).radius + GameScreen.lasers.get(ii).radius) {
+                            collisionEvent(GameScreen.objects.get(i), GameScreen.lasers.get(ii));
                         }
                     }
                 } catch (IndexOutOfBoundsException | NullPointerException e) {
