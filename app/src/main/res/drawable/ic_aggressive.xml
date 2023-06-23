@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="640"
+    android:viewportHeight="640"
+    android:width="640dp"
+    android:height="640dp">
+    <group>
+        <clip-path
+            android:pathData="M640 320C640 496.61 496.61 640 320 640 143.39 640 0 496.61 0 320 0 143.39 143.39 0 320 0 496.61 0 640 143.39 640 320Z" />
+        <path
+            android:pathData="M640 320C640 496.61 496.61 640 320 640 143.39 640 0 496.61 0 320 0 143.39 143.39 0 320 0 496.61 0 640 143.39 640 320Z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <group>
+        <clip-path
+            android:pathData="M590 320C590 469.02 469.02 590 320 590 170.98 590 50 469.02 50 320 50 170.98 170.98 50 320 50 469.02 50 590 170.98 590 320Z" />
+        <path
+            android:pathData="M590 320C590 469.02 469.02 590 320 590 170.98 590 50 469.02 50 320 50 170.98 170.98 50 320 50 469.02 50 590 170.98 590 320Z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <group>
+        <clip-path
+            android:pathData="M540 320c0 121.42 -98.58 220 -220 220 -121.42 0 -220 -98.58 -220 -220 0 -121.42 98.58 -220 220 -220 121.42 0 220 98.58 220 220z" />
+        <path
+            android:pathData="M540 320c0 121.42 -98.58 220 -220 220 -121.42 0 -220 -98.58 -220 -220 0 -121.42 98.58 -220 220 -220 121.42 0 220 98.58 220 220z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <group>
+        <clip-path
+            android:pathData="M490 320c0 93.83 -76.17 170 -170 170 -93.83 0 -170 -76.17 -170 -170 0 -93.83 76.17 -170 170 -170 93.83 0 170 76.17 170 170z" />
+        <path
+            android:pathData="M490 320c0 93.83 -76.17 170 -170 170 -93.83 0 -170 -76.17 -170 -170 0 -93.83 76.17 -170 170 -170 93.83 0 170 76.17 170 170z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <group>
+        <clip-path
+            android:pathData="M440 320c0 66.23 -53.77 120 -120 120 -66.23 0 -120 -53.77 -120 -120 0 -66.23 53.77 -120 120 -120 66.23 0 120 53.77 120 120z" />
+        <path
+            android:pathData="M440 320c0 66.23 -53.77 120 -120 120 -66.23 0 -120 -53.77 -120 -120 0 -66.23 53.77 -120 120 -120 66.23 0 120 53.77 120 120z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <group>
+        <clip-path
+            android:pathData="M390 320c0 38.63 -31.37 70 -70 70 -38.63 0 -70 -31.37 -70 -70 0 -38.63 31.37 -70 70 -70 38.63 0 70 31.37 70 70z" />
+        <path
+            android:pathData="M390 320c0 38.63 -31.37 70 -70 70 -38.63 0 -70 -31.37 -70 -70 0 -38.63 31.37 -70 70 -70 38.63 0 70 31.37 70 70z"
+            android:strokeWidth="50"
+            android:strokeColor="#ff0000" />
+    </group>
+    <path
+        android:pathData="M340 320c0 11.04 -8.96 20 -20 20 -11.03 0 -20 -8.96 -20 -20 0 -11.03 8.97 -20 20 -20 11.04 0 20 8.97 20 20z"
+        android:fillColor="#ff0000"
+        android:fillAlpha="0.76" />
+</vector>

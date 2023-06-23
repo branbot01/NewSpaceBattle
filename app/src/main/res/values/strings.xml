@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">NewSpaceBattle</string>
+    <string name="app_name">Space Battle</string>
+    <string name="play_button">PLAY</string>
+    <string name="start">Tap To Start</string>
+    <string name="next">NEXT</string>
+    <string name="SpecialOptions">SPECIAL</string>
+    <string name="NormalOptions">NORMAL</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="640"
+    android:viewportHeight="640"
+    android:width="640dp"
+    android:height="640dp">
+    <path
+        android:pathData="M640 320C640 496.61 496.62 640 320 640 143.39 640 0 496.61 0 320 0 143.39 143.39 0 320 0 496.62 0 640 143.39 640 320Z"
+        android:fillColor="#ff0000" />
+    <path
+        android:pathData="M590 320C590 469.02 469.01 590 320 590 170.98 590 50 469.02 50 320 50 170.99 170.98 50 320 50 469.01 50 590 170.99 590 320Z"
+        android:fillColor="#ffffff" />
+    <path
+        android:pathData="M299.09 0l50 0 0 640 -50 0 0 -640z"
+        android:fillColor="#ff0000" />
+    <path
+        android:pathData="M640 300l0 50 -640 0 0 -50 640 0z"
+        android:fillColor="#ff0000" />
+</vector>
