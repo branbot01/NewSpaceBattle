@@ -197,6 +197,18 @@ class Collisions {
                 }
             }
         }
+
+        for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
+            if (GameScreen.lasers.get(i).exists) {
+                if (GameScreen.lasers.get(i).centerPosX + GameScreen.lasers.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.lasers.get(i).centerPosX - GameScreen.lasers.get(i).radius <= -GameScreen.mapSizeX / 2) {
+                    GameScreen.lasers.get(i).impact(null);
+                }
+
+                if (GameScreen.lasers.get(i).centerPosY + GameScreen.lasers.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.lasers.get(i).centerPosY - GameScreen.lasers.get(i).radius <= -GameScreen.mapSizeY / 2) {
+                    GameScreen.lasers.get(i).impact(null);
+                }
+            }
+        }
     }
 
     //Runs through all objects to see if they collide
