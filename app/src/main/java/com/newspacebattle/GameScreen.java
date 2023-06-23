@@ -132,8 +132,8 @@ public class GameScreen extends View {
         mapSizeY = (int) (Main.screenY / scaleY * 32);
         clusterSize = (int) (Main.screenX / 0.2);
 
-        //generateMap();
-        generateFaceoff();
+        generateMap();
+        //generateFaceoff();
 
         green.setColor(Color.GREEN);
         green.setStrokeWidth(20);
@@ -371,12 +371,12 @@ public class GameScreen extends View {
         final int battleShipNum = 100;
         final int bomberNum = 100;
         final int scoutNum = 0;
-        final int laserCruiserNum = 0;
+        final int laserCruiserNum = 300;
         final int spaceStationNum = 0;
         final int bulletNum = 500;
         final int explosionNum = 500;
         final int missileNum = 250;
-        final int laserNum = 50;
+        final int laserNum = 500;
 
         generateStars(3000);
         generateAsteroids(30, 5);

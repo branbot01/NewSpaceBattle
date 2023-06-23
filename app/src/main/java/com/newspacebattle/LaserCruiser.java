@@ -2,6 +2,8 @@ package com.newspacebattle;
 
 /**
  * Created by Dylan on 2018-07-06. Defines a laser cruiser ship
+ *
+ * Continued by Brandon on 2023-06-23.
  */
 class LaserCruiser extends Ship {
 
@@ -28,6 +30,9 @@ class LaserCruiser extends Ship {
         preScaleX = 1.75f;
         preScaleY = 1.75f;
         dockable = false;
+        laserPower = 50; //to be changed
+        laser1 = new PointObject(0, 0);
+        laser2 = new PointObject(0, 0);
     }
 
     //Updates the object's properties
@@ -39,10 +44,38 @@ class LaserCruiser extends Ship {
 
     //Shoots two lasers forward
     void shoot() {
-        laser1.x = Utilities.circleAngleX(degrees - 25, centerPosX, (radius + Laser.SIZE) * 1.2);
+        laser1.x = Utilities.circleAngleX(degrees - 25, centerPosX - (radius * 0.30), (radius + Laser.SIZE) * 1.2);
         laser1.y = Utilities.circleAngleY(degrees - 25, centerPosY, (radius + Laser.SIZE) * 1.2);
 
-        laser2.x = Utilities.circleAngleX(degrees + 25, centerPosX, (radius + Laser.SIZE) * 1.2);
+        laser2.x = Utilities.circleAngleX(degrees + 25, centerPosX - (radius * 0.30), (radius + Laser.SIZE) * 1.2);
         laser2.y = Utilities.circleAngleY(degrees + 25, centerPosY, (radius + Laser.SIZE) * 1.2);
+
+        for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
+            if (!GameScreen.lasers.get(i).exists) {
+                GameScreen.lasers.get(i).createLaser(
+                        (float) laser1.x
+                        , (float) laser1.y
+                        , team
+                        , (float) (Laser.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
+                        , (float) (Laser.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
+                        , degrees
+                        , laserPower);
+                break;
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
+            if (!GameScreen.lasers.get(i).exists) {
+                GameScreen.lasers.get(i).createLaser(
+                        (float) laser2.x
+                        , (float) laser2.y
+                        , team
+                        , (float) (Laser.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
+                        , (float) (Laser.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
+                        , degrees
+                        , laserPower);
+                break;
+            }
+        }
     }
 }

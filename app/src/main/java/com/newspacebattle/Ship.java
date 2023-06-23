@@ -12,7 +12,7 @@ import android.view.animation.LinearInterpolator;
 class Ship extends GameObject {
 
     float health;
-    float bulletPower, missilePower;
+    float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     boolean movable, behaviour, dockable, canWarp, selected, attSelected, canAttack, attacking;
     Matrix arrow = new Matrix();

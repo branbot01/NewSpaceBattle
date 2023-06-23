@@ -2,35 +2,58 @@ package com.newspacebattle;
 
 /**
  * Created by Dylan on 2019-01-15. Defines a laser object
+ * Continued by Brandon on 2023-06-23.
  */
 class Laser extends GameObject {
 
-    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2;
+    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2, MAX_SPEED = 800; //may change later
     private float scale, damage;
+
+    private int timeLeft;
 
     //Constructor method
     Laser() {
         type = "Laser";
+        width = Main.screenX / 6f;
+        height = Main.screenY / GameScreen.circleRatio / 6f;
+        midX = width / 2;
+        midY = height / 2;
+        radius = midY;
+        mass = 1;  //may change later
         exists = false;
-        scale = 1;
+        maxSpeed = MAX_SPEED;
+        scale = 4;
 
     }
 
     //Spawns a laser from a ship
-    void createLaser(float x, float y, int team, float angle, float damage) {
+    void createLaser(float x, float y, int team, float xVel, float yVel, float angle, float damage) {
         exists = true;
         this.team = team;
         this.damage = damage;
         degrees = angle;
+        velocityX = xVel;
+        velocityY = yVel;
         positionX = x - midX;
         positionY = y - midY;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
+        timeLeft = 5000; //to be changed
     }
 
     //Updates the object's properties
     void update() {
+        move();
         matrix();
+        countDown();
+    }
+
+    //Counts down the laser's lifetime
+    private void countDown() {
+        timeLeft -= 16;
+        if (timeLeft <= 0) {
+            impact(null);
+        }
     }
 
     //Draws object properly
@@ -42,6 +65,17 @@ class Laser extends GameObject {
 
     //When laser hits another object(incomplete)
     void impact(GameObject object) {
+        if (object instanceof Ship) {
+            ((Ship) object).health -= damage;
+            System.out.println("laser impact ship");
+        }
 
+        for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
+            if (!GameScreen.explosions.get(i).active) {
+                GameScreen.explosions.get(i).createExplosion(this);
+                break;
+            }
+        }
+        exists = false;
     }
 }
