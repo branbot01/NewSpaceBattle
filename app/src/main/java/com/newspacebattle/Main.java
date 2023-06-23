@@ -1,7 +1,6 @@
 package com.newspacebattle;
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -129,7 +128,6 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         setContentView(R.layout.title_screen);
-        //loadingBar = findViewById(R.id.loading);
     }
 
     //When the app is resumed
@@ -171,7 +169,8 @@ public class Main extends AppCompatActivity {
             zoomY.setDuration(500);
 
             loader.start();
-            //loadingBar.setVisibility(View.VISIBLE);
+            loadingBar = findViewById(R.id.loading);
+            loadingBar.setVisibility(View.VISIBLE);
             showGameScreen();
         }
     }
@@ -187,7 +186,7 @@ public class Main extends AppCompatActivity {
                     collisions = new Collisions();
                     gameScreen.gameLoop();
                     checkShipSelection();
-                    //loadingBar.setVisibility(View.INVISIBLE);
+                    loadingBar.setVisibility(View.INVISIBLE);
                     findIds();
                 } else {
                     showGameScreen();
