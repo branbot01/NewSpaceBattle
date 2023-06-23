@@ -104,6 +104,8 @@ class Collisions {
             ((Bullet) object1).impact(object2);
         } else if (object1 instanceof Missile) {
             ((Missile) object1).impact(object2);
+        } else if (object1 instanceof Laser) {
+            ((Laser) object1).impact(object2);
         }
         if (object1 instanceof ResourceCollector) {
             ((ResourceCollector) object1).harvesting = false;
@@ -122,6 +124,8 @@ class Collisions {
             ((Bullet) object2).impact(object1);
         } else if (object2 instanceof Missile) {
             ((Missile) object2).impact(object1);
+        } else if (object2 instanceof Laser) {
+            ((Laser) object2).impact(object1);
         }
         if (object2 instanceof ResourceCollector) {
             ((ResourceCollector) object2).harvesting = false;
