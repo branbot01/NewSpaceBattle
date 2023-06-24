@@ -38,7 +38,7 @@ public class Main extends AppCompatActivity {
     static Collisions collisions;
     //JoystickView joystick;
     ProgressBar loadingBar;
-    FloatingActionButton zoomIn, zoomOut, move, stop, destroy, select, attack, shipMode, follow, harvest, dock, warp, formation;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, warp, formation;
     Button special, moreOptions, normal;
     GameScreen gameScreen;
     MediaPlayer rickRoll;
@@ -51,6 +51,10 @@ public class Main extends AppCompatActivity {
         }
     });
     View decorView, gameView, bar;
+
+    private ScaleGestureDetector mScaleDetector;
+
+    private float mScaleFactor = 0.05f;
 
     //Stops selected ships from moving, stops completely
     public static void stopMovement() {
@@ -181,6 +185,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void run() {
                 if (loaded) {
+                    mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleListener());
                     setContentView(gameScreen);
                     addContentView(gameView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
                     collisions = new Collisions();
@@ -208,12 +213,63 @@ public class Main extends AppCompatActivity {
         }, 16);
     }
 
+    private class ScaleListener
+            extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mScaleFactor *= detector.getScaleFactor();
+
+            // Don't let the object get too small or too large.
+            mScaleFactor = Math.max(0.05f, Math.min(mScaleFactor, 0.5f));
+            return true;
+        }
+    }
+
     //When user touches the screen, not any buttons
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (mScaleDetector == null) {
+            return true;
+        }
+
         int x = (int) (event.getX()), y = (int) (event.getY()), eventAction = event.getAction();
         float trueX = (x + GameScreen.offsetX) / GameScreen.scaleX;
         float trueY = (y + GameScreen.offsetY) / GameScreen.scaleY;
+
+        mScaleDetector.onTouchEvent(event);
+        GameScreen.scaleX = mScaleFactor;
+        GameScreen.scaleY = mScaleFactor;
+
+        /*if (mScaleDetector.isInProgress()) {
+            boolean zoomingOut = mScaleFactor < GameScreen.scaleX, zoomingIn = mScaleFactor > GameScreen.scaleX;
+
+            float zoomPointX = (mScaleDetector.getFocusX() + GameScreen.offsetX) / GameScreen.scaleX;
+            float zoomPointY = (mScaleDetector.getFocusY() + GameScreen.offsetY) / GameScreen.scaleY;
+            double angle = Utilities.anglePoints(zoomPointX, zoomPointY, 0, 0);
+
+            GameScreen.scaleX = mScaleFactor;
+            GameScreen.scaleY = mScaleFactor;
+            double distance = Utilities.distanceFormula(zoomPointX, zoomPointY, 0, 0);
+            double unit = 400 * mScaleFactor * distance;
+            if (zoomingOut & !(!zoomingIn && !zoomingOut)) {
+                unit *= -1;
+            }
+            if (angle >= 0 && angle <= 90) {
+                GameScreen.offsetX -= unit * Math.cos(Math.toRadians(angle));
+                GameScreen.offsetY += unit * Math.sin(Math.toRadians(angle));
+            } else if (angle > 90 && angle <= 180) {
+                GameScreen.offsetX += unit * Math.cos(Math.toRadians(angle));
+                GameScreen.offsetY -= unit * Math.sin(Math.toRadians(angle));
+            } else if (angle > 180 && angle <= 270) {
+                GameScreen.offsetX -= unit * Math.cos(Math.toRadians(angle));
+                GameScreen.offsetY += unit * Math.sin(Math.toRadians(angle));
+            } else if (angle > 270 && angle <= 360) {
+                GameScreen.offsetX += unit * Math.cos(Math.toRadians(angle));
+                GameScreen.offsetY -= unit * Math.sin(Math.toRadians(angle));
+            }
+            System.out.println("Zooming at " + zoomPointX + ", " + zoomPointY + ", distance: " + distance);
+            return true;
+        }*/
 
         if (startSelection) {
             switch (eventAction) {
@@ -311,7 +367,6 @@ public class Main extends AppCompatActivity {
                         } else {
                             GameScreen.offsetY = movedY - y;
                         }
-                        //System.out.println(GameScreen.offsetX + ", " + GameScreen.offsetY);
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -325,8 +380,6 @@ public class Main extends AppCompatActivity {
 
     //Get references for all of the buttons and ui elements
     public void findIds() {
-        zoomIn = findViewById(R.id.zoomIn);
-        zoomOut = findViewById(R.id.zoomOut);
         bar = findViewById(R.id.bottomBar);
         move = findViewById(R.id.moveButton);
         stop = findViewById(R.id.stopButton);
@@ -697,57 +750,5 @@ public class Main extends AppCompatActivity {
     public void clearButtonsToWhite() {
         move.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         attack.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-    }
-
-    //Zooms in the map
-    public void zoomIn(View view) {
-        if (GameScreen.scaleX <= 0.5f && GameScreen.scaleY <= 0.5f && !zoomX.isRunning() && !zoomY.isRunning()) {
-            zoomX = ValueAnimator.ofFloat(GameScreen.scaleX, GameScreen.scaleX + 0.05f);
-            zoomY = ValueAnimator.ofFloat(GameScreen.scaleY, GameScreen.scaleY + 0.05f);
-            GameScreen.midPointX = (Main.screenX / 2 + GameScreen.offsetX) / GameScreen.scaleX;
-            GameScreen.midPointY = (Main.screenY / 2 + GameScreen.offsetY) / GameScreen.scaleY;
-
-            zoomX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    GameScreen.scaleX += (float) animation.getAnimatedValue() - GameScreen.scaleX;
-                }
-            });
-            zoomX.start();
-
-            zoomY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    GameScreen.scaleY += (float) animation.getAnimatedValue() - GameScreen.scaleY;
-                }
-            });
-            zoomY.start();
-        }
-    }
-
-    //Zooms out the map
-    public void zoomOut(View view) {
-        if (GameScreen.scaleX >= 0.1f && GameScreen.scaleY >= 0.1f && !zoomX.isRunning() && !zoomY.isRunning()) {
-            zoomX = ValueAnimator.ofFloat(GameScreen.scaleX, GameScreen.scaleX - 0.05f);
-            zoomY = ValueAnimator.ofFloat(GameScreen.scaleY, GameScreen.scaleY - 0.05f);
-            GameScreen.midPointX = (Main.screenX / 2 + GameScreen.offsetX) / GameScreen.scaleX;
-            GameScreen.midPointY = (Main.screenY / 2 + GameScreen.offsetY) / GameScreen.scaleY;
-
-            zoomX.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    GameScreen.scaleX -= GameScreen.scaleX - (float) animation.getAnimatedValue();
-                }
-            });
-            zoomX.start();
-
-            zoomY.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    GameScreen.scaleY -= GameScreen.scaleY - (float) animation.getAnimatedValue();
-                }
-            });
-            zoomY.start();
-        }
     }
 }
