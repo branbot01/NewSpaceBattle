@@ -247,8 +247,6 @@ public class Main extends AppCompatActivity {
 
             GameScreen.offsetX += scaleDiff * GameScreen.midPointX;
             GameScreen.offsetY += scaleDiff * GameScreen.midPointY;
-
-            //System.out.println("Offset: " + GameScreen.offsetX + ", " + GameScreen.offsetY + " Scale: " + GameScreen.scaleX + ", " + GameScreen.scaleY);
             return true;
         }
 
@@ -351,8 +349,6 @@ public class Main extends AppCompatActivity {
                         } else {
                             GameScreen.offsetY = movedY - y;
                         }
-                        // print hi
-                        System.out.println("hi");
                         break;
 
                     case MotionEvent.ACTION_UP:
