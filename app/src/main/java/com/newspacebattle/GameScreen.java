@@ -324,7 +324,7 @@ public class GameScreen extends View {
 
     //Puts selected ships in the main view
     public static void followShips() {
-        if (Main.selectShips.size() != 0) {
+        if (Main.selectShips.size() != 0 && Main.following) {
             double biggestX = 0, biggestY = 0, smallestX = 0, smallestY = 0;
 
             for (int i = 0; i <= Main.selectShips.size() - 1; i++) {
@@ -350,14 +350,11 @@ public class GameScreen extends View {
                 }
             }
 
-            /*midPointX = (biggestX + smallestX) / 2;
+            midPointX = (biggestX + smallestX) / 2;
             midPointY = (biggestY + smallestY) / 2;
-            zoomInRightPlace(midPointX, midPointY);*/
+            offsetX = (int) (midPointX * scaleX - Main.screenX / 2);
+            offsetY = (int) (midPointY * scaleY - Main.screenY / 2);
         }
-    }
-
-    public static void zoomInRightPlace(float trueX, float trueY) {
-
     }
 
     //Generates ships randomly around the map
@@ -884,9 +881,7 @@ public class GameScreen extends View {
                             Main.selectShips.remove(Main.selectShips.get(i));
                         }
                     }
-                    if (Main.following) {
-                        followShips();
-                    }
+                    followShips();
                 }
                 gameLoop();
             }
