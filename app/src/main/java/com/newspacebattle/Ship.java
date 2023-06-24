@@ -147,27 +147,19 @@ class Ship extends GameObject {
 
     //Going to tell ship to dock
     void dock(){
-
-        System.out.println("dock ran");
         float distanceToClosestSS = Float.MAX_VALUE, distanceToSS;
         SpaceStation closestSS = null;
 
         for(int i = 0; i <= GameScreen.spaceStations.size() - 1; i++){
             distanceToSS = (float) Utilities.distanceFormula(GameScreen.spaceStations.get(i).centerPosX, GameScreen.spaceStations.get(i).centerPosY, centerPosX, centerPosY);
-
             if(distanceToSS < distanceToClosestSS){
-
-                System.out.println("dock ran, found closest SS");
                 distanceToClosestSS = distanceToSS;
                 closestSS = GameScreen.spaceStations.get(i);
             }
         }
-        System.out.println(closestSS.centerPosX + ", " + closestSS.centerPosY);
-
-        if(closestSS != null) {
-
-            System.out.println("dock ran, ran run()");
-            destinationFinder.run(closestSS);
+        if (closestSS == null) {
+            return;
         }
+        setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
     }
 }
