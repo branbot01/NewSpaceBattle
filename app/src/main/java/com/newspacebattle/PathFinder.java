@@ -1,6 +1,7 @@
 package com.newspacebattle;
 
 import android.os.Looper;
+import android.widget.Space;
 
 import java.util.ArrayList;
 
@@ -193,6 +194,12 @@ class PathFinder {
                 if (path.size() >= 1) {
                     path.remove(path.size() - 1);
                     if (path.size() == 0) {
+                        if(ship.docking && targetObj instanceof SpaceStation){
+                            ((SpaceStation) targetObj).dockedShips.add(ship);
+                            ship.docked = true;
+                            ship.docking = false;
+
+                        }
                         ship.stop();
                         return;
                     }

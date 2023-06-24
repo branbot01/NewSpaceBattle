@@ -2,6 +2,8 @@ package com.newspacebattle;
 
 import android.graphics.Matrix;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dylan on 2018-08-06. Defines a space station object.
  */
@@ -9,6 +11,8 @@ class SpaceStation extends Ship {
 
     Matrix ringSpiral1 = new Matrix(), ringSpiral2 = new Matrix(), ringSpiral3 = new Matrix();
     private int ring1Degrees, ring2Degrees, ring3Degrees;
+
+    ArrayList<Ship> dockedShips = new ArrayList<>();
 
     //Constructor method
     SpaceStation(float x, float y, int team) {

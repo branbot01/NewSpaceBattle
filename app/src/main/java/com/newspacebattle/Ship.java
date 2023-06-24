@@ -14,7 +14,7 @@ class Ship extends GameObject {
     float health;
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
-    boolean movable, behaviour, dockable, canWarp, selected, attSelected, canAttack, attacking;
+    boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
     Matrix arrow = new Matrix();
     Paint selector = new Paint();
     private ValueAnimator stopperX, stopperY;
@@ -145,7 +145,7 @@ class Ship extends GameObject {
         }
     }
 
-    //Going to tell ship to dock
+    //tell ship to dock
     void dock(){
         float distanceToClosestSS = Float.MAX_VALUE, distanceToSS;
         SpaceStation closestSS = null;
@@ -160,6 +160,9 @@ class Ship extends GameObject {
         if (closestSS == null) {
             return;
         }
+        docking = true;
         setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
+
+
     }
 }
