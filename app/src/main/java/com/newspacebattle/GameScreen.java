@@ -49,7 +49,7 @@ public class GameScreen extends View {
     static Bitmap bitBomber, enBomber1;
     static Bitmap bitScout, enScout1;
     static Bitmap bitLaserCruiser, enLaserCruiser1;
-    static Bitmap bitStation, bitStationRing1, bitStationRing2, bitStationRing3;
+    static Bitmap bitStation, enBitStation, bitStationRing1, bitStationRing2, bitStationRing3;
     static Bitmap bitBullet, bitBullet2;
     static Bitmap bitMissile, bitMissile2;
     static Bitmap bitLaser, bitLaser2;
@@ -84,6 +84,7 @@ public class GameScreen extends View {
                 bitLaserCruiser = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_lasercruiser)), Main.screenX, (int) (Main.screenY / circleRatio), true);
                 enLaserCruiser1 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_enemylasercruiser1)), Main.screenX, (int) (Main.screenY / circleRatio), true);
                 bitStation = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_spacestation)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+                enBitStation = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_enemyspacestation1)), Main.screenX, (int) (Main.screenY / circleRatio), true);
                 bitStationRing1 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_spacestationring1)), Main.screenX / 2, (int) (Main.screenY / circleRatio / 2), true);
                 bitStationRing2 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_spacestationring2)), Main.screenX / 2, (int) (Main.screenY / circleRatio / 2), true);
                 bitStationRing3 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_spacestationring3)), Main.screenX / 2, (int) (Main.screenY / circleRatio / 2), true);
@@ -364,11 +365,11 @@ public class GameScreen extends View {
         blackHole.add(new BlackHole(0, 0));
 
         final int flagShipNum = 0;
-        final int resCollectorsNum = 0;
+        final int resCollectorsNum = 100;
         final int fighterNum = 100;
         final int battleShipNum = 0;
-        final int bomberNum = 0;
-        final int scoutNum = 0;
+        final int bomberNum = 100;
+        final int scoutNum = 100;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 100;
         final int bulletNum = 500;
@@ -733,7 +734,13 @@ public class GameScreen extends View {
                 if (spaceStations.get(i).selected || spaceStations.get(i).attSelected) {
                     canvas.drawCircle(spaceStations.get(i).centerPosX, spaceStations.get(i).centerPosY, spaceStations.get(i).radius, spaceStations.get(i).selector);
                 }
-                canvas.drawBitmap(bitStation, spaceStations.get(i).appearance, null);
+                if (spaceStations.get(i).team == 1) {
+                    canvas.drawBitmap(bitStation, spaceStations.get(i).appearance, null);
+                } else if (spaceStations.get(i).team == 2) {
+                    canvas.drawBitmap(enBitStation, spaceStations.get(i).appearance, null);
+                }
+
+
                 canvas.drawBitmap(bitStationRing1, spaceStations.get(i).ringSpiral1, null);
                 canvas.drawBitmap(bitStationRing2, spaceStations.get(i).ringSpiral2, null);
                 canvas.drawBitmap(bitStationRing3, spaceStations.get(i).ringSpiral3, null);

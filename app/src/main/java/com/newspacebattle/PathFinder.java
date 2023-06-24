@@ -196,6 +196,18 @@ class PathFinder {
                     if (path.size() == 0) {
                         if(ship.docking && targetObj instanceof SpaceStation){
                             ((SpaceStation) targetObj).dockedShips.add(ship);
+
+                            if(ship instanceof Fighter){
+                                GameScreen.fighters.remove(ship);
+                            }else if(ship instanceof Bomber) {
+                                GameScreen.bombers.remove(ship);
+                            }else if(ship instanceof ResourceCollector){
+                                GameScreen.resourceCollectors.remove(ship);
+                            }else if(ship instanceof Scout){
+                                GameScreen.scouts.remove(ship);
+                            }
+                            GameScreen.ships.remove(ship);
+                            GameScreen.objects.remove(ship);
                             ship.docked = true;
                             ship.docking = false;
 
