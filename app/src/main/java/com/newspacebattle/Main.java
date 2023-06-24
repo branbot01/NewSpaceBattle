@@ -56,6 +56,8 @@ public class Main extends AppCompatActivity {
 
     private float mScaleFactor = 0.05f;
 
+    boolean zooming = false;
+
     //Stops selected ships from moving, stops completely
     public static void stopMovement() {
         for (int i = 0; i <= selectShips.size() - 1; i++) {
@@ -235,6 +237,7 @@ public class Main extends AppCompatActivity {
 
         mScaleDetector.onTouchEvent(event);
         if (mScaleDetector.isInProgress() && event.getPointerCount() == 2) {
+            zooming = true;
             GameScreen.midPointX = (Main.screenX / 2 + GameScreen.offsetX) / GameScreen.scaleX;
             GameScreen.midPointY = (Main.screenY / 2 + GameScreen.offsetY) / GameScreen.scaleY;
 
@@ -328,6 +331,9 @@ public class Main extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
+                        if(event.getPointerCount() == 2 || zooming){
+                            break;
+                        }
                         following = false;
                         clearSelectionReferences();
                         if (movedX - x < -16 * screenX) {
@@ -345,10 +351,13 @@ public class Main extends AppCompatActivity {
                         } else {
                             GameScreen.offsetY = movedY - y;
                         }
+                        // print hi
+                        System.out.println("hi");
                         break;
 
                     case MotionEvent.ACTION_UP:
                         selection = false;
+                        zooming = false;
                         break;
                 }
             }
