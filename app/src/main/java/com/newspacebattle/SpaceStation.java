@@ -12,6 +12,8 @@ class SpaceStation extends Ship {
     Matrix ringSpiral1 = new Matrix(), ringSpiral2 = new Matrix(), ringSpiral3 = new Matrix();
     private int ring1Degrees, ring2Degrees, ring3Degrees;
 
+    int maxDockedNum = 2; //to be changed
+
     ArrayList<Ship> dockedShips = new ArrayList<>();
 
     //Constructor method

@@ -151,10 +151,12 @@ class Ship extends GameObject {
         SpaceStation closestSS = null;
 
         for(int i = 0; i <= GameScreen.spaceStations.size() - 1; i++){
-            distanceToSS = (float) Utilities.distanceFormula(GameScreen.spaceStations.get(i).centerPosX, GameScreen.spaceStations.get(i).centerPosY, centerPosX, centerPosY);
-            if(distanceToSS < distanceToClosestSS){
-                distanceToClosestSS = distanceToSS;
-                closestSS = GameScreen.spaceStations.get(i);
+            if(GameScreen.spaceStations.get(i).team == team) {
+                distanceToSS = (float) Utilities.distanceFormula(GameScreen.spaceStations.get(i).centerPosX, GameScreen.spaceStations.get(i).centerPosY, centerPosX, centerPosY);
+                if (distanceToSS < distanceToClosestSS && GameScreen.spaceStations.get(i).dockedShips.size() < GameScreen.spaceStations.get(i).maxDockedNum) {
+                    distanceToClosestSS = distanceToSS;
+                    closestSS = GameScreen.spaceStations.get(i);
+                }
             }
         }
         if (closestSS == null) {
@@ -162,7 +164,5 @@ class Ship extends GameObject {
         }
         docking = true;
         setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
-
-
     }
 }

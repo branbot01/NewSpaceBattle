@@ -195,22 +195,24 @@ class PathFinder {
                     path.remove(path.size() - 1);
                     if (path.size() == 0) {
                         if(ship.docking && targetObj instanceof SpaceStation){
-                            ((SpaceStation) targetObj).dockedShips.add(ship);
+                           if(((SpaceStation) targetObj).dockedShips.size() < ((SpaceStation) targetObj).maxDockedNum) {
 
-                            if(ship instanceof Fighter){
-                                GameScreen.fighters.remove(ship);
-                            }else if(ship instanceof Bomber) {
-                                GameScreen.bombers.remove(ship);
-                            }else if(ship instanceof ResourceCollector){
-                                GameScreen.resourceCollectors.remove(ship);
-                            }else if(ship instanceof Scout){
-                                GameScreen.scouts.remove(ship);
-                            }
-                            GameScreen.ships.remove(ship);
-                            GameScreen.objects.remove(ship);
-                            ship.docked = true;
-                            ship.docking = false;
+                               ((SpaceStation) targetObj).dockedShips.add(ship);
 
+                               if (ship instanceof Fighter) {
+                                   GameScreen.fighters.remove(ship);
+                               } else if (ship instanceof Bomber) {
+                                   GameScreen.bombers.remove(ship);
+                               } else if (ship instanceof ResourceCollector) {
+                                   GameScreen.resourceCollectors.remove(ship);
+                               } else if (ship instanceof Scout) {
+                                   GameScreen.scouts.remove(ship);
+                               }
+                               GameScreen.ships.remove(ship);
+                               GameScreen.objects.remove(ship);
+                               ship.docked = true;
+                               ship.docking = false;
+                           }
                         }
                         ship.stop();
                         return;
