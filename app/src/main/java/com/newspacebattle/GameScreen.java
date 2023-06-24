@@ -349,37 +349,35 @@ public class GameScreen extends View {
                 }
             }
 
-            midPointX = (biggestX + smallestX) / 2;
+            /*midPointX = (biggestX + smallestX) / 2;
             midPointY = (biggestY + smallestY) / 2;
-            zoomInRightPlace();
+            zoomInRightPlace(midPointX, midPointY);*/
         }
     }
 
-    //Keeps the view on the midpoint of the selected ships
-    public static void zoomInRightPlace() {
-        offsetX = (int) (midPointX * scaleX - Main.screenX / 2);
-        offsetY = (int) (midPointY * scaleY - Main.screenY / 2);
+    public static void zoomInRightPlace(float trueX, float trueY) {
+
     }
 
     //Generates ships randomly around the map
     public static void generateMap() {
-        //blackHole.add(new BlackHole(0, 0));
+        blackHole.add(new BlackHole(0, 0));
 
-        final int flagShipNum = 100;
+        final int flagShipNum = 0;
         final int resCollectorsNum = 0;
         final int fighterNum = 100;
-        final int battleShipNum = 100;
-        final int bomberNum = 100;
+        final int battleShipNum = 0;
+        final int bomberNum = 0;
         final int scoutNum = 0;
-        final int laserCruiserNum = 300;
-        final int spaceStationNum = 0;
+        final int laserCruiserNum = 0;
+        final int spaceStationNum = 100;
         final int bulletNum = 500;
         final int explosionNum = 500;
         final int missileNum = 250;
         final int laserNum = 500;
 
         generateStars(3000);
-        generateAsteroids(30, 5);
+        generateAsteroids(0, 5);
 
         do {
             resourceCollectors.clear();
@@ -881,8 +879,6 @@ public class GameScreen extends View {
                     }
                     if (Main.following) {
                         followShips();
-                    } else if (!Main.following && Main.zoomX.isRunning() && Main.zoomY.isRunning()) {
-                        zoomInRightPlace();
                     }
                 }
                 gameLoop();

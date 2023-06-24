@@ -218,9 +218,7 @@ public class Main extends AppCompatActivity {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
-
-            // Don't let the object get too small or too large.
-            mScaleFactor = Math.max(0.05f, Math.min(mScaleFactor, 0.5f));
+            mScaleFactor = Math.max(0.05f, Math.min(mScaleFactor, 0.15f));
             return true;
         }
     }
@@ -231,45 +229,25 @@ public class Main extends AppCompatActivity {
         if (mScaleDetector == null) {
             return true;
         }
-
         int x = (int) (event.getX()), y = (int) (event.getY()), eventAction = event.getAction();
         float trueX = (x + GameScreen.offsetX) / GameScreen.scaleX;
         float trueY = (y + GameScreen.offsetY) / GameScreen.scaleY;
 
         mScaleDetector.onTouchEvent(event);
-        GameScreen.scaleX = mScaleFactor;
-        GameScreen.scaleY = mScaleFactor;
+        if (mScaleDetector.isInProgress() && event.getPointerCount() == 2) {
+            GameScreen.midPointX = (Main.screenX / 2 + GameScreen.offsetX) / GameScreen.scaleX;
+            GameScreen.midPointY = (Main.screenY / 2 + GameScreen.offsetY) / GameScreen.scaleY;
 
-        /*if (mScaleDetector.isInProgress()) {
-            boolean zoomingOut = mScaleFactor < GameScreen.scaleX, zoomingIn = mScaleFactor > GameScreen.scaleX;
-
-            float zoomPointX = (mScaleDetector.getFocusX() + GameScreen.offsetX) / GameScreen.scaleX;
-            float zoomPointY = (mScaleDetector.getFocusY() + GameScreen.offsetY) / GameScreen.scaleY;
-            double angle = Utilities.anglePoints(zoomPointX, zoomPointY, 0, 0);
-
+            double scaleDiff = mScaleFactor - GameScreen.scaleX;
             GameScreen.scaleX = mScaleFactor;
             GameScreen.scaleY = mScaleFactor;
-            double distance = Utilities.distanceFormula(zoomPointX, zoomPointY, 0, 0);
-            double unit = 400 * mScaleFactor * distance;
-            if (zoomingOut & !(!zoomingIn && !zoomingOut)) {
-                unit *= -1;
-            }
-            if (angle >= 0 && angle <= 90) {
-                GameScreen.offsetX -= unit * Math.cos(Math.toRadians(angle));
-                GameScreen.offsetY += unit * Math.sin(Math.toRadians(angle));
-            } else if (angle > 90 && angle <= 180) {
-                GameScreen.offsetX += unit * Math.cos(Math.toRadians(angle));
-                GameScreen.offsetY -= unit * Math.sin(Math.toRadians(angle));
-            } else if (angle > 180 && angle <= 270) {
-                GameScreen.offsetX -= unit * Math.cos(Math.toRadians(angle));
-                GameScreen.offsetY += unit * Math.sin(Math.toRadians(angle));
-            } else if (angle > 270 && angle <= 360) {
-                GameScreen.offsetX += unit * Math.cos(Math.toRadians(angle));
-                GameScreen.offsetY -= unit * Math.sin(Math.toRadians(angle));
-            }
-            System.out.println("Zooming at " + zoomPointX + ", " + zoomPointY + ", distance: " + distance);
+
+            GameScreen.offsetX += scaleDiff * GameScreen.midPointX;
+            GameScreen.offsetY += scaleDiff * GameScreen.midPointY;
+
+            //System.out.println("Offset: " + GameScreen.offsetX + ", " + GameScreen.offsetY + " Scale: " + GameScreen.scaleX + ", " + GameScreen.scaleY);
             return true;
-        }*/
+        }
 
         if (startSelection) {
             switch (eventAction) {
