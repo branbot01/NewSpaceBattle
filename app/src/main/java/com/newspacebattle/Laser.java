@@ -6,7 +6,7 @@ package com.newspacebattle;
  */
 class Laser extends GameObject {
 
-    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2, MAX_SPEED = 800; //may change later
+    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2, MAX_SPEED = 700; //may change later
     private float scale, damage;
 
     private int timeLeft;
@@ -59,7 +59,7 @@ class Laser extends GameObject {
     //Draws object properly
     private void matrix() {
         appearance.setRotate(degrees, midX, midY);
-        appearance.preScale(scale, scale);
+        appearance.preScale(scale, 5 * scale);
         appearance.postTranslate(positionX, positionY);
     }
 

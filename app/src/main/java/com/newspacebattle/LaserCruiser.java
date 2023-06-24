@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import android.os.Looper;
+
 /**
  * Created by Dylan on 2018-07-06. Defines a laser cruiser ship
  *
@@ -30,7 +32,7 @@ class LaserCruiser extends Ship {
         preScaleX = 1.75f;
         preScaleY = 1.75f;
         dockable = false;
-        laserPower = 50; //to be changed
+        laserPower = 150; //to be changed
         laser1 = new PointObject(0, 0);
         laser2 = new PointObject(0, 0);
     }
@@ -44,11 +46,11 @@ class LaserCruiser extends Ship {
 
     //Shoots two lasers forward
     void shoot() {
-        laser1.x = Utilities.circleAngleX(degrees - 25, centerPosX - (radius * 0.30), (radius + Laser.SIZE) * 1.2);
-        laser1.y = Utilities.circleAngleY(degrees - 25, centerPosY, (radius + Laser.SIZE) * 1.2);
+        laser1.x = Utilities.circleAngleX(degrees - 12, centerPosX, (radius + Laser.SIZE) * 1.2 * 3);
+        laser1.y = Utilities.circleAngleY(degrees - 12, centerPosY, (radius + Laser.SIZE) * 1.2 * 3);
 
-        laser2.x = Utilities.circleAngleX(degrees + 25, centerPosX - (radius * 0.30), (radius + Laser.SIZE) * 1.2);
-        laser2.y = Utilities.circleAngleY(degrees + 25, centerPosY, (radius + Laser.SIZE) * 1.2);
+        laser2.x = Utilities.circleAngleX(degrees + 5, centerPosX, (radius + Laser.SIZE) * 0.95 * 3.7);
+        laser2.y = Utilities.circleAngleY(degrees + 5, centerPosY, (radius + Laser.SIZE) * 0.95 * 3.7);
 
         for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
             if (!GameScreen.lasers.get(i).exists) {
