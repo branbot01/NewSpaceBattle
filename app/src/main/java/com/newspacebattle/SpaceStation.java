@@ -1,6 +1,7 @@
 package com.newspacebattle;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -13,7 +14,7 @@ class SpaceStation extends Ship {
     Matrix ringSpiral1 = new Matrix(), ringSpiral2 = new Matrix(), ringSpiral3 = new Matrix();
     private int ring1Degrees, ring2Degrees, ring3Degrees;
 
-    int maxDockedNum = 2; //to be changed
+    int maxDockedNum = 16; //to be changed
 
     ArrayList<Ship> dockedShips = new ArrayList<>();
 
@@ -91,18 +92,40 @@ class SpaceStation extends Ship {
         ringSpiral3.preScale(preScaleX * 2, preScaleY * 2);
     }
 
+    //changes deploy angle if needed
+    private PointObject setDeployPos(float degreeOffset){
+        PointObject deployPos = new PointObject(0, 0);
+        initialRedeployLocation.x = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);
+        initialRedeployLocation.y = Utilities.circleAngleX(degrees - degreeOffset, centerPosY, (radius) * 1.5);
+        deployPos.x = initialRedeployLocation.x;
+        deployPos.y = initialRedeployLocation.y;
+        return deployPos;
+    }
+
+    private PointObject findFinalDeployPos(float degreeOffset){
+        PointObject finalDeployPos = new PointObject(0, 0);
+        for(int j = 0; j < GameScreen.objects.size(); j++){
+            if(Utilities.distanceFormula(finalDeployPos.x, finalDeployPos.y, GameScreen.objects.get(j).centerPosX, GameScreen.objects.get(j).centerPosY) <= dockedShips.get(j).radius + GameScreen.objects.get(j).radius){
+                degreeOffset += 22.5;
+                finalDeployPos = setDeployPos(degreeOffset);
+                continue;
+            }
+            break;
+        }
+        return finalDeployPos;
+    }
+
     //redeploys docked ship from space station
     void deployShip(String type) {
-
-        int degreeOffset = 0;
-        initialRedeployLocation.x = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);
-        initialRedeployLocation.y = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);
+        float degreeOffset = 0;
+        PointObject deployPos;
 
         if(Objects.equals(type, "ResourceCollector")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof ResourceCollector){
+                    deployPos = findFinalDeployPos(degreeOffset);
                     dockedShips.remove(dockedShips.get(i));
-                    ResourceCollector newResourceCollector = new ResourceCollector(centerPosX, centerPosY - (2 * radius), team);
+                    ResourceCollector newResourceCollector = new ResourceCollector((float) deployPos.x, (float) deployPos.y, team);
                     GameScreen.resourceCollectors.add(newResourceCollector);
                     GameScreen.ships.add(newResourceCollector);
                     GameScreen.objects.add(newResourceCollector);
@@ -112,8 +135,9 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Scout")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Scout){
+                    deployPos = findFinalDeployPos(degreeOffset);
                     dockedShips.remove(dockedShips.get(i));
-                    Scout newScout = new Scout(centerPosX, centerPosY - (2 * radius), team);
+                    Scout newScout = new Scout((float) deployPos.x, (float) deployPos.y, team);
                     GameScreen.scouts.add(newScout);
                     GameScreen.ships.add(newScout);
                     GameScreen.objects.add(newScout);
@@ -123,8 +147,9 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Fighter")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Fighter){
+                    deployPos = findFinalDeployPos(degreeOffset);
                     dockedShips.remove(dockedShips.get(i));
-                    Fighter newFighter = new Fighter(centerPosX, centerPosY - (2 * radius), team);
+                    Fighter newFighter = new Fighter((float) deployPos.x, (float) deployPos.y, team);
                     GameScreen.fighters.add(newFighter);
                     GameScreen.ships.add(newFighter);
                     GameScreen.objects.add(newFighter);
@@ -134,8 +159,9 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Bomber")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Bomber){
+                    deployPos = findFinalDeployPos(degreeOffset);
                     dockedShips.remove(dockedShips.get(i));
-                    Bomber newBomber = new Bomber(centerPosX, centerPosY - (2 * radius), team);
+                    Bomber newBomber = new Bomber((float) deployPos.x, (float) deployPos.y, team);
                     GameScreen.bombers.add(newBomber);
                     GameScreen.ships.add(newBomber);
                     GameScreen.objects.add(newBomber);
