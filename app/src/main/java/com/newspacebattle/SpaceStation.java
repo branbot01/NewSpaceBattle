@@ -101,7 +101,7 @@ class SpaceStation extends Ship {
         if(Objects.equals(type, "ResourceCollector")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof ResourceCollector){
-                    dockedShips.remove(i);
+                    dockedShips.remove(dockedShips.get(i));
                     ResourceCollector newResourceCollector = new ResourceCollector(centerPosX, centerPosY - (2 * radius), team);
                     GameScreen.resourceCollectors.add(newResourceCollector);
                     GameScreen.ships.add(newResourceCollector);
@@ -112,7 +112,7 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Scout")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Scout){
-                    dockedShips.remove(i);
+                    dockedShips.remove(dockedShips.get(i));
                     Scout newScout = new Scout(centerPosX, centerPosY - (2 * radius), team);
                     GameScreen.scouts.add(newScout);
                     GameScreen.ships.add(newScout);
@@ -123,7 +123,7 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Fighter")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Fighter){
-                    dockedShips.remove(i);
+                    dockedShips.remove(dockedShips.get(i));
                     Fighter newFighter = new Fighter(centerPosX, centerPosY - (2 * radius), team);
                     GameScreen.fighters.add(newFighter);
                     GameScreen.ships.add(newFighter);
@@ -134,7 +134,7 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Bomber")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Bomber){
-                    dockedShips.remove(i);
+                    dockedShips.remove(dockedShips.get(i));
                     Bomber newBomber = new Bomber(centerPosX, centerPosY - (2 * radius), team);
                     GameScreen.bombers.add(newBomber);
                     GameScreen.ships.add(newBomber);
