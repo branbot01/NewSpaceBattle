@@ -3,6 +3,7 @@ package com.newspacebattle;
 import android.graphics.Matrix;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Dylan on 2018-08-06. Defines a space station object.
@@ -15,6 +16,8 @@ class SpaceStation extends Ship {
     int maxDockedNum = 2; //to be changed
 
     ArrayList<Ship> dockedShips = new ArrayList<>();
+
+    private PointObject initialRedeployLocation;
 
     //Constructor method
     SpaceStation(float x, float y, int team) {
@@ -42,6 +45,7 @@ class SpaceStation extends Ship {
         ring1Degrees = 90;
         ring2Degrees = 180;
         ring3Degrees = 270;
+        initialRedeployLocation = new PointObject(0, 0);
     }
 
     //Updates the object's properties
@@ -87,10 +91,57 @@ class SpaceStation extends Ship {
         ringSpiral3.preScale(preScaleX * 2, preScaleY * 2);
     }
 
-    private void deployShips(GameObject object) {
+    //redeploys docked ship from space station
+    private void deployShip(String type) {
 
+        int degreeOffset = 0;
+        initialRedeployLocation.x = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);
+        initialRedeployLocation.y = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);
 
-
-
+        if(Objects.equals(type, "ResourceCollector")){
+            for(int i = 0; i < dockedShips.size(); i++){
+                if(dockedShips.get(i) instanceof ResourceCollector){
+                    dockedShips.remove(i);
+                    ResourceCollector newResourceCollector = new ResourceCollector(centerPosX, centerPosY - 500, team);
+                    GameScreen.resourceCollectors.add(newResourceCollector);
+                    GameScreen.ships.add(newResourceCollector);
+                    GameScreen.objects.add(newResourceCollector);
+                    break;
+                }
+            }
+        }else if(Objects.equals(type, "Scout")){
+            for(int i = 0; i < dockedShips.size(); i++){
+                if(dockedShips.get(i) instanceof Scout){
+                    dockedShips.remove(i);
+                    Scout newScout = new Scout(centerPosX, centerPosY - 500, team);
+                    GameScreen.scouts.add(newScout);
+                    GameScreen.ships.add(newScout);
+                    GameScreen.objects.add(newScout);
+                    break;
+                }
+            }
+        }else if(Objects.equals(type, "Fighter")){
+            for(int i = 0; i < dockedShips.size(); i++){
+                if(dockedShips.get(i) instanceof Fighter){
+                    dockedShips.remove(i);
+                    Fighter newFighter = new Fighter(centerPosX, centerPosY - 500, team);
+                    GameScreen.fighters.add(newFighter);
+                    GameScreen.ships.add(newFighter);
+                    GameScreen.objects.add(newFighter);
+                    break;
+                }
+            }
+        }else if(Objects.equals(type, "Bomber")){
+            for(int i = 0; i < dockedShips.size(); i++){
+                if(dockedShips.get(i) instanceof Bomber){
+                    dockedShips.remove(i);
+                    Bomber newBomber = new Bomber(centerPosX, centerPosY - 500, team);
+                    GameScreen.bombers.add(newBomber);
+                    GameScreen.ships.add(newBomber);
+                    GameScreen.objects.add(newBomber);
+                    break;
+                }
+            }
+        }
     }
 }
