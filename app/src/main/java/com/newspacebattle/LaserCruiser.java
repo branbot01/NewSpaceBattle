@@ -13,6 +13,8 @@ class LaserCruiser extends Ship {
 
     static float constRadius;
 
+    static int buildTime, cost;
+
     //Constructor method
     LaserCruiser(float x, float y, int team) {
         type = "LaserCruiser";

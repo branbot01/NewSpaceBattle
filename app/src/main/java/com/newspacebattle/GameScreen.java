@@ -143,6 +143,22 @@ public class GameScreen extends View {
         Scout.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
         SpaceStation.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
 
+        BattleShip.buildTime = 200000;
+        Bomber.buildTime = 30000;
+        Fighter.buildTime = 20000;
+        LaserCruiser.buildTime = 200000;
+        ResourceCollector.buildTime = 40000;
+        Scout.buildTime = 12000;
+        SpaceStation.buildTime = 480000;
+
+        BattleShip.cost = 50000;
+        Bomber.cost = 7500;
+        Fighter.cost = 5000;
+        LaserCruiser.cost = 25000;
+        ResourceCollector.cost = 10000;
+        Scout.cost = 3000;
+        SpaceStation.cost = 120000;
+
         generateMap();
         //generateFaceoff();
 

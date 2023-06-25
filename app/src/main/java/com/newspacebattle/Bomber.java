@@ -9,6 +9,8 @@ class Bomber extends Ship {
 
     static float constRadius;
 
+    static int buildTime, cost;
+
     //Constructor method
     Bomber(float x, float y, int team) {
         type = "Bomber";

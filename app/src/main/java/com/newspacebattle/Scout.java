@@ -7,6 +7,8 @@ class Scout extends Ship {
 
     static float constRadius;
 
+    static int buildTime, cost;
+
     //Constructor method
     Scout(float x, float y, int team) {
         type = "Scout";

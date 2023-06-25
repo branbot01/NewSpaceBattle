@@ -16,6 +16,8 @@ class SpaceStation extends Ship {
 
     static float constRadius;
 
+    static int buildTime, cost;
+
     int maxDockedNum = 16; //to be changed
 
     ArrayList<Ship> dockedShips = new ArrayList<>();

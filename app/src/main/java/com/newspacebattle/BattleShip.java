@@ -9,6 +9,8 @@ class BattleShip extends Ship {
 
     static float constRadius;
 
+    static int buildTime, cost;
+
     //Constructor method
     BattleShip(float x, float y, int team) {
         type = "BattleShip";

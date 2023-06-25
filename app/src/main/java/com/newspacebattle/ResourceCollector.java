@@ -13,6 +13,8 @@ class ResourceCollector extends Ship {
     private Asteroid asteroidSelected;
 
     static float constRadius;
+
+    static int buildTime, cost;
     private FlagShip flagShipSelected = null;
 
     //Constructor method
