@@ -31,6 +31,7 @@ class SpaceStation extends Ship {
         centerPosY = positionY + midY;
         mass = 25000;
         health = 40000;
+        MAX_HEALTH = 40000;
         accelerate = 0;
         maxSpeed = 0;
         preScaleX = 7;
@@ -84,5 +85,12 @@ class SpaceStation extends Ship {
         ringSpiral3.setRotate(ring3Degrees, midX, midY);
         ringSpiral3.postTranslate(positionX, positionY);
         ringSpiral3.preScale(preScaleX * 2, preScaleY * 2);
+    }
+
+    private void deployShips(GameObject object) {
+
+
+
+
     }
 }

@@ -24,6 +24,7 @@ class FlagShip extends Ship {
         centerPosY = positionY + midY;
         mass = 11000;
         health = 15000;
+        MAX_HEALTH = 15000;
         accelerate = 0.2f;
         maxSpeed = accelerate * 75;
         resources = 0;

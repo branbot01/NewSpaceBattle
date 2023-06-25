@@ -27,6 +27,7 @@ class LaserCruiser extends Ship {
         centerPosY = positionY + midY;
         mass = 3000;
         health = 7500;
+        MAX_HEALTH = 7500;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;
         preScaleX = 1.75f;

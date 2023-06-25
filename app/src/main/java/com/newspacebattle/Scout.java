@@ -20,6 +20,7 @@ class Scout extends Ship {
         centerPosY = positionY + midY;
         mass = 500;
         health = 1000;
+        MAX_HEALTH = 1000;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;
         preScaleX = 1;

@@ -11,7 +11,7 @@ import android.view.animation.LinearInterpolator;
  */
 class Ship extends GameObject {
 
-    float health;
+    float health, MAX_HEALTH;
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;

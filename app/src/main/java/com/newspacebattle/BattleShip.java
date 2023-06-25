@@ -23,6 +23,7 @@ class BattleShip extends Ship {
         centerPosY = positionY + midY;
         mass = 10000;
         health = 20000;
+        MAX_HEALTH = 20000;
         accelerate = 0.175f;
         maxSpeed = accelerate * 75;
         preScaleX = 3.5f;

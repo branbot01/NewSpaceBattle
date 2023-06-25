@@ -23,6 +23,7 @@ class Fighter extends Ship {
         centerPosY = positionY + midY;
         mass = 2500;
         health = 3000;
+        MAX_HEALTH = 3000;
         accelerate = 0.6f;
         maxSpeed = accelerate * 75;
         preScaleX = 1;

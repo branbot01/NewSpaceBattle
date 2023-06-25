@@ -198,6 +198,7 @@ class PathFinder {
                            if(((SpaceStation) targetObj).dockedShips.size() < ((SpaceStation) targetObj).maxDockedNum) {
 
                                ((SpaceStation) targetObj).dockedShips.add(ship);
+                               ship.health = ship.MAX_HEALTH;
 
                                if (ship instanceof Fighter) {
                                    GameScreen.fighters.remove(ship);

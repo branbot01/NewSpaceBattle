@@ -23,6 +23,7 @@ class Bomber extends Ship {
         centerPosY = positionY + midY;
         mass = 1500;
         health = 3000;
+        MAX_HEALTH = 3000;
         accelerate = 0.4f;
         maxSpeed = accelerate * 75;
         preScaleX = 1;
