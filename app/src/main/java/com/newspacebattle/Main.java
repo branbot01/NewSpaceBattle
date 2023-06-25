@@ -196,9 +196,19 @@ public class Main extends AppCompatActivity {
             public void run() {
                 if (selectShips.size() == 0) {
                     shipBar(false);
+                } else {
+                    boolean allDocked = true;
+                    for (Ship ship : selectShips) {
+                        if (!ship.docked) {
+                            allDocked = false;
+                            break;
+                        }
+                    }
+                    if (allDocked) {
+                        shipBar(false);
+                    }
                 }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
-                System.out.println("Resources: " + GameScreen.resources[0]);
                 UILoop();
             }
         }, 16);
