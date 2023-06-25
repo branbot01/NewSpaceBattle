@@ -11,6 +11,8 @@ class LaserCruiser extends Ship {
 
     private PointObject laser1, laser2;
 
+    static float constRadius;
+
     //Constructor method
     LaserCruiser(float x, float y, int team) {
         type = "LaserCruiser";

@@ -14,11 +14,11 @@ class SpaceStation extends Ship {
     Matrix ringSpiral1 = new Matrix(), ringSpiral2 = new Matrix(), ringSpiral3 = new Matrix();
     private int ring1Degrees, ring2Degrees, ring3Degrees;
 
+    static float constRadius;
+
     int maxDockedNum = 16; //to be changed
 
     ArrayList<Ship> dockedShips = new ArrayList<>();
-
-    private PointObject initialRedeployLocation;
 
     //Constructor method
     SpaceStation(float x, float y, int team) {
@@ -46,7 +46,6 @@ class SpaceStation extends Ship {
         ring1Degrees = 90;
         ring2Degrees = 180;
         ring3Degrees = 270;
-        initialRedeployLocation = new PointObject(0, 0);
     }
 
     //Updates the object's properties
@@ -95,10 +94,8 @@ class SpaceStation extends Ship {
     //changes deploy angle if needed
     private PointObject setDeployPos(){
         PointObject deployPos = new PointObject(0, 0);
-        initialRedeployLocation.x = Utilities.circleAngleX(degrees, centerPosX, (radius) * 1.2);
-        initialRedeployLocation.y = Utilities.circleAngleY(degrees, centerPosY, (radius) * 1.2);
-        deployPos.x = initialRedeployLocation.x;
-        deployPos.y = initialRedeployLocation.y;
+        deployPos.x = Utilities.circleAngleX(degrees, centerPosX, (radius) * 1.2);
+        deployPos.y = Utilities.circleAngleY(degrees, centerPosY, (radius) * 1.2);
         return deployPos;
     }
 

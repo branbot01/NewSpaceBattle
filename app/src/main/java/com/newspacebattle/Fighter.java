@@ -7,6 +7,8 @@ class Fighter extends Ship {
 
     private PointObject gun1, gun2;
 
+    static float constRadius;
+
     //Constructor method
     Fighter(float x, float y, int team) {
         type = "Fighter";

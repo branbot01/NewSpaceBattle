@@ -5,6 +5,8 @@ package com.newspacebattle;
  */
 class Scout extends Ship {
 
+    static float constRadius;
+
     //Constructor method
     Scout(float x, float y, int team) {
         type = "Scout";

@@ -134,6 +134,15 @@ public class GameScreen extends View {
         mapSizeY = (int) (Main.screenY / scaleY * 32);
         clusterSize = (int) (Main.screenX / 0.2);
 
+        BattleShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 3.5);
+        Bomber.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.25);
+        Fighter.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.5);
+        FlagShip.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 4);
+        LaserCruiser.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.75);
+        ResourceCollector.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 2);
+        Scout.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
+        SpaceStation.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
+
         generateMap();
         //generateFaceoff();
 

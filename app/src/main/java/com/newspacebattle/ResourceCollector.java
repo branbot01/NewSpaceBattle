@@ -11,6 +11,8 @@ class ResourceCollector extends Ship {
     boolean harvesting, unloading;
     double resources;
     private Asteroid asteroidSelected;
+
+    static float constRadius;
     private FlagShip flagShipSelected = null;
 
     //Constructor method
