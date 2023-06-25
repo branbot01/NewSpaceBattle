@@ -370,7 +370,7 @@ public class GameScreen extends View {
 
     //Generates ships randomly around the map
     public static void generateMap() {
-        blackHole.add(new BlackHole(0, 0));
+        //blackHole.add(new BlackHole(0, 0));
 
         final int flagShipNum = 0;
         final int resCollectorsNum = 200;

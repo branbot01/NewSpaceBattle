@@ -34,7 +34,8 @@ public class Main extends AppCompatActivity {
     static Collisions collisions;
     ProgressBar loadingBar;
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation;
-    Button special, normal;
+    FloatingActionButton resourceCollector, scout, fighter, bomber;
+    Button special, normal, dockedShips;
     GameScreen gameScreen;
     TextView resourceCount;
     MediaPlayer rickRoll;
@@ -372,11 +373,16 @@ public class Main extends AppCompatActivity {
         follow = findViewById(R.id.followButton);
         special = findViewById(R.id.specialButton);
         normal = findViewById(R.id.normalButton);
+        dockedShips = findViewById(R.id.dockedShipsButton);
         harvest = findViewById(R.id.harvestButton);
         dock = findViewById(R.id.dockButton);
         dockMenu = findViewById(R.id.dockMenuButton);
         formation = findViewById(R.id.shootButton);
         fabColor = select.getBackgroundTintList();
+        resourceCollector = findViewById(R.id.resourceCollectorButton);
+        scout = findViewById(R.id.scoutButton);
+        fighter = findViewById(R.id.fighterButton);
+        bomber = findViewById(R.id.bomberButton);
         resourceCount = findViewById(R.id.resourcesText);
     }
 
@@ -395,6 +401,8 @@ public class Main extends AppCompatActivity {
         }
 
         if (hiddenOrNot) {
+            bar.setBackgroundColor(Color.parseColor("#0099CC"));
+
             bar.setVisibility(View.VISIBLE);
             move.setVisibility(View.VISIBLE);
             stop.setVisibility(View.VISIBLE);
@@ -406,6 +414,7 @@ public class Main extends AppCompatActivity {
             normal.setVisibility(View.VISIBLE);
 
             special.setVisibility(View.INVISIBLE);
+            dockedShips.setVisibility(View.INVISIBLE);
             harvest.setVisibility(View.INVISIBLE);
             dock.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
@@ -421,8 +430,13 @@ public class Main extends AppCompatActivity {
             normal.setVisibility(View.INVISIBLE);
             harvest.setVisibility(View.INVISIBLE);
             dock.setVisibility(View.INVISIBLE);
+            dockedShips.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
+            resourceCollector.setVisibility(View.INVISIBLE);
+            scout.setVisibility(View.INVISIBLE);
+            fighter.setVisibility(View.INVISIBLE);
+            bomber.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -465,6 +479,10 @@ public class Main extends AppCompatActivity {
             clearButtonsToWhite();
             attack.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
             startAttack = true;
+            GameScreen.startAttX = 0;
+            GameScreen.startAttY = 0;
+            GameScreen.endAttX = 0;
+            GameScreen.endAttY = 0;
         } else {
             attack.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
             startAttack = false;
@@ -512,6 +530,26 @@ public class Main extends AppCompatActivity {
 
     // Opens the dock menu
     public void openDockMenu(View view) {
+        int spaceStationCount = 0;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof SpaceStation) {
+                spaceStationCount++;
+            }
+        }
+        if (spaceStationCount != 1){
+            return;
+        }
+        bar.setBackgroundColor(Color.parseColor("#FF4081"));
+        dockedShips.setVisibility(View.VISIBLE);
+
+        harvest.setVisibility(View.INVISIBLE);
+        dock.setVisibility(View.INVISIBLE);
+        dockMenu.setVisibility(View.INVISIBLE);
+
+        resourceCollector.setVisibility(View.VISIBLE);
+        scout.setVisibility(View.VISIBLE);
+        fighter.setVisibility(View.VISIBLE);
+        bomber.setVisibility(View.VISIBLE);
     }
 
     //Initiates ship selection process
@@ -544,6 +582,7 @@ public class Main extends AppCompatActivity {
 
         normal.setVisibility(View.VISIBLE);
         special.setVisibility(View.INVISIBLE);
+        dockedShips.setVisibility(View.INVISIBLE);
 
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
@@ -552,6 +591,8 @@ public class Main extends AppCompatActivity {
 
     //Opens normal menu
     public void normalMenu(View view) {
+        bar.setBackgroundColor(Color.parseColor("#0099CC"));
+
         stop.setVisibility(View.INVISIBLE);
         move.setVisibility(View.INVISIBLE);
         attack.setVisibility(View.INVISIBLE);
@@ -561,10 +602,16 @@ public class Main extends AppCompatActivity {
 
         normal.setVisibility(View.INVISIBLE);
         special.setVisibility(View.VISIBLE);
+        dockedShips.setVisibility(View.INVISIBLE);
 
         harvest.setVisibility(View.VISIBLE);
         dock.setVisibility(View.VISIBLE);
         dockMenu.setVisibility(View.VISIBLE);
+
+        resourceCollector.setVisibility(View.INVISIBLE);
+        scout.setVisibility(View.INVISIBLE);
+        fighter.setVisibility(View.INVISIBLE);
+        bomber.setVisibility(View.INVISIBLE);
     }
 
     //Sets all buttons background colours to white

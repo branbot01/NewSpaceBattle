@@ -5,4 +5,5 @@
     <string name="next">NEXT</string>
     <string name="SpecialOptions">SPECIAL</string>
     <string name="NormalOptions">NORMAL</string>
+    <string name="DockedShipsOptions">DOCKED SHIPS</string>
 </resources>
