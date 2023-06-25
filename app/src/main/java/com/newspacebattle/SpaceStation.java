@@ -92,7 +92,7 @@ class SpaceStation extends Ship {
     }
 
     //redeploys docked ship from space station
-    private void deployShip(String type) {
+    void deployShip(String type) {
 
         int degreeOffset = 0;
         initialRedeployLocation.x = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 1.5);

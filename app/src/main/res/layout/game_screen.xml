@@ -248,6 +248,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        android:onClick="deployBomber"
         app:backgroundTint="@android:color/white"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -263,6 +264,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        android:onClick="deployFighter"
         app:backgroundTint="@android:color/white"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -278,6 +280,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        android:onClick="deployScout"
         app:backgroundTint="@android:color/white"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -293,6 +296,7 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        android:onClick="deployResourceCollector"
         app:backgroundTint="@android:color/white"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -312,5 +316,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/numResourceCollectors"
+        android:layout_width="40dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/numScouts"
+        app:layout_constraintTop_toBottomOf="@+id/shipModeButton" />
+
+    <TextView
+        android:id="@+id/numScouts"
+        android:layout_width="40dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/numFighters"
+        app:layout_constraintTop_toBottomOf="@+id/scoutButton" />
+
+    <TextView
+        android:id="@+id/numFighters"
+        android:layout_width="40dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/numBombers"
+        app:layout_constraintTop_toBottomOf="@+id/fighterButton" />
+
+    <TextView
+        android:id="@+id/numBombers"
+        android:layout_width="40dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bomberButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

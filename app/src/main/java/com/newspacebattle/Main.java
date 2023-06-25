@@ -37,7 +37,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     Button special, normal, dockedShips;
     GameScreen gameScreen;
-    TextView resourceCount;
+    TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
         @Override
@@ -207,6 +207,17 @@ public class Main extends AppCompatActivity {
                     }
                     if (allDocked) {
                         shipBar(false);
+                    }
+                    int spaceStationCount = 0;
+                    SpaceStation spaceStation = null;
+                    for (int i = 0; i <= selectShips.size() - 1; i++) {
+                        if (selectShips.get(i) instanceof SpaceStation) {
+                            spaceStationCount++;
+                            spaceStation = (SpaceStation) selectShips.get(i);
+                        }
+                    }
+                    if (spaceStationCount == 1){
+                        countDockedShips(spaceStation);
                     }
                 }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
@@ -383,6 +394,10 @@ public class Main extends AppCompatActivity {
         scout = findViewById(R.id.scoutButton);
         fighter = findViewById(R.id.fighterButton);
         bomber = findViewById(R.id.bomberButton);
+        numResourceCollectors = findViewById(R.id.numResourceCollectors);
+        numScouts = findViewById(R.id.numScouts);
+        numFighters = findViewById(R.id.numFighters);
+        numBombers = findViewById(R.id.numBombers);
         resourceCount = findViewById(R.id.resourcesText);
     }
 
@@ -437,6 +452,10 @@ public class Main extends AppCompatActivity {
             scout.setVisibility(View.INVISIBLE);
             fighter.setVisibility(View.INVISIBLE);
             bomber.setVisibility(View.INVISIBLE);
+            numResourceCollectors.setVisibility(View.INVISIBLE);
+            numScouts.setVisibility(View.INVISIBLE);
+            numFighters.setVisibility(View.INVISIBLE);
+            numBombers.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -531,25 +550,53 @@ public class Main extends AppCompatActivity {
     // Opens the dock menu
     public void openDockMenu(View view) {
         int spaceStationCount = 0;
+        SpaceStation spaceStation = null;
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             if (selectShips.get(i) instanceof SpaceStation) {
                 spaceStationCount++;
+                spaceStation = (SpaceStation) selectShips.get(i);
             }
         }
         if (spaceStationCount != 1){
             return;
         }
+        countDockedShips(spaceStation);
+
         bar.setBackgroundColor(Color.parseColor("#FF4081"));
         dockedShips.setVisibility(View.VISIBLE);
 
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);
+        special.setVisibility(View.INVISIBLE);
 
         resourceCollector.setVisibility(View.VISIBLE);
         scout.setVisibility(View.VISIBLE);
         fighter.setVisibility(View.VISIBLE);
         bomber.setVisibility(View.VISIBLE);
+        numResourceCollectors.setVisibility(View.VISIBLE);
+        numScouts.setVisibility(View.VISIBLE);
+        numFighters.setVisibility(View.VISIBLE);
+        numBombers.setVisibility(View.VISIBLE);
+    }
+
+    private void countDockedShips(SpaceStation spaceStation){
+        int dockedResourceCollectors = 0, dockedScouts = 0, dockedFighters = 0, dockedBombers = 0;
+        for (int i = 0; i <= spaceStation.dockedShips.size() - 1; i++) {
+            if (spaceStation.dockedShips.get(i) instanceof ResourceCollector) {
+                dockedResourceCollectors++;
+            } else if (spaceStation.dockedShips.get(i) instanceof Scout) {
+                dockedScouts++;
+            } else if (spaceStation.dockedShips.get(i) instanceof Fighter) {
+                dockedFighters++;
+            } else if (spaceStation.dockedShips.get(i) instanceof Bomber) {
+                dockedBombers++;
+            }
+        }
+        numResourceCollectors.setText("x" + dockedResourceCollectors);
+        numScouts.setText("x" + dockedScouts);
+        numFighters.setText("x" + dockedFighters);
+        numBombers.setText("x" + dockedBombers);
     }
 
     //Initiates ship selection process
@@ -612,11 +659,68 @@ public class Main extends AppCompatActivity {
         scout.setVisibility(View.INVISIBLE);
         fighter.setVisibility(View.INVISIBLE);
         bomber.setVisibility(View.INVISIBLE);
+
+        numResourceCollectors.setVisibility(View.INVISIBLE);
+        numScouts.setVisibility(View.INVISIBLE);
+        numFighters.setVisibility(View.INVISIBLE);
+        numBombers.setVisibility(View.INVISIBLE);
     }
 
     //Sets all buttons background colours to white
     public void clearButtonsToWhite() {
         move.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
         attack.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+    }
+
+    public void deployResourceCollector(View view) {
+        SpaceStation spaceStation = null;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof SpaceStation) {
+                spaceStation = (SpaceStation) selectShips.get(i);
+            }
+        }
+        if (spaceStation != null) {
+            spaceStation.deployShip("ResourceCollector");
+            countDockedShips(spaceStation);
+        }
+    }
+
+    public void deployScout(View view) {
+        SpaceStation spaceStation = null;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof SpaceStation) {
+                spaceStation = (SpaceStation) selectShips.get(i);
+            }
+        }
+        if (spaceStation != null) {
+            spaceStation.deployShip("Scout");
+            countDockedShips(spaceStation);
+        }
+    }
+
+    public void deployFighter(View view) {
+        SpaceStation spaceStation = null;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof SpaceStation) {
+                spaceStation = (SpaceStation) selectShips.get(i);
+            }
+        }
+        if (spaceStation != null) {
+            spaceStation.deployShip("Fighter");
+            countDockedShips(spaceStation);
+        }
+    }
+
+    public void deployBomber(View view) {
+        SpaceStation spaceStation = null;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof SpaceStation) {
+                spaceStation = (SpaceStation) selectShips.get(i);
+            }
+        }
+        if (spaceStation != null) {
+            spaceStation.deployShip("Bomber");
+            countDockedShips(spaceStation);
+        }
     }
 }
