@@ -199,25 +199,43 @@ public class Main extends AppCompatActivity {
                     shipBar(false);
                 } else {
                     boolean allDocked = true;
-                    for (Ship ship : selectShips) {
-                        if (!ship.docked) {
+                    for (int i = 0; i <= selectShips.size() - 1; i++) {
+                        if (!selectShips.get(i).docked) {
                             allDocked = false;
-                            break;
                         }
                     }
                     if (allDocked) {
                         shipBar(false);
                     }
-                    int spaceStationCount = 0;
+                    for (int i = 0; i <= selectShips.size() - 1; i++) {
+                        if (selectShips.get(i).docked) {
+                            selectShips.remove(selectShips.get(i));
+                        }
+                    }
+                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0;
                     SpaceStation spaceStation = null;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (selectShips.get(i) instanceof SpaceStation) {
                             spaceStationCount++;
                             spaceStation = (SpaceStation) selectShips.get(i);
                         }
+                        if (selectShips.get(i) instanceof ResourceCollector) {
+                            resourceCollectorCount++;
+                        }
+                        if (selectShips.get(i).dockable) {
+                            dockableShipsCount++;
+                        }
                     }
                     if (spaceStationCount == 1){
                         countDockedShips(spaceStation);
+                    } else {
+                        dockMenu.setAlpha(0.5f);
+                    }
+                    if (resourceCollectorCount == 0) {
+                        harvest.setAlpha(0.5f);
+                    }
+                    if (dockableShipsCount == 0) {
+                        dock.setAlpha(0.5f);
                     }
                 }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
@@ -597,6 +615,27 @@ public class Main extends AppCompatActivity {
         numScouts.setText("x" + dockedScouts);
         numFighters.setText("x" + dockedFighters);
         numBombers.setText("x" + dockedBombers);
+
+        if (dockedResourceCollectors == 0) {
+            resourceCollector.setAlpha(0.5f);
+        } else {
+            resourceCollector.setAlpha(1f);
+        }
+        if (dockedScouts == 0) {
+            scout.setAlpha(0.5f);
+        } else {
+            scout.setAlpha(1f);
+        }
+        if (dockedFighters == 0) {
+            fighter.setAlpha(0.5f);
+        } else {
+            fighter.setAlpha(1f);
+        }
+        if (dockedBombers == 0) {
+            bomber.setAlpha(0.5f);
+        } else {
+            bomber.setAlpha(1f);
+        }
     }
 
     //Initiates ship selection process
