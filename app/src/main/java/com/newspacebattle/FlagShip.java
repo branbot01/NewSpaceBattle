@@ -26,7 +26,7 @@ class FlagShip extends Ship {
         health = 15000;
         accelerate = 0.2f;
         maxSpeed = accelerate * 75;
-        resources = 20000;
+        resources = 0;
         preScaleX = 4;
         preScaleY = 4;
         dockable = false;

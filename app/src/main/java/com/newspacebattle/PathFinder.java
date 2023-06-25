@@ -215,13 +215,13 @@ class PathFinder {
                            }
                         }
 
-                        if(((ResourceCollector) ship).harvesting && targetObj instanceof Asteroid){
-                            ((ResourceCollector) ship).mineAsteroid();
-                        }else if(((ResourceCollector) ship).unloading && targetObj instanceof FlagShip){
-                            ((ResourceCollector) ship).transferRes();
+                        if (ship instanceof ResourceCollector){
+                            if(((ResourceCollector) ship).harvesting && targetObj instanceof Asteroid){
+                                ((ResourceCollector) ship).mineAsteroid();
+                            }else if(((ResourceCollector) ship).unloading && targetObj instanceof FlagShip){
+                                ((ResourceCollector) ship).transferRes();
+                            }
                         }
-
-
                         ship.stop();
                         return;
                     }

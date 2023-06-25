@@ -1,6 +1,5 @@
 package com.newspacebattle;
 
-import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -9,9 +8,9 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.*;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,8 +28,6 @@ public class Main extends AppCompatActivity {
     static int screenX, screenY, movedX, movedY;
     static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
-    static ValueAnimator zoomX = ValueAnimator.ofFloat(GameScreen.scaleX, GameScreen.scaleX + 0.05f);
-    static ValueAnimator zoomY = ValueAnimator.ofFloat(GameScreen.scaleY, GameScreen.scaleY + 0.05f);
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
     static ColorStateList fabColor;
@@ -39,6 +36,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation;
     Button special, normal;
     GameScreen gameScreen;
+    TextView resourceCount;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
         @Override
@@ -163,12 +161,6 @@ public class Main extends AppCompatActivity {
             screenX = size.x;
             GameScreen.circleRatio = (float) screenY / screenX;
 
-            zoomX.setInterpolator(new LinearInterpolator());
-            zoomX.setDuration(500);
-
-            zoomY.setInterpolator(new LinearInterpolator());
-            zoomY.setDuration(500);
-
             loader.start();
             loadingBar = findViewById(R.id.loading);
             loadingBar.setVisibility(View.VISIBLE);
@@ -187,7 +179,7 @@ public class Main extends AppCompatActivity {
                     addContentView(gameView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
                     collisions = new Collisions();
                     gameScreen.gameLoop();
-                    checkShipSelection();
+                    UILoop();
                     loadingBar.setVisibility(View.INVISIBLE);
                     findIds();
                 } else {
@@ -197,15 +189,17 @@ public class Main extends AppCompatActivity {
         }, 16);
     }
 
-    //If there are no ships selected, turn menu off
-    public void checkShipSelection() {
+    //Loop updating ui elements
+    public void UILoop() {
         selectionChecker.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (selectShips.size() == 0) {
                     shipBar(false);
                 }
-                checkShipSelection();
+                resourceCount.setText("Resources: " + GameScreen.resources[0]);
+                System.out.println("Resources: " + GameScreen.resources[0]);
+                UILoop();
             }
         }, 16);
     }
@@ -373,6 +367,7 @@ public class Main extends AppCompatActivity {
         dockMenu = findViewById(R.id.dockMenuButton);
         formation = findViewById(R.id.shootButton);
         fabColor = select.getBackgroundTintList();
+        resourceCount = findViewById(R.id.resourcesText);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected

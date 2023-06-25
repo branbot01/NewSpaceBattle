@@ -43,9 +43,6 @@ class ResourceCollector extends Ship {
         exists = checkIfAlive();
         move();
         rotate();
-        if (resources > 0) {
-            System.out.println(resources);
-        }
     }
 
     //Finds closest asteroid with resources
@@ -75,11 +72,10 @@ class ResourceCollector extends Ship {
             @Override
             public void run() {
                 Looper.prepare();
-                System.out.println("mine asteroid ran");
                 while (resources < RESOURCE_CAPACITY && harvesting && asteroidSelected.resources > 0) {
                     velocityX = asteroidSelected.velocityX;
                     velocityY = asteroidSelected.velocityY;
-                    if (resources <= 2500) {
+                    if (resources < 2500) {
                         resources += 4;
                         asteroidSelected.resources -= 4;
                     }

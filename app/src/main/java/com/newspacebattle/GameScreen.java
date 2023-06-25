@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class GameScreen extends View {
 
     static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize;
+    static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
     static float startAttX, startAttY, endAttX, endAttY;
@@ -355,6 +356,16 @@ public class GameScreen extends View {
             offsetX = (int) (midPointX * scaleX - Main.screenX / 2);
             offsetY = (int) (midPointY * scaleY - Main.screenY / 2);
         }
+    }
+
+    public static void calculateResources() {
+        int[] res = new int[4];
+        for(int i = 0; i < res.length; i++){
+            for (int ii = 0; ii <= flagShips.size() - 1; ii++) {
+                res[i] += flagShips.get(ii).resources;
+            }
+        }
+        resources = res;
     }
 
     //Generates ships randomly around the map
@@ -882,6 +893,7 @@ public class GameScreen extends View {
                         }
                     }
                     followShips();
+                    calculateResources();
                 }
                 gameLoop();
             }
