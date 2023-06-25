@@ -75,6 +75,7 @@ class ResourceCollector extends Ship {
             @Override
             public void run() {
                 Looper.prepare();
+                System.out.println("mine asteroid ran");
                 while (resources < RESOURCE_CAPACITY && harvesting && asteroidSelected.resources > 0) {
                     velocityX = asteroidSelected.velocityX;
                     velocityY = asteroidSelected.velocityY;
@@ -96,9 +97,11 @@ class ResourceCollector extends Ship {
         double nearest = 99999999999999999.0;
         flagShipSelected = null;
         for (int i = 0; i <= GameScreen.flagShips.size() - 1; i++) {
-            if (Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2))) < nearest) {
-                flagShipSelected = GameScreen.flagShips.get(i);
-                nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2)));
+            if(GameScreen.flagShips.get(i).team == team){
+                if (Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2))) < nearest) {
+                    flagShipSelected = GameScreen.flagShips.get(i);
+                    nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2)));
+                }
             }
         }
         if (flagShipSelected != null) {

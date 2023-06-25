@@ -361,21 +361,21 @@ public class GameScreen extends View {
     public static void generateMap() {
         blackHole.add(new BlackHole(0, 0));
 
-        final int flagShipNum = 0;
-        final int resCollectorsNum = 100;
-        final int fighterNum = 100;
+        final int flagShipNum = 100;
+        final int resCollectorsNum = 200;
+        final int fighterNum = 0;
         final int battleShipNum = 0;
-        final int bomberNum = 100;
-        final int scoutNum = 100;
+        final int bomberNum = 0;
+        final int scoutNum = 0;
         final int laserCruiserNum = 0;
-        final int spaceStationNum = 100;
+        final int spaceStationNum = 0;
         final int bulletNum = 500;
         final int explosionNum = 500;
         final int missileNum = 250;
         final int laserNum = 500;
 
         generateStars(3000);
-        generateAsteroids(0, 5);
+        generateAsteroids(40, 5);
 
         do {
             resourceCollectors.clear();
