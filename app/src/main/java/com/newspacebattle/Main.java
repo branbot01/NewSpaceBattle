@@ -26,9 +26,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //Main class handles ui elements like the menus and buttons
 public class Main extends AppCompatActivity {
 
-    static int screenX, screenY, movedX, movedY, menuList;
+    static int screenX, screenY, movedX, movedY;
     static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded;
-    static boolean menuChoice;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static ValueAnimator zoomX = ValueAnimator.ofFloat(GameScreen.scaleX, GameScreen.scaleX + 0.05f);
     static ValueAnimator zoomY = ValueAnimator.ofFloat(GameScreen.scaleY, GameScreen.scaleY + 0.05f);
@@ -36,10 +35,9 @@ public class Main extends AppCompatActivity {
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
     static ColorStateList fabColor;
     static Collisions collisions;
-    //JoystickView joystick;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, warp, formation;
-    Button special, moreOptions, normal;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation;
+    Button special, normal;
     GameScreen gameScreen;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
@@ -104,17 +102,14 @@ public class Main extends AppCompatActivity {
         enemySelect.clear();
     }
 
-    //Makeshift shoot button for ships
-    public void center(View view) {
-        //GameScreen.offsetX = 0 - screenX / 2;
-        //GameScreen.offsetY = 0 - screenY / 2;
+    // Shoot button for ships
+    public void shoot(View view) {
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             selectShips.get(i).shoot();
         }
     }
 
     //Method runs on creation of app
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -329,7 +324,7 @@ public class Main extends AppCompatActivity {
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        if(event.getPointerCount() == 2 || zooming){
+                        if (event.getPointerCount() == 2 || zooming) {
                             break;
                         }
                         following = false;
@@ -368,7 +363,6 @@ public class Main extends AppCompatActivity {
         stop = findViewById(R.id.stopButton);
         destroy = findViewById(R.id.destroyButton);
         select = findViewById(R.id.select);
-        moreOptions = findViewById(R.id.More);
         attack = findViewById(R.id.attackButton);
         shipMode = findViewById(R.id.shipModeButton);
         follow = findViewById(R.id.followButton);
@@ -376,31 +370,10 @@ public class Main extends AppCompatActivity {
         normal = findViewById(R.id.normalButton);
         harvest = findViewById(R.id.harvestButton);
         dock = findViewById(R.id.dockButton);
-        warp = findViewById(R.id.warpButton);
-        formation = findViewById(R.id.formationButton);
-        //joystick = findViewById(R.id.joystickView);
-        //joyStick();
+        dockMenu = findViewById(R.id.dockMenuButton);
+        formation = findViewById(R.id.shootButton);
         fabColor = select.getBackgroundTintList();
     }
-
-    //Listener for the joystick, drives selected ships
-    /*public void joyStick() {
-        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
-            @Override
-            public void onMove(int angle, int strength) {
-                double newStrength = strength / 100.0;
-                angle = 360 - angle + 90;
-                if (angle >= 360 && angle <= 450) {
-                    angle -= 360;
-                }
-
-                for (Ship i : selectShips) {
-                    i.accelerationX = (float) (i.accelerate * newStrength * (Math.sin(angle * Math.PI / 180)));
-                    i.accelerationY = (float) (i.accelerate * newStrength * (Math.cos(angle * Math.PI / 180)));
-                }
-            }
-        });
-    }*/
 
     //Either hides or shows the ship options bar depending if any ships are selected
     public void shipBar(boolean hiddenOrNot) {
@@ -417,31 +390,25 @@ public class Main extends AppCompatActivity {
         }
 
         if (hiddenOrNot) {
-            menuChoice = false;
-            menuList = 1;
-
             bar.setVisibility(View.VISIBLE);
             move.setVisibility(View.VISIBLE);
             stop.setVisibility(View.VISIBLE);
             attack.setVisibility(View.VISIBLE);
-            moreOptions.setVisibility(View.VISIBLE);
-            normal.setVisibility(View.VISIBLE);
             formation.setVisibility(View.VISIBLE);
-            //joystick.setVisibility(View.VISIBLE);
+            destroy.setVisibility(View.VISIBLE);
+            shipMode.setVisibility(View.VISIBLE);
+            follow.setVisibility(View.VISIBLE);
+            normal.setVisibility(View.VISIBLE);
 
-            destroy.setVisibility(View.INVISIBLE);
-            shipMode.setVisibility(View.INVISIBLE);
-            follow.setVisibility(View.INVISIBLE);
             special.setVisibility(View.INVISIBLE);
             harvest.setVisibility(View.INVISIBLE);
             dock.setVisibility(View.INVISIBLE);
-            warp.setVisibility(View.INVISIBLE);
+            dockMenu.setVisibility(View.INVISIBLE);
         } else {
             bar.setVisibility(View.INVISIBLE);
             move.setVisibility(View.INVISIBLE);
             stop.setVisibility(View.INVISIBLE);
             destroy.setVisibility(View.INVISIBLE);
-            moreOptions.setVisibility(View.INVISIBLE);
             attack.setVisibility(View.INVISIBLE);
             shipMode.setVisibility(View.INVISIBLE);
             follow.setVisibility(View.INVISIBLE);
@@ -449,9 +416,8 @@ public class Main extends AppCompatActivity {
             normal.setVisibility(View.INVISIBLE);
             harvest.setVisibility(View.INVISIBLE);
             dock.setVisibility(View.INVISIBLE);
-            warp.setVisibility(View.INVISIBLE);
+            dockMenu.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
-            //joystick.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -468,7 +434,7 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    //Shops all currently selected ships
+    //Stops all currently selected ships
     public void stopShip(View view) {
         following = false;
         stopMovement();
@@ -539,9 +505,8 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    //Is going to tell ships to warp
-    public void warpShips(View view) {
-
+    // Opens the dock menu
+    public void openDockMenu(View view) {
     }
 
     //Initiates ship selection process
@@ -563,143 +528,25 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    //Lets you see more options in the menu
-    public void moreOptions(View view) {
-        if (!menuChoice) {
-
-            stop.setVisibility(View.INVISIBLE);
-            move.setVisibility(View.INVISIBLE);
-            attack.setVisibility(View.INVISIBLE);
-            destroy.setVisibility(View.INVISIBLE);
-            shipMode.setVisibility(View.INVISIBLE);
-            follow.setVisibility(View.INVISIBLE);
-
-            harvest.setVisibility(View.INVISIBLE);
-            dock.setVisibility(View.INVISIBLE);
-            warp.setVisibility(View.INVISIBLE);
-
-            if (menuList == 1) {
-                menuList = 2;
-
-                destroy.setVisibility(View.VISIBLE);
-                shipMode.setVisibility(View.VISIBLE);
-                follow.setVisibility(View.VISIBLE);
-            } else if (menuList == 2) {
-                menuList = 1;
-
-                stop.setVisibility(View.VISIBLE);
-                move.setVisibility(View.VISIBLE);
-                attack.setVisibility(View.VISIBLE);
-            }
-        } else {
-
-            stop.setVisibility(View.INVISIBLE);
-            move.setVisibility(View.INVISIBLE);
-            attack.setVisibility(View.INVISIBLE);
-            destroy.setVisibility(View.INVISIBLE);
-            shipMode.setVisibility(View.INVISIBLE);
-            follow.setVisibility(View.INVISIBLE);
-
-            harvest.setVisibility(View.INVISIBLE);
-            dock.setVisibility(View.INVISIBLE);
-            warp.setVisibility(View.INVISIBLE);
-
-            if (menuList == 1) {
-                menuList = 2;
-
-            } else if (menuList == 2) {
-                menuList = 1;
-
-                harvest.setVisibility(View.VISIBLE);
-                dock.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
     //Opens special menu
     public void specialMenu(View view) {
-        menuChoice = false;
-        menuList = 1;
-
         stop.setVisibility(View.VISIBLE);
         move.setVisibility(View.VISIBLE);
         attack.setVisibility(View.VISIBLE);
+        destroy.setVisibility(View.VISIBLE);
+        shipMode.setVisibility(View.VISIBLE);
+        follow.setVisibility(View.VISIBLE);
 
         normal.setVisibility(View.VISIBLE);
         special.setVisibility(View.INVISIBLE);
 
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
-        warp.setVisibility(View.INVISIBLE);
+        dockMenu.setVisibility(View.INVISIBLE);
     }
 
     //Opens normal menu
     public void normalMenu(View view) {
-        menuChoice = true;
-        menuList = 1;
-
-        boolean[] specialButtons = new boolean[3];
-        int positionCounter = 0;
-        int pageNum = 1;
-        int[] pageSorter = new int[specialButtons.length];
-
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            if (selectShips.get(i) instanceof ResourceCollector) {
-                specialButtons[0] = true;
-            }
-
-            if (selectShips.get(i).dockable) {
-                specialButtons[1] = true;
-            }
-
-            if (selectShips.get(i).canWarp) {
-                specialButtons[2] = true;
-            }
-        }
-
-        for (int i = 0; i <= specialButtons.length - 1; i++) {
-            if (specialButtons[i]) {
-                if (positionCounter == 4) {
-                    pageNum++;
-                    positionCounter = 0;
-                }
-
-                positionCounter++;
-
-                if (i == 0) {
-                    if (positionCounter == 1) {
-                        harvest.setX(0.822f * screenX);
-                    } else if (positionCounter == 2) {
-                        harvest.setX(0.644f * screenX);
-                    } else if (positionCounter == 3) {
-                        harvest.setX(0.466f * screenX);
-                    }
-
-                    pageSorter[i] = pageNum;
-                } else if (i == 1) {
-                    if (positionCounter == 1) {
-                        dock.setX(0.822f * screenX);
-                    } else if (positionCounter == 2) {
-                        dock.setX(0.644f * screenX);
-                    } else if (positionCounter == 3) {
-                        dock.setX(0.466f * screenX);
-                    }
-
-                    pageSorter[i] = pageNum;
-                } else if (i == 2) {
-                    if (positionCounter == 1) {
-                        warp.setX(0.822f * screenX);
-                    } else if (positionCounter == 2) {
-                        warp.setX(0.644f * screenX);
-                    } else if (positionCounter == 3) {
-                        warp.setX(0.466f * screenX);
-                    }
-
-                    pageSorter[i] = pageNum;
-                }
-            }
-        }
-
         stop.setVisibility(View.INVISIBLE);
         move.setVisibility(View.INVISIBLE);
         attack.setVisibility(View.INVISIBLE);
@@ -710,23 +557,9 @@ public class Main extends AppCompatActivity {
         normal.setVisibility(View.INVISIBLE);
         special.setVisibility(View.VISIBLE);
 
-        if (specialButtons[0]) {
-            harvest.setVisibility(View.VISIBLE);
-        } else {
-            harvest.setVisibility(View.INVISIBLE);
-        }
-
-        if (specialButtons[1]) {
-            dock.setVisibility(View.VISIBLE);
-        } else {
-            dock.setVisibility(View.INVISIBLE);
-        }
-
-        if (specialButtons[2]) {
-            warp.setVisibility(View.VISIBLE);
-        } else {
-            warp.setVisibility(View.INVISIBLE);
-        }
+        harvest.setVisibility(View.VISIBLE);
+        dock.setVisibility(View.VISIBLE);
+        dockMenu.setVisibility(View.VISIBLE);
     }
 
     //Sets all buttons background colours to white
