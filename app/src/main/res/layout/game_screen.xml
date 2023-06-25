@@ -185,7 +185,7 @@
         android:focusable="true"
         android:onClick="buildMenu"
         android:visibility="invisible"
-        app:backgroundTint="#fff700"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/attackButton"
@@ -201,7 +201,7 @@
         android:focusable="true"
         android:onClick="shipHarvest"
         android:visibility="invisible"
-        app:backgroundTint="#fff700"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stopButton"
@@ -218,7 +218,7 @@
         android:focusable="true"
         android:onClick="dockShips"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/holo_blue_bright"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dockMenuButton"
@@ -235,7 +235,7 @@
         android:focusable="true"
         android:onClick="openDockMenu"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/holo_blue_light"
+        app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -380,5 +380,132 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bomberButton" />
+
+    <Button
+        android:id="@+id/buildShipsButton"
+        android:layout_width="223dp"
+        android:layout_height="27dp"
+        android:background="#FF4081"
+        android:onClick="normalMenu"
+        android:text="@string/BuildShipsOptions"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeSpaceStation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildSpaceStation"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_spacestation" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeBattleShip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildBattleShip"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/moveButton"
+        app:srcCompat="@drawable/ic_battleship" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeLaserCruiser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildLaserCruiser"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/stopButton"
+        app:srcCompat="@drawable/ic_lasercruiser" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeBomber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildBomber"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/attackButton"
+        app:srcCompat="@drawable/ic_bomber" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeFighter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildFighter"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/shipModeButton"
+        app:srcCompat="@drawable/ic_fighter" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeScout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildScout"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/followButton"
+        app:srcCompat="@drawable/ic_scout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/makeResourceCollector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildResourceCollector"
+        android:visibility="invisible"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/destroyButton"
+        app:srcCompat="@drawable/ic_resourcecollector" />
+
+    <TextView
+        android:id="@+id/costResourceCollector"
+        android:layout_width="30dp"
+        android:layout_height="11dp"
+        android:text="10k"
+        app:layout_constraintBottom_toTopOf="@+id/makeResourceCollector"
+        tools:layout_editor_absoluteX="45dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

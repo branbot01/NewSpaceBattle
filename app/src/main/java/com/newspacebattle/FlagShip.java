@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import java.util.Objects;
+
 /**
  * Created by Dylan on 2018-06-30. Defines a flagship object.
  */
@@ -113,6 +115,24 @@ class FlagShip extends Ship {
                         , bulletPower);
                 break;
             }
+        }
+    }
+
+    void buildShip(String type) {
+        if (Objects.equals(type, "SpaceStation")) {
+            System.out.println("building space station");
+        } else if (Objects.equals(type, "BattleShip")) {
+            System.out.println("building battleship");
+        } else if (Objects.equals(type, "LaserCruiser")){
+            System.out.println("building laser cruiser");
+        } else if (Objects.equals(type, "Bomber")) {
+            System.out.println("building bomber");
+        } else if (Objects.equals(type, "Fighter")) {
+            System.out.println("building fighter");
+        } else if (Objects.equals(type, "Scout")) {
+            System.out.println("building scout");
+        } else if (Objects.equals(type, "ResourceCollector")) {
+            System.out.println("building resource collector");
         }
     }
 }
