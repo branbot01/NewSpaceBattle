@@ -57,11 +57,14 @@ class ResourceCollector extends Ship {
         asteroidSelected = null;
         for (int i = 0; i <= GameScreen.asteroids.size() - 1; i++) {
             if (Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2))) < nearest && GameScreen.asteroids.get(i).resources > 0) {
-                asteroidSelected = GameScreen.asteroids.get(i);
-                nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2)));
+                if (!GameScreen.asteroids.get(i).incomingResourceCollector) {
+                    asteroidSelected = GameScreen.asteroids.get(i);
+                    nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2)));
+                }
             }
         }
         if (asteroidSelected != null) {
+            asteroidSelected.incomingResourceCollector = true;
             setDestination(asteroidSelected.centerPosX, asteroidSelected.centerPosY, false);
         }
     }
@@ -88,6 +91,7 @@ class ResourceCollector extends Ship {
 
     //Finds nearest flagship
     private void goToCollector() {
+        asteroidSelected.incomingResourceCollector = false;
         unloading = true;
         harvesting = false;
         double nearest = 99999999999999999.0;

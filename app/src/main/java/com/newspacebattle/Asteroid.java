@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import java.util.Arrays;
+
 /**
  * Created by Dylan on 2018-06-30. Asteroid class defines the asteroid object.
  */
@@ -8,9 +10,9 @@ class Asteroid extends GameObject {
     private int scale;
     double resources;
     boolean hasResLeft;
-    boolean[] dockingSpots = new boolean[4];
+    boolean incomingResourceCollector;
 
-    PointObject dockingSpot1, dockingSpot2, dockingSpot3, dockingSpot4;
+    boolean[] availableDockSpots = new boolean[4];
 
     //Constructor method
     Asteroid(float x, float y, int size) {
@@ -31,10 +33,7 @@ class Asteroid extends GameObject {
         velocityY = 0;
         hasResLeft = true;
         degrees = (int) (Math.random() * 360 + 1);
-        dockingSpot1 = new PointObject(0, 0);
-        dockingSpot2 = new PointObject(0, 0);
-        dockingSpot3 = new PointObject(0, 0);
-        dockingSpot4 = new PointObject(0, 0);
+        incomingResourceCollector = false;
     }
 
     //Updates the object's properties
@@ -58,20 +57,5 @@ class Asteroid extends GameObject {
         appearance.setRotate(degrees, midX, midY);
         appearance.preScale(scale / 2, scale / 2);
         appearance.postTranslate(positionX, positionY);
-    }
-
-    private void updateDockingSpots(){
-        dockingSpot1.x = Utilities.circleAngleX(degrees - 0, centerPosX, (radius) * 1.2);
-        dockingSpot1.y = Utilities.circleAngleY(degrees - 0, centerPosY, (radius) * 1.2);
-
-        dockingSpot2.x = Utilities.circleAngleX(degrees + 90, centerPosX, (radius) * 1.2);
-        dockingSpot2.y = Utilities.circleAngleY(degrees + 90, centerPosY, (radius) * 1.2);
-
-        dockingSpot3.x = Utilities.circleAngleX(degrees - 90, centerPosX, (radius) * 1.2);
-        dockingSpot3.y = Utilities.circleAngleY(degrees - 90, centerPosY, (radius) * 1.2);
-
-        dockingSpot4.x = Utilities.circleAngleX(degrees + 180, centerPosX, (radius) * 1.2);
-        dockingSpot4.y = Utilities.circleAngleY(degrees + 180, centerPosY, (radius) * 1.2);
-
     }
 }
