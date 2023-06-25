@@ -649,6 +649,8 @@ public class GameScreen extends View {
                     canvas.drawBitmap(enFlagShip1, flagShips.get(i).appearance, null);
                 }
             }
+            // PointObject test = flagShips.get(i).setBuildPos(0);
+            // canvas.drawCircle((float)test.x, (float)test.y, 50, green);
             if (flagShips.get(i).destination) {
                 canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.destX, flagShips.get(i).destinationFinder.destY, green);
                 canvas.drawBitmap(bitArrow, flagShips.get(i).arrow, null);
