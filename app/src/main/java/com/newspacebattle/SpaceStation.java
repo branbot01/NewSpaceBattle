@@ -93,10 +93,10 @@ class SpaceStation extends Ship {
     }
 
     //changes deploy angle if needed
-    private PointObject setDeployPos(float degreeOffset){
+    private PointObject setDeployPos(){
         PointObject deployPos = new PointObject(0, 0);
-        initialRedeployLocation.x = Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (radius) * 4);
-        initialRedeployLocation.y = Utilities.circleAngleX(degrees - degreeOffset, centerPosY, (radius) * 4);
+        initialRedeployLocation.x = Utilities.circleAngleX(degrees, centerPosX, (radius) * 1.2);
+        initialRedeployLocation.y = Utilities.circleAngleY(degrees, centerPosY, (radius) * 1.2);
         deployPos.x = initialRedeployLocation.x;
         deployPos.y = initialRedeployLocation.y;
         return deployPos;
@@ -104,16 +104,13 @@ class SpaceStation extends Ship {
 
     //redeploys docked ship from space station
     void deployShip(String type) {
-        float degreeOffset = 0;
-
         if(Objects.equals(type, "ResourceCollector")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof ResourceCollector){
-                    PointObject finalDeployPos = setDeployPos(degreeOffset);
+                    PointObject finalDeployPos = setDeployPos();
                     for(int j = 0; j < GameScreen.objects.size(); j++){
                         if(Utilities.distanceFormula(finalDeployPos.x, finalDeployPos.y, GameScreen.objects.get(j).centerPosX, GameScreen.objects.get(j).centerPosY) <= dockedShips.get(i).radius + GameScreen.objects.get(j).radius){
-                            degreeOffset += 22.5;
-                            finalDeployPos = setDeployPos(degreeOffset);
+                            finalDeployPos = setDeployPos();
                             continue;
                         }
                         break;
@@ -129,11 +126,10 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Scout")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Scout){
-                    PointObject finalDeployPos = setDeployPos(degreeOffset);
+                    PointObject finalDeployPos = setDeployPos();
                     for(int j = 0; j < GameScreen.objects.size(); j++){
                         if(Utilities.distanceFormula(finalDeployPos.x, finalDeployPos.y, GameScreen.objects.get(j).centerPosX, GameScreen.objects.get(j).centerPosY) <= dockedShips.get(i).radius + GameScreen.objects.get(j).radius){
-                            degreeOffset += 22.5;
-                            finalDeployPos = setDeployPos(degreeOffset);
+                            finalDeployPos = setDeployPos();
                             continue;
                         }
                         break;
@@ -149,11 +145,10 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Fighter")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Fighter){
-                    PointObject finalDeployPos = setDeployPos(degreeOffset);
+                    PointObject finalDeployPos = setDeployPos();
                     for(int j = 0; j < GameScreen.objects.size(); j++){
                         if(Utilities.distanceFormula(finalDeployPos.x, finalDeployPos.y, GameScreen.objects.get(j).centerPosX, GameScreen.objects.get(j).centerPosY) <= dockedShips.get(i).radius + GameScreen.objects.get(j).radius){
-                            degreeOffset += 22.5;
-                            finalDeployPos = setDeployPos(degreeOffset);
+                            finalDeployPos = setDeployPos();
                             continue;
                         }
                         break;
@@ -169,11 +164,10 @@ class SpaceStation extends Ship {
         }else if(Objects.equals(type, "Bomber")){
             for(int i = 0; i < dockedShips.size(); i++){
                 if(dockedShips.get(i) instanceof Bomber){
-                    PointObject finalDeployPos = setDeployPos(degreeOffset);
+                    PointObject finalDeployPos = setDeployPos();
                     for(int j = 0; j < GameScreen.objects.size(); j++){
                         if(Utilities.distanceFormula(finalDeployPos.x, finalDeployPos.y, GameScreen.objects.get(j).centerPosX, GameScreen.objects.get(j).centerPosY) <= dockedShips.get(i).radius + GameScreen.objects.get(j).radius){
-                            degreeOffset += 22.5;
-                            finalDeployPos = setDeployPos(degreeOffset);
+                            finalDeployPos = setDeployPos();
                             continue;
                         }
                         break;

@@ -373,13 +373,13 @@ public class GameScreen extends View {
         //blackHole.add(new BlackHole(0, 0));
 
         final int flagShipNum = 100;
-        final int resCollectorsNum = 300;
+        final int resCollectorsNum = 600;
         final int fighterNum = 0;
         final int battleShipNum = 0;
         final int bomberNum = 0;
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
-        final int spaceStationNum = 0;
+        final int spaceStationNum = 100;
         final int bulletNum = 500;
         final int explosionNum = 500;
         final int missileNum = 250;
