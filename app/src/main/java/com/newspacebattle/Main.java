@@ -33,7 +33,7 @@ public class Main extends AppCompatActivity {
     static ColorStateList fabColor;
     static Collisions collisions;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation, buildMenu;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     Button special, normal, dockedShips;
     GameScreen gameScreen;
@@ -212,7 +212,7 @@ public class Main extends AppCompatActivity {
                             selectShips.remove(selectShips.get(i));
                         }
                     }
-                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0;
+                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, flagShipCount = 0;
                     SpaceStation spaceStation = null;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (selectShips.get(i) instanceof SpaceStation) {
@@ -225,6 +225,9 @@ public class Main extends AppCompatActivity {
                         if (selectShips.get(i).dockable) {
                             dockableShipsCount++;
                         }
+                        if (selectShips.get(i) instanceof FlagShip) {
+                            flagShipCount++;
+                        }
                     }
                     if (spaceStationCount == 1){
                         countDockedShips(spaceStation);
@@ -236,6 +239,9 @@ public class Main extends AppCompatActivity {
                     }
                     if (dockableShipsCount == 0) {
                         dock.setAlpha(0.5f);
+                    }
+                    if (flagShipCount != 1) {
+                        buildMenu.setAlpha(0.5f);
                     }
                 }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
@@ -407,6 +413,7 @@ public class Main extends AppCompatActivity {
         dock = findViewById(R.id.dockButton);
         dockMenu = findViewById(R.id.dockMenuButton);
         formation = findViewById(R.id.shootButton);
+        buildMenu = findViewById(R.id.buildButton);
         fabColor = select.getBackgroundTintList();
         resourceCollector = findViewById(R.id.resourceCollectorButton);
         scout = findViewById(R.id.scoutButton);
@@ -466,6 +473,7 @@ public class Main extends AppCompatActivity {
             dockedShips.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
+            buildMenu.setVisibility(View.INVISIBLE);
             resourceCollector.setVisibility(View.INVISIBLE);
             scout.setVisibility(View.INVISIBLE);
             fighter.setVisibility(View.INVISIBLE);
@@ -586,6 +594,7 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);
+        buildMenu.setVisibility(View.INVISIBLE);
         special.setVisibility(View.INVISIBLE);
 
         resourceCollector.setVisibility(View.VISIBLE);
@@ -673,6 +682,7 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);
+        buildMenu.setVisibility(View.INVISIBLE);
     }
 
     //Opens normal menu
@@ -693,6 +703,7 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.VISIBLE);
         dock.setVisibility(View.VISIBLE);
         dockMenu.setVisibility(View.VISIBLE);
+        buildMenu.setVisibility(View.VISIBLE);
 
         resourceCollector.setVisibility(View.INVISIBLE);
         scout.setVisibility(View.INVISIBLE);
@@ -703,6 +714,20 @@ public class Main extends AppCompatActivity {
         numScouts.setVisibility(View.INVISIBLE);
         numFighters.setVisibility(View.INVISIBLE);
         numBombers.setVisibility(View.INVISIBLE);
+    }
+
+    public void buildMenu(View view){
+        int flagShipCount = 0;
+        FlagShip flagShip = null;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i) instanceof FlagShip) {
+                flagShipCount++;
+                flagShip = (FlagShip) selectShips.get(i);
+            }
+        }
+        if (flagShipCount != 1){
+            return;
+        }
     }
 
     //Sets all buttons background colours to white
