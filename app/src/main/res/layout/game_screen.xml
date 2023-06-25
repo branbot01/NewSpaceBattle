@@ -503,9 +503,97 @@
     <TextView
         android:id="@+id/costResourceCollector"
         android:layout_width="30dp"
-        android:layout_height="11dp"
+        android:layout_height="15dp"
         android:text="10k"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/makeResourceCollector"
-        tools:layout_editor_absoluteX="45dp" />
+        app:layout_constraintEnd_toEndOf="@+id/makeResourceCollector" />
+
+    <TextView
+        android:id="@+id/costScout"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="24dp"
+        android:text="3k"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeScout"
+        app:layout_constraintEnd_toEndOf="@+id/makeScout"
+        app:layout_constraintStart_toEndOf="@+id/costResourceCollector" />
+
+    <TextView
+        android:id="@+id/costFighter"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:text="5k"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeFighter"
+        app:layout_constraintEnd_toEndOf="@+id/makeFighter"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/costScout" />
+
+    <TextView
+        android:id="@+id/costBomber"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:text="7.5k"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeBomber"
+        app:layout_constraintEnd_toEndOf="@+id/makeBomber"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/costFighter" />
+
+    <TextView
+        android:id="@+id/costLaserCruiser"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:text="25k"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeLaserCruiser"
+        app:layout_constraintEnd_toEndOf="@+id/makeLaserCruiser"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/costBomber" />
+
+    <TextView
+        android:id="@+id/costBattleShip"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:text="50k"
+        android:textAlignment="textEnd"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeBattleShip"
+        app:layout_constraintEnd_toEndOf="@+id/makeBattleShip"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/costLaserCruiser" />
+
+    <TextView
+        android:id="@+id/costSpaceStation"
+        android:layout_width="30dp"
+        android:layout_height="15dp"
+        android:text="120k"
+        android:textAlignment="textStart"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/makeSpaceStation"
+        app:layout_constraintEnd_toEndOf="@+id/makeSpaceStation"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/costBattleShip" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

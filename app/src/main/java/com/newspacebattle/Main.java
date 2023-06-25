@@ -39,6 +39,7 @@ public class Main extends AppCompatActivity {
     Button special, normal, dockedShips, buildShips;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
+    TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
         @Override
@@ -241,7 +242,43 @@ public class Main extends AppCompatActivity {
                     if (dockableShipsCount == 0) {
                         dock.setAlpha(0.5f);
                     }
-                    if (flagShipCount != 1) {
+                    if (flagShipCount == 1) {
+                        if(GameScreen.resources[0] < 10000){
+                            buildResourceCollector.setAlpha(0.5f);
+                        } else {
+                            buildResourceCollector.setAlpha(1f);
+                        }
+                        if(GameScreen.resources[0] < 3000){
+                            buildScout.setAlpha(0.5f);
+                        } else {
+                            buildScout.setAlpha(1f);
+                        }
+                        if(GameScreen.resources[0] < 5000){
+                            buildFighter.setAlpha(0.5f);
+                        } else {
+                            buildFighter.setAlpha(1f);
+                        }
+                        if(GameScreen.resources[0] < 7500){
+                            buildBomber.setAlpha(0.5f);
+                        } else {
+                            buildBomber.setAlpha(1f);
+                        }
+                        if(GameScreen.resources[0] < 25000){
+                            buildLaserCruiser.setAlpha(0.5f);
+                        } else {
+                            buildLaserCruiser.setAlpha(1f);
+                        }
+                        if(GameScreen.resources[0] < 50000){
+                            buildBattleShip.setAlpha(0.5f);
+                        } else {
+                            buildBattleShip.setAlpha(1f);
+                        }
+                        if (GameScreen.resources[0] < 120000) {
+                            buildSpaceStation.setAlpha(0.5f);
+                        } else {
+                            buildSpaceStation.setAlpha(1f);
+                        }
+                    } else {
                         buildMenu.setAlpha(0.5f);
                     }
                 }
@@ -433,6 +470,13 @@ public class Main extends AppCompatActivity {
         buildFighter = findViewById(R.id.makeFighter);
         buildScout = findViewById(R.id.makeScout);
         buildResourceCollector = findViewById(R.id.makeResourceCollector);
+        costResourceCollector = findViewById(R.id.costResourceCollector);
+        costScout = findViewById(R.id.costScout);
+        costFighter = findViewById(R.id.costFighter);
+        costBomber = findViewById(R.id.costBomber);
+        costLaserCruiser = findViewById(R.id.costLaserCruiser);
+        costBattleShip = findViewById(R.id.costBattleShip);
+        costSpaceStation = findViewById(R.id.costSpaceStation);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -500,6 +544,14 @@ public class Main extends AppCompatActivity {
             buildFighter.setVisibility(View.INVISIBLE);
             buildScout.setVisibility(View.INVISIBLE);
             buildResourceCollector.setVisibility(View.INVISIBLE);
+
+            costResourceCollector.setVisibility(View.INVISIBLE);
+            costScout.setVisibility(View.INVISIBLE);
+            costFighter.setVisibility(View.INVISIBLE);
+            costBomber.setVisibility(View.INVISIBLE);
+            costLaserCruiser.setVisibility(View.INVISIBLE);
+            costBattleShip.setVisibility(View.INVISIBLE);
+            costSpaceStation.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -615,6 +667,14 @@ public class Main extends AppCompatActivity {
         buildMenu.setVisibility(View.INVISIBLE);
         special.setVisibility(View.INVISIBLE);
 
+        costResourceCollector.setVisibility(View.INVISIBLE);
+        costScout.setVisibility(View.INVISIBLE);
+        costFighter.setVisibility(View.INVISIBLE);
+        costBomber.setVisibility(View.INVISIBLE);
+        costLaserCruiser.setVisibility(View.INVISIBLE);
+        costBattleShip.setVisibility(View.INVISIBLE);
+        costSpaceStation.setVisibility(View.INVISIBLE);
+
         resourceCollector.setVisibility(View.VISIBLE);
         scout.setVisibility(View.VISIBLE);
         fighter.setVisibility(View.VISIBLE);
@@ -712,6 +772,14 @@ public class Main extends AppCompatActivity {
         buildFighter.setVisibility(View.INVISIBLE);
         buildScout.setVisibility(View.INVISIBLE);
         buildResourceCollector.setVisibility(View.INVISIBLE);
+
+        costResourceCollector.setVisibility(View.INVISIBLE);
+        costScout.setVisibility(View.INVISIBLE);
+        costFighter.setVisibility(View.INVISIBLE);
+        costBomber.setVisibility(View.INVISIBLE);
+        costLaserCruiser.setVisibility(View.INVISIBLE);
+        costBattleShip.setVisibility(View.INVISIBLE);
+        costSpaceStation.setVisibility(View.INVISIBLE);
     }
 
     //Opens normal menu
@@ -752,6 +820,14 @@ public class Main extends AppCompatActivity {
         buildFighter.setVisibility(View.INVISIBLE);
         buildScout.setVisibility(View.INVISIBLE);
         buildResourceCollector.setVisibility(View.INVISIBLE);
+
+        costResourceCollector.setVisibility(View.INVISIBLE);
+        costScout.setVisibility(View.INVISIBLE);
+        costFighter.setVisibility(View.INVISIBLE);
+        costBomber.setVisibility(View.INVISIBLE);
+        costLaserCruiser.setVisibility(View.INVISIBLE);
+        costBattleShip.setVisibility(View.INVISIBLE);
+        costSpaceStation.setVisibility(View.INVISIBLE);
     }
 
     public void buildMenu(View view){
@@ -775,6 +851,14 @@ public class Main extends AppCompatActivity {
         buildFighter.setVisibility(View.VISIBLE);
         buildScout.setVisibility(View.VISIBLE);
         buildResourceCollector.setVisibility(View.VISIBLE);
+
+        costResourceCollector.setVisibility(View.VISIBLE);
+        costScout.setVisibility(View.VISIBLE);
+        costFighter.setVisibility(View.VISIBLE);
+        costBomber.setVisibility(View.VISIBLE);
+        costLaserCruiser.setVisibility(View.VISIBLE);
+        costBattleShip.setVisibility(View.VISIBLE);
+        costSpaceStation.setVisibility(View.VISIBLE);
     }
 
     public FlagShip checkIfOneFlagship(){
