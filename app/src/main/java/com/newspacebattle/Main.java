@@ -1018,6 +1018,9 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
+        if (flagShip.buildingSpaceStation && flagShip.costCounter[0] > 0){
+            flagShip.stopBuilding("SpaceStation");
+        }
         flagShip.buildingSpaceStation = true;
     }
 
@@ -1025,6 +1028,9 @@ public class Main extends AppCompatActivity {
         FlagShip flagShip = checkIfOneFlagship();
         if(flagShip == null){
             return;
+        }
+        if (flagShip.buildingBattleShip && flagShip.costCounter[1] > 0){
+            flagShip.stopBuilding("BattleShip");
         }
         flagShip.buildingBattleShip = true;
     }
@@ -1034,7 +1040,11 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildingLaserCruiser = true;
+        if (flagShip.buildingLaserCruiser && flagShip.costCounter[2] > 0){
+            flagShip.stopBuilding("LaserCruiser");
+        } else {
+            flagShip.buildingLaserCruiser = true;
+        }
     }
 
     public void buildBomber(View view){
@@ -1042,7 +1052,11 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildingBomber = true;
+        if (flagShip.buildingBomber && flagShip.costCounter[3] > 0){
+            flagShip.stopBuilding("Bomber");
+        } else {
+            flagShip.buildingBomber = true;
+        }
     }
 
     public void buildFighter(View view){
@@ -1050,7 +1064,11 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildingFighter = true;
+        if (flagShip.buildingFighter && flagShip.costCounter[4] > 0){
+            flagShip.stopBuilding("Fighter");
+        } else {
+            flagShip.buildingFighter = true;
+        }
     }
 
     public void buildScout(View view){
@@ -1058,7 +1076,11 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildingScout = true;
+        if (flagShip.buildingScout && flagShip.costCounter[5] > 0){
+            flagShip.stopBuilding("Scout");
+        } else {
+            flagShip.buildingScout = true;
+        }
     }
 
     public void buildResourceCollector(View view){
@@ -1066,6 +1088,10 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildingResourceCollector = true;
+        if (flagShip.buildingResourceCollector && flagShip.costCounter[6] > 0){
+            flagShip.stopBuilding("ResourceCollector");
+        } else {
+            flagShip.buildingResourceCollector = true;
+        }
     }
 }

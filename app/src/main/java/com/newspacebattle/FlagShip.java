@@ -147,6 +147,38 @@ class FlagShip extends Ship {
         }
     }
 
+    void stopBuilding(String type){
+        if (Objects.equals(type, "SpaceStation")){
+            buildingSpaceStation = false;
+            GameScreen.resources[team - 1] += costCounter[0];
+            costCounter[0] = 0;
+        } else if (Objects.equals(type, "BattleShip")){
+            buildingBattleShip = false;
+            GameScreen.resources[team - 1] += costCounter[1];
+            costCounter[1] = 0;
+        } else if (Objects.equals(type, "LaserCruiser")){
+            buildingLaserCruiser = false;
+            GameScreen.resources[team - 1] += costCounter[2];
+            costCounter[2] = 0;
+        } else if (Objects.equals(type, "Bomber")){
+            buildingBomber = false;
+            GameScreen.resources[team - 1] += costCounter[3];
+            costCounter[3] = 0;
+        } else if (Objects.equals(type, "Fighter")){
+            buildingFighter = false;
+            GameScreen.resources[team - 1] += costCounter[4];
+            costCounter[4] = 0;
+        } else if (Objects.equals(type, "Scout")){
+            buildingScout = false;
+            GameScreen.resources[team - 1] += costCounter[5];
+            costCounter[5] = 0;
+        } else if (Objects.equals(type, "ResourceCollector")){
+            buildingResourceCollector = false;
+            GameScreen.resources[team - 1] += costCounter[6];
+            costCounter[6] = 0;
+        }
+    }
+
     void checkResourceForBuild() {
         if (buildingSpaceStation) {
             if (costCounter[0] == 0 && GameScreen.resources[team - 1] < SpaceStation.cost) {
