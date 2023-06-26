@@ -120,6 +120,30 @@ class FlagShip extends Ship {
         }
     }
 
+    void checkResourceForBuild(String type) {
+
+        if(Objects.equals(type, "SpaceStation")) {
+            if(SpaceStation.cost <= GameScreen.resources[team - 1]){
+
+            }
+
+
+        }else if(Objects.equals(type, "Battleship")) {
+
+        }else if(Objects.equals(type, "LaserCruiser")) {
+
+        }else if(Objects.equals(type, "Bomber")) {
+
+        }else if(Objects.equals(type, "Fighter")) {
+
+        }else if(Objects.equals(type, "Scout")) {
+
+        }else if(Objects.equals(type, "ResourceCollector")) {
+
+        }
+
+    }
+
     PointObject setBuildPos(float degreeOffset, float radius) {
         return new PointObject(Utilities.circleAngleX(degreeOffset, centerPosX, (this.radius + radius)), Utilities.circleAngleY(degreeOffset, centerPosY, (this.radius + radius)));
     }
