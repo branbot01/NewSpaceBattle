@@ -132,7 +132,7 @@ class FlagShip extends Ship {
             finalBuildPos = setBuildPos(trueDegree, constRadius * shipSpacing);
             canBuild = true;
             for (int i = 0; i < GameScreen.objects.size(); i++) {
-                if (Utilities.distanceFormula(finalBuildPos.x - constRadius / 2, finalBuildPos.y - constRadius / 2, GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY) <= (constRadius + GameScreen.objects.get(i).radius) * 1.5f) {
+                if (Utilities.distanceFormula(finalBuildPos.x - constRadius / 2, finalBuildPos.y - constRadius / 2, GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY) <= (constRadius + GameScreen.objects.get(i).radius) * 1.1f) {
                     canBuild = false;
                     break;
                 }
@@ -141,6 +141,8 @@ class FlagShip extends Ship {
                 break;
             }
         }
+        // print canBuild and finalBuildPos
+        System.out.println("canBuild: " + canBuild + " finalBuildPos: " + finalBuildPos);
         if (!canBuild || finalBuildPos == null) {
             return null;
         }
@@ -171,6 +173,7 @@ class FlagShip extends Ship {
             BattleShip newBattleShip = new BattleShip((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newBattleShip.velocityX = velocityX;
             newBattleShip.velocityY = velocityY;
+            newBattleShip.degrees = degrees;
             GameScreen.battleShips.add(newBattleShip);
             GameScreen.ships.add(newBattleShip);
             GameScreen.objects.add(newBattleShip);
@@ -184,6 +187,7 @@ class FlagShip extends Ship {
             LaserCruiser newLaserCruiser = new LaserCruiser((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newLaserCruiser.velocityX = velocityX;
             newLaserCruiser.velocityY = velocityY;
+            newLaserCruiser.degrees = degrees;
             GameScreen.laserCruisers.add(newLaserCruiser);
             GameScreen.ships.add(newLaserCruiser);
             GameScreen.objects.add(newLaserCruiser);
@@ -197,6 +201,7 @@ class FlagShip extends Ship {
             Bomber newBomber = new Bomber((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newBomber.velocityX = velocityX;
             newBomber.velocityY = velocityY;
+            newBomber.degrees = degrees;
             GameScreen.bombers.add(newBomber);
             GameScreen.ships.add(newBomber);
             GameScreen.objects.add(newBomber);
@@ -210,6 +215,7 @@ class FlagShip extends Ship {
             Fighter newFighter = new Fighter((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newFighter.velocityX = velocityX;
             newFighter.velocityY = velocityY;
+            newFighter.degrees = degrees;
             GameScreen.fighters.add(newFighter);
             GameScreen.ships.add(newFighter);
             GameScreen.objects.add(newFighter);
@@ -223,6 +229,7 @@ class FlagShip extends Ship {
             Scout newScout = new Scout((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newScout.velocityX = velocityX;
             newScout.velocityY = velocityY;
+            newScout.degrees = degrees;
             GameScreen.scouts.add(newScout);
             GameScreen.ships.add(newScout);
             GameScreen.objects.add(newScout);
@@ -236,6 +243,7 @@ class FlagShip extends Ship {
             ResourceCollector newResourceCollector = new ResourceCollector((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newResourceCollector.velocityX = velocityX;
             newResourceCollector.velocityY = velocityY;
+            newResourceCollector.degrees = degrees;
             GameScreen.resourceCollectors.add(newResourceCollector);
             GameScreen.ships.add(newResourceCollector);
             GameScreen.objects.add(newResourceCollector);
