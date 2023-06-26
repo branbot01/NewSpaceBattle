@@ -45,6 +45,7 @@ class FlagShip extends Ship {
     void update() {
         exists = checkIfAlive();
         move();
+        checkResourceForBuild();
         rotate();
     }
 
@@ -119,31 +120,22 @@ class FlagShip extends Ship {
         }
     }
 
-    void updateResourceForBuild(String type, int counter) {
-        GameScreen.resources[team - 1] -= 4;
-        costCounter[counter] += 4;
+    void updateResourceForBuild(String type, int shipCost, int counter) {
+        if(GameScreen.resources[team - 1] >= 4) {
+            GameScreen.resources[team - 1] -= 4;
+            costCounter[counter] += 4;
+        }
+        if(costCounter[counter] >= shipCost){
+            buildShip(type);
+
+        }
     }
 
-    void checkResourceForBuild(String type) {
+    void checkResourceForBuild() {
 
-        if(Objects.equals(type, "SpaceStation")) {
-            if(!buildingSpaceStation && SpaceStation.cost <= GameScreen.resources[team - 1]){
-                buildingSpaceStation = true;
-                updateResourceForBuild("SpaceStation", 0);
-            }else if(buildingSpaceStation){
-
-            }
-        }else if(Objects.equals(type, "Battleship")) {
-
-        }else if(Objects.equals(type, "LaserCruiser")) {
-
-        }else if(Objects.equals(type, "Bomber")) {
-
-        }else if(Objects.equals(type, "Fighter")) {
-
-        }else if(Objects.equals(type, "Scout")) {
-
-        }else if(Objects.equals(type, "ResourceCollector")) {
+        if(SpaceStation.cost <= GameScreen.resources[team - 1]){
+            updateResourceForBuild("SpaceStation", SpaceStation.cost, 0);
+        }else if(buildingSpaceStation){
 
         }
 
