@@ -121,17 +121,18 @@ class FlagShip extends Ship {
     }
 
     PointObject setBuildPos(float degreeOffset, float radius) {
-        return new PointObject(Utilities.circleAngleX(degrees - degreeOffset, centerPosX, (this.radius + radius) * 2.25), Utilities.circleAngleY(degrees - degreeOffset, centerPosY, (this.radius + radius) * 2.25));
+        return new PointObject(Utilities.circleAngleX(degreeOffset, centerPosX, (this.radius + radius)), Utilities.circleAngleY(degreeOffset, centerPosY, (this.radius + radius)));
     }
 
-    PointObject finalBuildPos(float constRadius){
+    PointObject finalBuildPos(float constRadius, float shipSpacing){
         PointObject finalBuildPos = null;
         boolean canBuild = false;
-        for (float degreeOffset = 0; degreeOffset < 360; degreeOffset += 45) {
-            finalBuildPos = setBuildPos(degreeOffset, constRadius);
+        for (float degreeOffset = 90; degreeOffset <= 270; degreeOffset += 45) {
+            float trueDegree = degrees + degreeOffset;
+            finalBuildPos = setBuildPos(trueDegree, constRadius * shipSpacing);
             canBuild = true;
             for (int i = 0; i < GameScreen.objects.size(); i++) {
-                if (Utilities.distanceFormula(finalBuildPos.x - constRadius / 2, finalBuildPos.y - constRadius / 2, GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY) <= constRadius + GameScreen.objects.get(i).radius) {
+                if (Utilities.distanceFormula(finalBuildPos.x - constRadius / 2, finalBuildPos.y - constRadius / 2, GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY) <= (constRadius + GameScreen.objects.get(i).radius) * 1.5f) {
                     canBuild = false;
                     break;
                 }
@@ -147,11 +148,12 @@ class FlagShip extends Ship {
     }
 
     void buildShip(String type) {
-        float radius;
+        float radius, shipSpacing;
 
         if (Objects.equals(type, "SpaceStation")) {
             radius = SpaceStation.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 7f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
@@ -161,61 +163,79 @@ class FlagShip extends Ship {
             GameScreen.objects.add(newSpaceStation);
         } else if (Objects.equals(type, "BattleShip")) {
             radius = BattleShip.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 8.5f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             BattleShip newBattleShip = new BattleShip((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newBattleShip.velocityX = velocityX;
+            newBattleShip.velocityY = velocityY;
             GameScreen.battleShips.add(newBattleShip);
             GameScreen.ships.add(newBattleShip);
             GameScreen.objects.add(newBattleShip);
         } else if (Objects.equals(type, "LaserCruiser")){
             radius = LaserCruiser.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 11f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             LaserCruiser newLaserCruiser = new LaserCruiser((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newLaserCruiser.velocityX = velocityX;
+            newLaserCruiser.velocityY = velocityY;
             GameScreen.laserCruisers.add(newLaserCruiser);
             GameScreen.ships.add(newLaserCruiser);
             GameScreen.objects.add(newLaserCruiser);
         } else if (Objects.equals(type, "Bomber")) {
             radius = Bomber.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 11f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             Bomber newBomber = new Bomber((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newBomber.velocityX = velocityX;
+            newBomber.velocityY = velocityY;
             GameScreen.bombers.add(newBomber);
             GameScreen.ships.add(newBomber);
             GameScreen.objects.add(newBomber);
         } else if (Objects.equals(type, "Fighter")) {
             radius = Fighter.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 5.5f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             Fighter newFighter = new Fighter((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newFighter.velocityX = velocityX;
+            newFighter.velocityY = velocityY;
             GameScreen.fighters.add(newFighter);
             GameScreen.ships.add(newFighter);
             GameScreen.objects.add(newFighter);
         } else if (Objects.equals(type, "Scout")) {
             radius = Scout.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 8f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             Scout newScout = new Scout((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newScout.velocityX = velocityX;
+            newScout.velocityY = velocityY;
             GameScreen.scouts.add(newScout);
             GameScreen.ships.add(newScout);
             GameScreen.objects.add(newScout);
         } else if (Objects.equals(type, "ResourceCollector")) {
             radius = ResourceCollector.constRadius;
-            PointObject finalBuildPos = finalBuildPos(radius);
+            shipSpacing = 4f;
+            PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
                 return;
             }
             ResourceCollector newResourceCollector = new ResourceCollector((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
+            newResourceCollector.velocityX = velocityX;
+            newResourceCollector.velocityY = velocityY;
             GameScreen.resourceCollectors.add(newResourceCollector);
             GameScreen.ships.add(newResourceCollector);
             GameScreen.objects.add(newResourceCollector);
