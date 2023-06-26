@@ -7,7 +7,6 @@ import java.util.Objects;
  */
 class FlagShip extends Ship {
 
-    double resources;
     private PointObject gun1, gun2, gun3, gun4;
     boolean buildingSpaceStation, buildingBattleship, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
     static float constRadius;
@@ -32,7 +31,6 @@ class FlagShip extends Ship {
         MAX_HEALTH = 15000;
         accelerate = 0.2f;
         maxSpeed = accelerate * 75;
-        resources = 0;
         preScaleX = 4;
         preScaleY = 4;
         dockable = false;

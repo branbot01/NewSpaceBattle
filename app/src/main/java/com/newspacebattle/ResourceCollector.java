@@ -123,8 +123,10 @@ class ResourceCollector extends Ship {
                     velocityX = flagShipSelected.velocityX;
                     velocityY = flagShipSelected.velocityY;
                     resources -= 4;
-                    flagShipSelected.resources += 4;
-                    Utilities.delay(16);
+                    GameScreen.resources[team - 1] += 4;
+                    if (resources > 0) {
+                        Utilities.delay(16);
+                    }
                 }
                 goToAsteroid();
             }

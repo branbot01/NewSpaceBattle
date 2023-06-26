@@ -383,16 +383,6 @@ public class GameScreen extends View {
         }
     }
 
-    public static void calculateResources() {
-        int[] res = new int[4];
-        for(int i = 0; i < res.length; i++){
-            for (int ii = 0; ii <= flagShips.size() - 1; ii++) {
-                res[i] += flagShips.get(ii).resources;
-            }
-        }
-        resources = res;
-    }
-
     //Generates ships randomly around the map
     public static void generateMap() {
         //blackHole.add(new BlackHole(0, 0));
@@ -920,7 +910,6 @@ public class GameScreen extends View {
                         }
                     }
                     followShips();
-                    calculateResources();
                 }
                 gameLoop();
             }
