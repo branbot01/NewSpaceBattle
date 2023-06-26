@@ -939,7 +939,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("SpaceStation");
+        flagShip.buildingSpaceStation = true;
     }
 
     public void buildBattleShip(View view){
@@ -947,7 +947,8 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("BattleShip");
+
+        flagShip.buildingBattleship = true;
     }
 
     public void buildLaserCruiser(View view){
@@ -955,7 +956,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("LaserCruiser");
+        flagShip.buildingLaserCruiser = true;
     }
 
     public void buildBomber(View view){
@@ -963,7 +964,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("Bomber");
+        flagShip.buildingBomber = true;
     }
 
     public void buildFighter(View view){
@@ -971,7 +972,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("Fighter");
+        flagShip.buildingFighter = true;
     }
 
     public void buildScout(View view){
@@ -979,7 +980,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("Scout");
+        flagShip.buildingScout = true;
     }
 
     public void buildResourceCollector(View view){
@@ -987,6 +988,6 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-        flagShip.buildShip("ResourceCollector");
+        flagShip.buildingResourceCollector = true;
     }
 }
