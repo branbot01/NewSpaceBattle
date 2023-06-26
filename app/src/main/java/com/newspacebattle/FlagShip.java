@@ -121,7 +121,7 @@ class FlagShip extends Ship {
     }
 
     void updateResourceForBuild(String type, int shipCost, int counter) {
-        if(GameScreen.resources[team - 1] >= 4) {
+        if(GameScreen.resources[team - 1] >= 4 && costCounter[counter] < shipCost) {
             GameScreen.resources[team - 1] -= 4;
             costCounter[counter] += 4;
         }
