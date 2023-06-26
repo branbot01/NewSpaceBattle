@@ -321,7 +321,7 @@
 
     <TextView
         android:id="@+id/resourcesText"
-        android:layout_width="121dp"
+        android:layout_width="219dp"
         android:layout_height="21dp"
         android:background="@android:color/holo_blue_dark"
         android:text="Resources: 0"

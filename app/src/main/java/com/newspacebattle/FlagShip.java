@@ -8,7 +8,7 @@ import java.util.Objects;
 class FlagShip extends Ship {
 
     private PointObject gun1, gun2, gun3, gun4;
-    boolean buildingSpaceStation, buildingBattleship, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
+    boolean buildingSpaceStation, buildingBattleShip, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
     static float constRadius;
     int[] costCounter = new int[7];
 
@@ -126,19 +126,77 @@ class FlagShip extends Ship {
             costCounter[counter] += 4;
         }
         if(costCounter[counter] >= shipCost){
-            buildShip(type);
-
+            if (buildShip(type)) {
+                costCounter[counter] = 0;
+                if (type.equals("SpaceStation")) {
+                    buildingSpaceStation = false;
+                } else if (type.equals("BattleShip")) {
+                    buildingBattleShip = false;
+                } else if (type.equals("LaserCruiser")) {
+                    buildingLaserCruiser = false;
+                } else if (type.equals("Bomber")) {
+                    buildingBomber = false;
+                } else if (type.equals("Fighter")) {
+                    buildingFighter = false;
+                } else if (type.equals("Scout")) {
+                    buildingScout = false;
+                } else if (type.equals("ResourceCollector")) {
+                    buildingResourceCollector = false;
+                }
+            }
         }
     }
 
     void checkResourceForBuild() {
-
-        if(SpaceStation.cost <= GameScreen.resources[team - 1]){
-            updateResourceForBuild("SpaceStation", SpaceStation.cost, 0);
-        }else if(buildingSpaceStation){
-
+        if (buildingSpaceStation) {
+            if (costCounter[0] == 0 && GameScreen.resources[team - 1] < SpaceStation.cost) {
+                buildingSpaceStation = false;
+            } else {
+                updateResourceForBuild("SpaceStation", SpaceStation.cost, 0);
+            }
         }
-
+        if (buildingBattleShip) {
+            if (costCounter[1] == 0 && GameScreen.resources[team - 1] < BattleShip.cost) {
+                buildingBattleShip = false;
+            } else {
+                updateResourceForBuild("BattleShip", BattleShip.cost, 1);
+            }
+        }
+        if (buildingLaserCruiser) {
+            if (costCounter[2] == 0 && GameScreen.resources[team - 1] < LaserCruiser.cost) {
+                buildingLaserCruiser = false;
+            } else {
+                updateResourceForBuild("LaserCruiser", LaserCruiser.cost, 2);
+            }
+        }
+        if (buildingBomber) {
+            if (costCounter[3] == 0 && GameScreen.resources[team - 1] < Bomber.cost) {
+                buildingBomber = false;
+            } else {
+                updateResourceForBuild("Bomber", Bomber.cost, 3);
+            }
+        }
+        if (buildingFighter) {
+            if (costCounter[4] == 0 && GameScreen.resources[team - 1] < Fighter.cost) {
+                buildingFighter = false;
+            } else {
+                updateResourceForBuild("Fighter", Fighter.cost, 4);
+            }
+        }
+        if (buildingScout) {
+            if (costCounter[5] == 0 && GameScreen.resources[team - 1] < Scout.cost) {
+                buildingScout = false;
+            } else {
+                updateResourceForBuild("Scout", Scout.cost, 5);
+            }
+        }
+        if (buildingResourceCollector) {
+            if (costCounter[6] == 0 && GameScreen.resources[team - 1] < ResourceCollector.cost) {
+                buildingResourceCollector = false;
+            } else {
+                updateResourceForBuild("ResourceCollector", ResourceCollector.cost, 6);
+            }
+        }
     }
 
     PointObject setBuildPos(float degreeOffset, float radius) {
@@ -170,7 +228,7 @@ class FlagShip extends Ship {
         return finalBuildPos;
     }
 
-    void buildShip(String type) {
+    boolean buildShip(String type) {
         float radius, shipSpacing;
 
         if (Objects.equals(type, "SpaceStation")) {
@@ -178,7 +236,7 @@ class FlagShip extends Ship {
             shipSpacing = 7f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             SpaceStation newSpaceStation = new SpaceStation((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             GameScreen.spaceStations.add(newSpaceStation);
@@ -189,7 +247,7 @@ class FlagShip extends Ship {
             shipSpacing = 8.5f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             BattleShip newBattleShip = new BattleShip((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newBattleShip.velocityX = velocityX;
@@ -203,7 +261,7 @@ class FlagShip extends Ship {
             shipSpacing = 11f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             LaserCruiser newLaserCruiser = new LaserCruiser((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newLaserCruiser.velocityX = velocityX;
@@ -217,7 +275,7 @@ class FlagShip extends Ship {
             shipSpacing = 11f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             Bomber newBomber = new Bomber((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newBomber.velocityX = velocityX;
@@ -231,7 +289,7 @@ class FlagShip extends Ship {
             shipSpacing = 5.5f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             Fighter newFighter = new Fighter((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newFighter.velocityX = velocityX;
@@ -245,7 +303,7 @@ class FlagShip extends Ship {
             shipSpacing = 8f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             Scout newScout = new Scout((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newScout.velocityX = velocityX;
@@ -259,7 +317,7 @@ class FlagShip extends Ship {
             shipSpacing = 4f;
             PointObject finalBuildPos = finalBuildPos(radius, shipSpacing);
             if (finalBuildPos == null) {
-                return;
+                return false;
             }
             ResourceCollector newResourceCollector = new ResourceCollector((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newResourceCollector.velocityX = velocityX;
@@ -269,5 +327,6 @@ class FlagShip extends Ship {
             GameScreen.ships.add(newResourceCollector);
             GameScreen.objects.add(newResourceCollector);
         }
+        return true;
     }
 }

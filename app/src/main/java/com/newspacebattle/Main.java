@@ -947,8 +947,7 @@ public class Main extends AppCompatActivity {
         if(flagShip == null){
             return;
         }
-
-        flagShip.buildingBattleship = true;
+        flagShip.buildingBattleShip = true;
     }
 
     public void buildLaserCruiser(View view){

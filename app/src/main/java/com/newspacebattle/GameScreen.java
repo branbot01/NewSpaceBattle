@@ -143,14 +143,6 @@ public class GameScreen extends View {
         Scout.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
         SpaceStation.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
 
-        BattleShip.buildTime = 200000;
-        Bomber.buildTime = 30000;
-        Fighter.buildTime = 20000;
-        LaserCruiser.buildTime = 200000;
-        ResourceCollector.buildTime = 40000;
-        Scout.buildTime = 12000;
-        SpaceStation.buildTime = 480000;
-
         BattleShip.cost = 50000;
         Bomber.cost = 7500;
         Fighter.cost = 5000;
@@ -158,6 +150,8 @@ public class GameScreen extends View {
         ResourceCollector.cost = 10000;
         Scout.cost = 3000;
         SpaceStation.cost = 120000;
+
+        resources[0] = 2000000;
 
         generateMap();
         //generateFaceoff();
@@ -387,14 +381,14 @@ public class GameScreen extends View {
     public static void generateMap() {
         //blackHole.add(new BlackHole(0, 0));
 
-        final int flagShipNum = 100;
-        final int resCollectorsNum = 600;
+        final int flagShipNum = 200;
+        final int resCollectorsNum = 800;
         final int fighterNum = 0;
         final int battleShipNum = 0;
         final int bomberNum = 0;
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
-        final int spaceStationNum = 100;
+        final int spaceStationNum = 0;
         final int bulletNum = 500;
         final int explosionNum = 500;
         final int missileNum = 250;
