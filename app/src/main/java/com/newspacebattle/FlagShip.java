@@ -9,8 +9,9 @@ class FlagShip extends Ship {
 
     double resources;
     private PointObject gun1, gun2, gun3, gun4;
-
+    boolean buildingSpaceStation, buildingBattleship, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
     static float constRadius;
+    int[] costCounter = new int[7];
 
     //Constructor method
     FlagShip(float x, float y, int team) {
@@ -120,14 +121,20 @@ class FlagShip extends Ship {
         }
     }
 
+    void updateResourceForBuild(String type, int counter) {
+        GameScreen.resources[team - 1] -= 4;
+        costCounter[counter] += 4;
+    }
+
     void checkResourceForBuild(String type) {
 
         if(Objects.equals(type, "SpaceStation")) {
-            if(SpaceStation.cost <= GameScreen.resources[team - 1]){
+            if(!buildingSpaceStation && SpaceStation.cost <= GameScreen.resources[team - 1]){
+                buildingSpaceStation = true;
+                updateResourceForBuild("SpaceStation", 0);
+            }else if(buildingSpaceStation){
 
             }
-
-
         }else if(Objects.equals(type, "Battleship")) {
 
         }else if(Objects.equals(type, "LaserCruiser")) {
