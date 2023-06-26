@@ -1,6 +1,7 @@
 package com.newspacebattle;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -40,6 +41,7 @@ public class Main extends AppCompatActivity {
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
+    ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
         @Override
@@ -216,6 +218,7 @@ public class Main extends AppCompatActivity {
                     }
                     int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, flagShipCount = 0;
                     SpaceStation spaceStation = null;
+                    FlagShip flagShip = null;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (selectShips.get(i) instanceof SpaceStation) {
                             spaceStationCount++;
@@ -229,6 +232,7 @@ public class Main extends AppCompatActivity {
                         }
                         if (selectShips.get(i) instanceof FlagShip) {
                             flagShipCount++;
+                            flagShip = (FlagShip) selectShips.get(i);
                         }
                     }
                     if (spaceStationCount == 1){
@@ -243,40 +247,76 @@ public class Main extends AppCompatActivity {
                         dock.setAlpha(0.5f);
                     }
                     if (flagShipCount == 1) {
-                        if(GameScreen.resources[0] < 10000){
+                        if(GameScreen.resources[0] < 10000 || flagShip.buildingResourceCollector){
                             buildResourceCollector.setAlpha(0.5f);
                         } else {
                             buildResourceCollector.setAlpha(1f);
                         }
-                        if(GameScreen.resources[0] < 3000){
+                        if(GameScreen.resources[0] < 3000 || flagShip.buildingScout){
                             buildScout.setAlpha(0.5f);
                         } else {
                             buildScout.setAlpha(1f);
                         }
-                        if(GameScreen.resources[0] < 5000){
+                        if(GameScreen.resources[0] < 5000 || flagShip.buildingFighter){
                             buildFighter.setAlpha(0.5f);
                         } else {
                             buildFighter.setAlpha(1f);
                         }
-                        if(GameScreen.resources[0] < 7500){
+                        if(GameScreen.resources[0] < 7500 || flagShip.buildingBomber){
                             buildBomber.setAlpha(0.5f);
                         } else {
                             buildBomber.setAlpha(1f);
                         }
-                        if(GameScreen.resources[0] < 25000){
+                        if(GameScreen.resources[0] < 25000 || flagShip.buildingLaserCruiser){
                             buildLaserCruiser.setAlpha(0.5f);
                         } else {
                             buildLaserCruiser.setAlpha(1f);
                         }
-                        if(GameScreen.resources[0] < 50000){
+                        if(GameScreen.resources[0] < 50000 || flagShip.buildingBattleShip){
                             buildBattleShip.setAlpha(0.5f);
                         } else {
                             buildBattleShip.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 120000) {
+                        if (GameScreen.resources[0] < 120000 || flagShip.buildingSpaceStation) {
                             buildSpaceStation.setAlpha(0.5f);
                         } else {
                             buildSpaceStation.setAlpha(1f);
+                        }
+
+                        if (flagShip.buildingResourceCollector){
+                            progressResourceCollector.setProgress((int)(flagShip.costCounter[6] / (double)(ResourceCollector.cost) * 100));
+                        } else {
+                            progressResourceCollector.setProgress(0);
+                        }
+                        if (flagShip.buildingScout){
+                            progressScout.setProgress((int)(flagShip.costCounter[5] / (double)(Scout.cost) * 100));
+                        } else {
+                            progressScout.setProgress(0);
+                        }
+                        if (flagShip.buildingFighter){
+                            progressFighter.setProgress((int)(flagShip.costCounter[4] / (double)(Fighter.cost) * 100));
+                        } else {
+                            progressFighter.setProgress(0);
+                        }
+                        if (flagShip.buildingBomber){
+                            progressBomber.setProgress((int)(flagShip.costCounter[3] / (double)(Bomber.cost) * 100));
+                        } else {
+                            progressBomber.setProgress(0);
+                        }
+                        if (flagShip.buildingLaserCruiser){
+                            progressLaserCruiser.setProgress((int)(flagShip.costCounter[2] / (double)(LaserCruiser.cost) * 100));
+                        } else {
+                            progressLaserCruiser.setProgress(0);
+                        }
+                        if (flagShip.buildingBattleShip){
+                            progressBattleShip.setProgress((int)(flagShip.costCounter[1] / (double)(BattleShip.cost) * 100));
+                        } else {
+                            progressBattleShip.setProgress(0);
+                        }
+                        if (flagShip.buildingSpaceStation){
+                            progressSpaceStation.setProgress((int)(flagShip.costCounter[0] / (double)(SpaceStation.cost) * 100));
+                        } else {
+                            progressSpaceStation.setProgress(0);
                         }
                     } else {
                         buildMenu.setAlpha(0.5f);
@@ -477,6 +517,13 @@ public class Main extends AppCompatActivity {
         costLaserCruiser = findViewById(R.id.costLaserCruiser);
         costBattleShip = findViewById(R.id.costBattleShip);
         costSpaceStation = findViewById(R.id.costSpaceStation);
+        progressResourceCollector = findViewById(R.id.progressResourceCollector);
+        progressScout = findViewById(R.id.progressScout);
+        progressFighter = findViewById(R.id.progressFighter);
+        progressBomber = findViewById(R.id.progressBomber);
+        progressLaserCruiser = findViewById(R.id.progressLaserCruiser);
+        progressBattleShip = findViewById(R.id.progressBattleShip);
+        progressSpaceStation = findViewById(R.id.progressSpaceStation);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -552,6 +599,14 @@ public class Main extends AppCompatActivity {
             costLaserCruiser.setVisibility(View.INVISIBLE);
             costBattleShip.setVisibility(View.INVISIBLE);
             costSpaceStation.setVisibility(View.INVISIBLE);
+
+            progressResourceCollector.setVisibility(View.INVISIBLE);
+            progressScout.setVisibility(View.INVISIBLE);
+            progressFighter.setVisibility(View.INVISIBLE);
+            progressBomber.setVisibility(View.INVISIBLE);
+            progressLaserCruiser.setVisibility(View.INVISIBLE);
+            progressBattleShip.setVisibility(View.INVISIBLE);
+            progressSpaceStation.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -780,6 +835,14 @@ public class Main extends AppCompatActivity {
         costLaserCruiser.setVisibility(View.INVISIBLE);
         costBattleShip.setVisibility(View.INVISIBLE);
         costSpaceStation.setVisibility(View.INVISIBLE);
+
+        progressResourceCollector.setVisibility(View.INVISIBLE);
+        progressScout.setVisibility(View.INVISIBLE);
+        progressFighter.setVisibility(View.INVISIBLE);
+        progressBomber.setVisibility(View.INVISIBLE);
+        progressLaserCruiser.setVisibility(View.INVISIBLE);
+        progressBattleShip.setVisibility(View.INVISIBLE);
+        progressSpaceStation.setVisibility(View.INVISIBLE);
     }
 
     //Opens normal menu
@@ -828,6 +891,14 @@ public class Main extends AppCompatActivity {
         costLaserCruiser.setVisibility(View.INVISIBLE);
         costBattleShip.setVisibility(View.INVISIBLE);
         costSpaceStation.setVisibility(View.INVISIBLE);
+
+        progressResourceCollector.setVisibility(View.INVISIBLE);
+        progressScout.setVisibility(View.INVISIBLE);
+        progressFighter.setVisibility(View.INVISIBLE);
+        progressBomber.setVisibility(View.INVISIBLE);
+        progressLaserCruiser.setVisibility(View.INVISIBLE);
+        progressBattleShip.setVisibility(View.INVISIBLE);
+        progressSpaceStation.setVisibility(View.INVISIBLE);
     }
 
     public void buildMenu(View view){
@@ -859,6 +930,14 @@ public class Main extends AppCompatActivity {
         costLaserCruiser.setVisibility(View.VISIBLE);
         costBattleShip.setVisibility(View.VISIBLE);
         costSpaceStation.setVisibility(View.VISIBLE);
+
+        progressResourceCollector.setVisibility(View.VISIBLE);
+        progressScout.setVisibility(View.VISIBLE);
+        progressFighter.setVisibility(View.VISIBLE);
+        progressBomber.setVisibility(View.VISIBLE);
+        progressLaserCruiser.setVisibility(View.VISIBLE);
+        progressBattleShip.setVisibility(View.VISIBLE);
+        progressSpaceStation.setVisibility(View.VISIBLE);
     }
 
     public FlagShip checkIfOneFlagship(){

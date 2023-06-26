@@ -220,8 +220,6 @@ class FlagShip extends Ship {
                 break;
             }
         }
-        // print canBuild and finalBuildPos
-        System.out.println("canBuild: " + canBuild + " finalBuildPos: " + finalBuildPos);
         if (!canBuild || finalBuildPos == null) {
             return null;
         }

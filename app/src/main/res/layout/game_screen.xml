@@ -596,4 +596,73 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/costBattleShip" />
 
+    <ProgressBar
+        android:id="@+id/progressResourceCollector"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressScout"
+        app:layout_constraintTop_toBottomOf="@+id/makeResourceCollector" />
+
+    <ProgressBar
+        android:id="@+id/progressScout"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressFighter"
+        app:layout_constraintTop_toBottomOf="@+id/makeScout" />
+
+    <ProgressBar
+        android:id="@+id/progressFighter"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressBomber"
+        app:layout_constraintTop_toBottomOf="@+id/makeFighter" />
+
+    <ProgressBar
+        android:id="@+id/progressBomber"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressLaserCruiser"
+        app:layout_constraintTop_toBottomOf="@+id/makeBomber" />
+
+    <ProgressBar
+        android:id="@+id/progressLaserCruiser"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressBattleShip"
+        app:layout_constraintTop_toBottomOf="@+id/makeLaserCruiser" />
+
+    <ProgressBar
+        android:id="@+id/progressBattleShip"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:layout_marginEnd="26dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/progressSpaceStation"
+        app:layout_constraintTop_toBottomOf="@+id/makeBattleShip" />
+
+    <ProgressBar
+        android:id="@+id/progressSpaceStation"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="30dp"
+        android:layout_height="8dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/makeSpaceStation" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

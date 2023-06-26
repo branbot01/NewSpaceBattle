@@ -395,17 +395,17 @@ public class GameScreen extends View {
         final int laserNum = 500;
 
         generateStars(3000);
-        generateAsteroids(40, 5);
+        generateAsteroids(80, 5);
 
         do {
             resourceCollectors.clear();
             for (int i = 0; i <= resCollectorsNum - 1; i++) {
-                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
             }
 
             flagShips.clear();
             for (int i = 0; i <= flagShipNum - 1; i++) {
-                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
             }
 
             fighters.clear();
