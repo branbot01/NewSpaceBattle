@@ -153,8 +153,8 @@ public class GameScreen extends View {
 
         resources[0] = 2000000;
 
-        generateMap();
-        //generateFaceoff();
+        //generateMap();
+        generateFaceoff();
 
         green.setColor(Color.GREEN);
         green.setStrokeWidth(20);

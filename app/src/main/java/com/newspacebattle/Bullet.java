@@ -64,7 +64,6 @@ class Bullet extends GameObject {
     void impact(GameObject object) {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
-            System.out.println("bullet impact ship");
         }
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
             if (!GameScreen.explosions.get(i).active) {
