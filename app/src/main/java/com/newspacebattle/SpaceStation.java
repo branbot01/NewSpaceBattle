@@ -16,7 +16,7 @@ class SpaceStation extends Ship {
 
     static float constRadius;
 
-    static int buildTime, cost;
+    static int cost;
 
     int maxDockedNum = 16; //to be changed
 

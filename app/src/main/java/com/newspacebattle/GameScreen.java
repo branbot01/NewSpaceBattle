@@ -125,8 +125,11 @@ public class GameScreen extends View {
         });
         bitLoader.start();
 
-        offsetX = 0 - Main.screenX / 2;
-        offsetY = 0 - Main.screenY / 2;
+        //offsetX = 0 - Main.screenX / 2;
+        //offsetY = 0 - Main.screenY / 2;
+        offsetX = -227;
+        offsetY = -12554;
+
         scaleX = 0.05f;
         scaleY = 0.05f;
 
@@ -153,7 +156,6 @@ public class GameScreen extends View {
 
         resources[0] = 2000000;
 
-        //generateMap();
         generateFaceoff();
 
         green.setColor(Color.GREEN);
@@ -479,44 +481,43 @@ public class GameScreen extends View {
         for (int i = 0; i <= flagShipNum - 1; i++) {
             //flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
         }
-        flagShips.add(new FlagShip(0, 0 - mapSizeY / 6, 1));
-        flagShips.add(new FlagShip(0, 0 - mapSizeY / 7, 2));
+        flagShips.add(new FlagShip(0, 0 - mapSizeY / 6, 2));
+        flagShips.add(new FlagShip(0, 0 - mapSizeY / 7, 1));
 
         fighters.clear();
         for (int i = 0; i <= fighterNum - 1; i++) {
             //fighters.add(new Fighter((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
         }
-        fighters.add(new Fighter(-2880, 0 - mapSizeY / 6 + 2000, 1));
-        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 6 + 2000, 1));
-        fighters.add(new Fighter(-2880 / 2, 0 - mapSizeY / 6 + 5000, 1));
-        fighters.add(new Fighter(2880 * 2.5f, 0 - mapSizeY / 6 + 5000, 1));
-        fighters.add(new Fighter(-2880, 0 - mapSizeY / 6 + 5000, 1));
-        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 6 + 5000, 1));
+        fighters.add(new Fighter(-2880, 0 - mapSizeY / 6 + 2000, 2));
+        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 6 + 2000, 2));
+        fighters.add(new Fighter(-2880 / 2, 0 - mapSizeY / 6 + 5000, 2));
+        fighters.add(new Fighter(2880 * 2.5f, 0 - mapSizeY / 6 + 5000, 2));
+        fighters.add(new Fighter(-2880, 0 - mapSizeY / 6 + 5000, 2));
+        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 6 + 5000, 2));
 
-        fighters.add(new Fighter(-2880, 0 - mapSizeY / 7 - 2000, 2));
-        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 7 - 2000, 2));
-        fighters.add(new Fighter(-2880 / 2, 0 - mapSizeY / 7 - 5000, 2));
-        fighters.add(new Fighter(2880 * 2.5f, 0 - mapSizeY / 7 - 5000, 2));
-        fighters.add(new Fighter(-2880, 0 - mapSizeY / 7 - 5000, 2));
-        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 7 - 5000, 2));
+        fighters.add(new Fighter(-2880, 0 - mapSizeY / 7 - 2000, 1));
+        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 7 - 2000, 1));
+        fighters.add(new Fighter(-2880 / 2, 0 - mapSizeY / 7 - 5000, 1));
+        fighters.add(new Fighter(2880 * 2.5f, 0 - mapSizeY / 7 - 5000, 1));
+        fighters.add(new Fighter(-2880, 0 - mapSizeY / 7 - 5000, 1));
+        fighters.add(new Fighter(2880 * 2.5f * 2, 0 - mapSizeY / 7 - 5000, 1));
 
         battleShips.clear();
         for (int i = 0; i <= battleShipNum - 1; i++) {
             //battleShips.add(new BattleShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
         }
-        battleShips.add(new BattleShip(2880 * 3, 0 - mapSizeY / 6, 1));
-        battleShips.add(new BattleShip(2880 * 3, 0 - mapSizeY / 7, 2));
-        battleShips.add(new BattleShip(2880 * 3, 0 + mapSizeY / 20, 2));
+        battleShips.add(new BattleShip(2880 * 3, 0 - mapSizeY / 6, 2));
+        battleShips.add(new BattleShip(2880 * 3, 0 - mapSizeY / 7, 1));
 
         bombers.clear();
         for (int i = 0; i <= bomberNum - 1; i++) {
             //bombers.add(new Bomber((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
         }
-        bombers.add(new Bomber(-2880, 0 - mapSizeY / 6, 1));
-        bombers.add(new Bomber(2880 * 2.5f * 2, 0 - mapSizeY / 6, 1));
+        bombers.add(new Bomber(-2880, 0 - mapSizeY / 6, 2));
+        bombers.add(new Bomber(2880 * 2.5f * 2, 0 - mapSizeY / 6, 2));
 
-        bombers.add(new Bomber(-2880, 0 - mapSizeY / 7, 2));
-        bombers.add(new Bomber(2880 * 2.5f * 2, 0 - mapSizeY / 7, 2));
+        bombers.add(new Bomber(-2880, 0 - mapSizeY / 7, 1));
+        bombers.add(new Bomber(2880 * 2.5f * 2, 0 - mapSizeY / 7, 1));
 
         bullets.clear();
         for (int i = 0; i <= bulletNum - 1; i++) {
@@ -666,7 +667,7 @@ public class GameScreen extends View {
         for (int i = 0; i <= fighters.size() - 1; i++) {
             if (fighters.get(i).centerPosX + fighters.get(i).radius >= offsetX / scaleX && fighters.get(i).centerPosX - fighters.get(i).radius <= offsetX / scaleX + mapSizeX / 32 && fighters.get(i).centerPosY + fighters.get(i).radius >= offsetY / scaleY && fighters.get(i).centerPosY - fighters.get(i).radius <= offsetY / scaleY + mapSizeY / 32) {
                 if (fighters.get(i).selected || fighters.get(i).attSelected) {
-                    canvas.drawCircle(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).radius, fighters.get(i).selector);
+                    canvas.drawCircle(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.avoidanceRadius, fighters.get(i).selector);
                 }
                 if (fighters.get(i).team == 1) {
                     canvas.drawBitmap(bitFighter, fighters.get(i).appearance, null);
@@ -677,6 +678,13 @@ public class GameScreen extends View {
             if (fighters.get(i).destination) {
                 canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.destX, fighters.get(i).destinationFinder.destY, green);
                 canvas.drawBitmap(bitArrow, fighters.get(i).arrow, null);
+                for (int j = 0; j < 8; j++){
+                    float angle = fighters.get(i).degrees + ((float) (j + 1)) * 45;
+                    double newX = Utilities.circleAngleX(angle, fighters.get(i).centerPosX, fighters.get(i).radius * 2);
+                    double newY = Utilities.circleAngleY(angle, fighters.get(i).centerPosY, fighters.get(i).radius * 2);
+                    canvas.drawCircle((float) newX, (float) newY, 50, green);
+                }
+                canvas.drawCircle(fighters.get(i).destinationFinder.tempX, fighters.get(i).destinationFinder.tempY, 50, red);
             }
         }
 

@@ -137,7 +137,7 @@ class Collisions {
 
         //To avoid objects colliding more than once
         while (Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY) <= object1.radius + object2.radius && object1.exists && object2.exists) {
-            System.out.println("collision detected");
+            //System.out.println("collision detected");
         }
     }
 
