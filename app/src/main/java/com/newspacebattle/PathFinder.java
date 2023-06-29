@@ -4,13 +4,14 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
  */
 class PathFinder {
 
-    float destX, destY, tempX, tempY, avoidanceRadius, speed;
+    float destX, destY, tempX, tempY, avoidanceRadius;
     private boolean pointOrObj;
     private Ship ship;
     private GameObject targetObj;
@@ -93,8 +94,21 @@ class PathFinder {
     private PointObject pathFind(){
         PointObject direction = new PointObject(destX, destY);
         ArrayList<GameObject> nearbyObjects = new ArrayList<>();
-        speed = (float) Math.sqrt(Math.pow(ship.velocityX, 2) + Math.pow(ship.velocityY, 2));
-        avoidanceRadius = ship.radius * 2;
+        if (Objects.equals(ship.type, "ResourceCollector")) {
+            avoidanceRadius = ship.radius * 9;
+        } else if (Objects.equals(ship.type, "Scout")) {
+            avoidanceRadius = ship.radius * 9.5f;
+        } else if (Objects.equals(ship.type, "Fighter")) {
+            avoidanceRadius = ship.radius * 10;
+        } else if (Objects.equals(ship.type, "Bomber")) {
+            avoidanceRadius = ship.radius * 8;
+        } else if (Objects.equals(ship.type, "LaserCruiser")) {
+            avoidanceRadius = ship.radius * 3.5f;
+        } else if (Objects.equals(ship.type, "BattleShip")) {
+            avoidanceRadius = ship.radius * 2;
+        } else if (Objects.equals(ship.type, "FlagShip")) {
+            avoidanceRadius = ship.radius * 2.25f;
+        }
 
         for (int i = 0; i < GameScreen.objects.size(); i++) {
             GameObject obj = GameScreen.objects.get(i);
@@ -111,7 +125,7 @@ class PathFinder {
             return direction;
         }
 
-        final int MAX_POINTS = 8;
+        final int MAX_POINTS = 16;
         boolean[] possiblePoints = new boolean[MAX_POINTS];
         Arrays.fill(possiblePoints, true);
         double[] distances = new double[MAX_POINTS];
@@ -124,15 +138,12 @@ class PathFinder {
             for (int ii = 0; ii < nearbyObjects.size(); ii++) {
                 GameObject obj = nearbyObjects.get(ii);
                 double distance = Utilities.distanceFormula(newX, newY, obj.centerPosX, obj.centerPosY);
-                if (distance <= avoidanceRadius + obj.radius) {
+                if (distance <= avoidanceRadius) {
                     possiblePoints[i] = false;
                 }
             }
         }
-        // print possible points and distances
-//        for (int i = 0; i < MAX_POINTS; i++){
-//            System.out.println("Point " + i + ": " + possiblePoints[i] + " Distance: " + distances[i]);
-//        }
+
         double min = Double.MAX_VALUE;
         int minIndex = -1;
         for (int i = 0; i < distances.length; i++){
@@ -152,7 +163,7 @@ class PathFinder {
 
     //Checks how close ship is to the destination
     private void checkDestination() {
-        double stopDistance = 50;
+        double stopDistance = ship.radius / 6;
         if (pointOrObj) {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;
@@ -208,13 +219,13 @@ class PathFinder {
     private void driveShip(double x, double y) {
         double requiredAngle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y);
         if (Math.abs(ship.degrees - requiredAngle) > 5) {
-            int turnAngle = 150;
+            int turnAngle = 160;
             if (ship.degrees - requiredAngle <= 0) {
                 turnAngle *= -1;
             }
 
-            ship.accelerationX = ship.accelerate / 2 * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
-            ship.accelerationY = ship.accelerate / 2 * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
+            ship.accelerationX = ship.accelerate / 1.5f * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
+            ship.accelerationY = ship.accelerate / 1.5f * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
         } else {
             ship.accelerationX = ship.accelerate * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y) * Math.PI / 180);
             ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y) * Math.PI / 180);
