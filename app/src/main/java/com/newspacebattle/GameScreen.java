@@ -476,6 +476,7 @@ public class GameScreen extends View {
         final int bulletNum = 750;
         final int explosionNum = 750;
         final int missileNum = 750;
+        final int laserNum = 500;
 
         flagShips.clear();
         for (int i = 0; i <= flagShipNum - 1; i++) {
@@ -532,6 +533,11 @@ public class GameScreen extends View {
         explosions.clear();
         for (int i = 0; i <= explosionNum - 1; i++) {
             explosions.add(new Explosion());
+        }
+
+        lasers.clear();
+        for (int i = 0; i <= laserNum - 1; i++) {
+            lasers.add(new Laser());
         }
 
         placeShips();
