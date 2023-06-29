@@ -273,36 +273,20 @@ class Collisions {
             }
         }
     }
-    //detect if two objects will collide at any point in the future given their velocities
+    //detect if two objects will collide at any point in the future given their current velocities
     static boolean relVelDetectCollision(GameObject object1, GameObject object2) {
-        boolean willCollide = false;
-        float velAngleObj2;
-        float thetaObj2;
-        float deltaTheta;
-
-        float P2wrt1 = (float) Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
+        float distanceOfObj2wrtObj1 = (float) Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
 
         float relVelObj2X = object2.velocityX - object1.velocityX;
         float relVelObj2Y = object2.velocityY - object1.velocityY;
 
-        if (relVelObj2X > 0 && relVelObj2Y > 0) {
-            velAngleObj2 = (float) (Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X))));
-        } else if (relVelObj2X < 0 && relVelObj2Y > 0) {
-            velAngleObj2 = (float) (180 - Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X))));
-        } else if (relVelObj2X < 0 && relVelObj2Y < 0) {
-            velAngleObj2 = (float) (((-180 - Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X)))) * -1) + 180);
-        } else if (relVelObj2X > 0 && relVelObj2Y < 0) {
-            velAngleObj2 = (float) (360 - (Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X)))) * -1);
-        }else{
-            return willCollide;
-        }
+        float relVelAngleObj2 = (float) Utilities.angleDim(relVelObj2X, relVelObj2Y);
 
-        thetaObj2 = (float) Utilities.anglePoints(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
-        deltaTheta = (float) (Math.toDegrees(Math.atan2(object1.radius + object2.radius, P2wrt1)));
-
-        if(velAngleObj2 <= thetaObj2 + deltaTheta && velAngleObj2 >= thetaObj2 - deltaTheta){
-            willCollide = true;
-        }
-        return willCollide;
+        float obj2AngleWrtObj1 = (float) Utilities.anglePoints(object2.centerPosX, object2.centerPosY, object1.centerPosX, object1.centerPosY);
+        float deltaTheta = (float) (Math.toDegrees(Math.atan2(object1.radius + object2.radius, distanceOfObj2wrtObj1)));
+        /*testing purposes only
+        System.out.println("velAngleObj2: " + relVelAngleObj2 + " thetaObj2: " + obj2AngleWrtObj1 + " deltaTheta: " + deltaTheta);
+        System.out.println(object1);*/
+        return relVelAngleObj2 <= obj2AngleWrtObj1 + deltaTheta && relVelAngleObj2 >= obj2AngleWrtObj1 - deltaTheta;
     }
 }
