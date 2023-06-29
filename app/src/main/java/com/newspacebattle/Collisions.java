@@ -137,7 +137,7 @@ class Collisions {
 
         //To avoid objects colliding more than once
         while (Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY) <= object1.radius + object2.radius && object1.exists && object2.exists) {
-            //System.out.println("collision detected");
+            System.out.println("collision detected");
         }
     }
 
@@ -280,5 +280,37 @@ class Collisions {
                 }
             }
         }
+    }
+    //detect if two objects will collide at any point in the future given their velocities
+    static boolean relVelDetectCollision(GameObject object1, GameObject object2) {
+        boolean willCollide = false;
+        float velAngleObj2;
+        float thetaObj2;
+        float deltaTheta;
+
+        float P2wrt1 = (float) Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
+
+        float relVelObj2X = object2.velocityX - object1.velocityX;
+        float relVelObj2Y = object2.velocityY - object1.velocityY;
+
+        if (relVelObj2X > 0 && relVelObj2Y > 0) {
+            velAngleObj2 = (float) (Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X))));
+        } else if (relVelObj2X < 0 && relVelObj2Y > 0) {
+            velAngleObj2 = (float) (180 - Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X))));
+        } else if (relVelObj2X < 0 && relVelObj2Y < 0) {
+            velAngleObj2 = (float) (((-180 - Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X)))) * -1) + 180);
+        } else if (relVelObj2X > 0 && relVelObj2Y < 0) {
+            velAngleObj2 = (float) (360 - (Math.toDegrees(Math.atan2(Math.abs(relVelObj2Y), Math.abs(relVelObj2X)))) * -1);
+        }else{
+            return willCollide;
+        }
+
+        thetaObj2 = (float) Utilities.anglePoints(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
+        deltaTheta = (float) (Math.toDegrees(Math.atan2(object1.radius + object2.radius, P2wrt1)));
+
+        if(velAngleObj2 <= thetaObj2 + deltaTheta && velAngleObj2 >= thetaObj2 - deltaTheta){
+            willCollide = true;
+        }
+        return willCollide;
     }
 }
