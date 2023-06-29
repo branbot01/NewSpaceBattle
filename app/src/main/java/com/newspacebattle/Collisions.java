@@ -95,11 +95,8 @@ class Collisions {
         //System.out.println(v1fx + ", " + v1fy);
         //System.out.println(v2fx + ", " + v2fy);
 
-        object1.destination = false;
         object1.velocityX = v1fx;
         object1.velocityY = v1fy;
-        object1.accelerationX = 0;
-        object1.accelerationY = 0;
         if (object1 instanceof Bullet) {
             ((Bullet) object1).impact(object2);
         } else if (object1 instanceof Missile) {
@@ -108,18 +105,14 @@ class Collisions {
             ((Laser) object1).impact(object2);
         }
         if (object1 instanceof ResourceCollector) {
-            ((ResourceCollector) object1).harvesting = false;
+            if (((ResourceCollector) object1).harvesting || ((ResourceCollector) object1).unloading) {
+                ((ResourceCollector) object1).harvesting = true;
+            }
             ((ResourceCollector) object1).unloading = false;
         }
-        if (object1 instanceof Ship) {
-            object1.destinationFinder.stopFinder();
-        }
 
-        object2.destination = false;
         object2.velocityX = v2fx;
         object2.velocityY = v2fy;
-        object2.accelerationX = 0;
-        object2.accelerationY = 0;
         if (object2 instanceof Bullet) {
             ((Bullet) object2).impact(object1);
         } else if (object2 instanceof Missile) {
@@ -128,16 +121,15 @@ class Collisions {
             ((Laser) object2).impact(object1);
         }
         if (object2 instanceof ResourceCollector) {
-            ((ResourceCollector) object2).harvesting = false;
+            if (((ResourceCollector) object2).harvesting || ((ResourceCollector) object2).unloading) {
+                ((ResourceCollector) object2).harvesting = true;
+            }
             ((ResourceCollector) object2).unloading = false;
-        }
-        if (object2 instanceof Ship) {
-            object2.destinationFinder.stopFinder();
         }
 
         //To avoid objects colliding more than once
         while (Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY) <= object1.radius + object2.radius && object1.exists && object2.exists) {
-            System.out.println("collision detected");
+            //System.out.println("collision detected");
         }
     }
 
