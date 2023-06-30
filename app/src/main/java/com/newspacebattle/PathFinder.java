@@ -97,7 +97,7 @@ class PathFinder {
         }).start();
     }
 
-    private PointObject pathFind(){
+    private PointObject pathFind() {
         PointObject direction = new PointObject(destX, destY);
         ArrayList<GameObject> nearbyObjects = new ArrayList<>();
         if (Objects.equals(ship.type, "ResourceCollector")) {
@@ -122,10 +122,24 @@ class PathFinder {
                 continue;
             }
             double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
-            if (distance <= avoidanceRadius + obj.radius) {
+            double addedDistance = 0;
+            if (obj instanceof SpaceStation) {
+                addedDistance = obj.radius * 1.5f;
+            }
+            if (distance <= avoidanceRadius + obj.radius + addedDistance) {
                 nearbyObjects.add(obj);
+                if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship){
+                    nearbyObjects.remove(obj);
+                    continue;
+                }
 
-                if (Utilities.distanceFormula(destX, destY, obj.centerPosX, obj.centerPosY) <= obj.radius) {
+                if (Utilities.distanceFormula(destX, destY, obj.centerPosX, obj.centerPosY) <= obj.radius && !ship.docking) {
+                    if (ship instanceof ResourceCollector) {
+                        if (((ResourceCollector) ship).harvesting || ((ResourceCollector) ship).unloading) {
+                            nearbyObjects.remove(obj);
+                            continue;
+                        }
+                    }
                     ship.stop();
                     ship.destination = false;
                     return null;
@@ -133,7 +147,7 @@ class PathFinder {
             }
         }
 
-        if (nearbyObjects.size() == 0){
+        if (nearbyObjects.size() == 0) {
             return direction;
         }
 
@@ -142,7 +156,7 @@ class PathFinder {
         Arrays.fill(possiblePoints, true);
         double[] distances = new double[MAX_POINTS];
         Arrays.fill(distances, Double.MAX_VALUE);
-        for (int i = 0; i < MAX_POINTS; i++){
+        for (int i = 0; i < MAX_POINTS; i++) {
             float angle = ship.degrees + (float) (i * (360 / MAX_POINTS));
             double newX = Utilities.circleAngleX(angle, ship.centerPosX, avoidanceRadius);
             double newY = Utilities.circleAngleY(angle, ship.centerPosY, avoidanceRadius);
@@ -150,7 +164,11 @@ class PathFinder {
             for (int ii = 0; ii < nearbyObjects.size(); ii++) {
                 GameObject obj = nearbyObjects.get(ii);
                 double distance = Utilities.distanceFormula(newX, newY, obj.centerPosX, obj.centerPosY);
-                if (distance <= avoidanceRadius) {
+                double addedDistance = 0;
+                if (obj instanceof SpaceStation) {
+                    addedDistance = obj.radius / 2;
+                }
+                if (distance <= avoidanceRadius + addedDistance) {
                     possiblePoints[i] = false;
                 }
             }
@@ -158,13 +176,13 @@ class PathFinder {
 
         double min = Double.MAX_VALUE;
         int minIndex = -1;
-        for (int i = 0; i < distances.length; i++){
-            if (distances[i] < min && possiblePoints[i]){
+        for (int i = 0; i < distances.length; i++) {
+            if (distances[i] < min && possiblePoints[i]) {
                 min = distances[i];
                 minIndex = i;
             }
         }
-        if (minIndex == -1){
+        if (minIndex == -1) {
             return direction;
         }
         float angle = ship.degrees + (float) (minIndex * (360 / MAX_POINTS));
@@ -215,10 +233,6 @@ class PathFinder {
             }
             ship.stop();
             ship.destination = false;
-            if (ship instanceof ResourceCollector) {
-                ((ResourceCollector) ship).harvesting = false;
-                ((ResourceCollector) ship).unloading = false;
-            }
             return;
         }
         if (Math.abs(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY) - ship.degrees) <= 5) {
