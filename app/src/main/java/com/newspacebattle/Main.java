@@ -33,7 +33,7 @@ public class Main extends AppCompatActivity {
     static ColorStateList fabColor;
     static Collisions collisions;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, formation, buildMenu;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
     Button special, normal, dockedShips, buildShips;
@@ -480,6 +480,7 @@ public class Main extends AppCompatActivity {
         stop = findViewById(R.id.stopButton);
         destroy = findViewById(R.id.destroyButton);
         select = findViewById(R.id.select);
+        formation = findViewById(R.id.formationButton);
         attack = findViewById(R.id.attackButton);
         shipMode = findViewById(R.id.shipModeButton);
         follow = findViewById(R.id.followButton);
@@ -489,7 +490,7 @@ public class Main extends AppCompatActivity {
         harvest = findViewById(R.id.harvestButton);
         dock = findViewById(R.id.dockButton);
         dockMenu = findViewById(R.id.dockMenuButton);
-        formation = findViewById(R.id.shootButton);
+        shoot = findViewById(R.id.shootButton);
         buildMenu = findViewById(R.id.buildButton);
         fabColor = select.getBackgroundTintList();
         resourceCollector = findViewById(R.id.resourceCollectorButton);
@@ -546,7 +547,7 @@ public class Main extends AppCompatActivity {
             move.setVisibility(View.VISIBLE);
             stop.setVisibility(View.VISIBLE);
             attack.setVisibility(View.VISIBLE);
-            formation.setVisibility(View.VISIBLE);
+            shoot.setVisibility(View.VISIBLE);
             destroy.setVisibility(View.VISIBLE);
             shipMode.setVisibility(View.VISIBLE);
             follow.setVisibility(View.VISIBLE);
@@ -572,7 +573,7 @@ public class Main extends AppCompatActivity {
             dock.setVisibility(View.INVISIBLE);
             dockedShips.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
-            formation.setVisibility(View.INVISIBLE);
+            shoot.setVisibility(View.INVISIBLE);
             buildMenu.setVisibility(View.INVISIBLE);
             resourceCollector.setVisibility(View.INVISIBLE);
             scout.setVisibility(View.INVISIBLE);
@@ -937,6 +938,10 @@ public class Main extends AppCompatActivity {
         progressLaserCruiser.setVisibility(View.VISIBLE);
         progressBattleShip.setVisibility(View.VISIBLE);
         progressSpaceStation.setVisibility(View.VISIBLE);
+    }
+
+    public void formationMenu(View view){
+
     }
 
     public FlagShip checkIfOneFlagship(){
