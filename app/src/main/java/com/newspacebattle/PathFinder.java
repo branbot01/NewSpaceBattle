@@ -64,6 +64,9 @@ class PathFinder {
             public void run() {
                 Looper.prepare();
                 PointObject direction = pathFind();
+                if (direction == null) {
+                    return;
+                }
                 tempX = (float) direction.x;
                 tempY = (float) direction.y;
                 ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
@@ -71,6 +74,9 @@ class PathFinder {
                 Utilities.delay(500);
                 while (ship.exists && ship.destination) {
                     direction = pathFind();
+                    if (direction == null) {
+                        return;
+                    }
                     tempX = (float) direction.x;
                     tempY = (float) direction.y;
                     driveShip(direction.x, direction.y);
@@ -118,6 +124,12 @@ class PathFinder {
             double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
             if (distance <= avoidanceRadius + obj.radius) {
                 nearbyObjects.add(obj);
+
+                if (Utilities.distanceFormula(destX, destY, obj.centerPosX, obj.centerPosY) <= obj.radius) {
+                    ship.stop();
+                    ship.destination = false;
+                    return null;
+                }
             }
         }
 
