@@ -332,7 +332,7 @@ public class Main extends AppCompatActivity {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             mScaleFactor *= detector.getScaleFactor();
-            mScaleFactor = Math.max(0.05f, Math.min(mScaleFactor, 0.15f));
+            mScaleFactor = Math.max(0.03f, Math.min(mScaleFactor, 0.15f));
             return true;
         }
     }
