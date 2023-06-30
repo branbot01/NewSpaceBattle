@@ -14,8 +14,8 @@ class ResourceCollector extends Ship {
 
     static float constRadius;
 
-    static int buildTime, cost;
-    private FlagShip flagShipSelected = null;
+    static int cost;
+    FlagShip flagShipSelected = null;
 
     //Constructor method
     ResourceCollector(float x, float y, int team) {
@@ -79,7 +79,7 @@ class ResourceCollector extends Ship {
             @Override
             public void run() {
                 Looper.prepare();
-                while (resources < RESOURCE_CAPACITY && harvesting && asteroidSelected.resources > 0) {
+                while (resources < RESOURCE_CAPACITY - 4 && harvesting && asteroidSelected.resources > 0) {
                     velocityX = asteroidSelected.velocityX;
                     velocityY = asteroidSelected.velocityY;
                     if (resources < 2500) {
