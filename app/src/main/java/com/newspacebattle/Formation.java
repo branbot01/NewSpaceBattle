@@ -8,7 +8,7 @@ import java.util.ArrayList;
 class Formation {
 
     ArrayList<Ship> ships;
-    ArrayList<PointObject> points;
+    ArrayList<PointObject> points = new ArrayList<>();
     double centerX, centerY;
     int type;
 
