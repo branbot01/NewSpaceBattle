@@ -986,7 +986,7 @@ public class Main extends AppCompatActivity {
         formationBar(false);
         shipBar(true);
 
-        GameScreen.formations[0].add(new Formation(selectShips, 0));
+        GameScreen.formations.get(0).add(new Formation(selectShips, 0));
     }
 
     public FlagShip checkIfOneFlagship(){

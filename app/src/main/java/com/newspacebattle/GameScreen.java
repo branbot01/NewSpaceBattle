@@ -24,7 +24,13 @@ public class GameScreen extends View {
     static float[] starXPos, starYPos;
     static boolean paused;
 
-    static ArrayList<Formation>[] formations = new ArrayList[4];
+    static ArrayList<ArrayList<Formation>> formations = new ArrayList<>();
+    static {
+        for (int i = 0; i < 4; i++) {
+            formations.add(new ArrayList<Formation>());
+        }
+    }
+
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
     static ArrayList<FlagShip> flagShips = new ArrayList<>();
@@ -774,6 +780,12 @@ public class GameScreen extends View {
                 canvas.drawBitmap(bitStationRing3, spaceStations.get(i).ringSpiral3, null);
             }
         }
+
+        /*for (int i = 0; i < 4; i++){
+            for (int j = 0; j < formations.get(i).size(); j++){
+                canvas.drawBitmap(bitFighter, formations.get(i).get(j), null);
+            }
+        }*/
 
         if (Main.startSelection) {
             canvas.drawLine(startSelX, startSelY, endSelX, startSelY, green);
