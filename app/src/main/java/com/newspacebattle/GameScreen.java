@@ -567,8 +567,8 @@ public class GameScreen extends View {
         canvas.translate(-offsetX, -offsetY);
         canvas.scale(scaleX, scaleY);
 
-        double extraOffsetX = mapSizeX / 16;
-        double extraOffsetY = mapSizeY / 16;
+        double extraOffsetX = mapSizeX / 6;
+        double extraOffsetY = mapSizeY / 6;
 
         for (int i = 0; i <= starXPos.length - 1; i++) {
             if (starXPos[i] >= offsetX / scaleX && starXPos[i] <= offsetX / scaleX + extraOffsetX && starYPos[i] >= offsetY / scaleY && starYPos[i] <= offsetY / scaleY + extraOffsetY) {
