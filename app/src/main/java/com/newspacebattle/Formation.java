@@ -54,11 +54,12 @@ class Formation {
 
     void remakeFormation() {
         for(int i = 0; i < ships.size(); i++) {
-            if(ships.get(i).formation != this){
+            if(ships.get(i).formation != this || !ships.get(i).exists){
                 ships.remove(ships.get(i));
             }
         }
         if(ships.size() <= initialSize / 2) {
+            initialSize = ships.size();
             setCenter();
            if(type == 0) {
                rectangleFormation();
