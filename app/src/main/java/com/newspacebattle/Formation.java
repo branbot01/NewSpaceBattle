@@ -8,6 +8,8 @@ import java.util.ArrayList;
 class Formation {
 
     ArrayList<Ship> ships;
+
+    //visualize ship locations
     ArrayList<PointObject> points = new ArrayList<>();
     double centerX, centerY;
     int type;
@@ -21,6 +23,10 @@ class Formation {
         if (type == 0) {
             rectangleFormation();
         }
+    }
+
+    void update() {
+
     }
 
     //Finds the center of the selected ships
@@ -43,7 +49,7 @@ class Formation {
 
     void rectangleFormation() {
         int shipCounter = 0;
-        float offsetX = 0;
+        float offsetX = 0, offsetY;
 
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i) instanceof BattleShip || ships.get(i) instanceof FlagShip) {
@@ -88,18 +94,22 @@ class Formation {
                 } else {
                     if (shipCounter % 4 == 0) {
                         offsetX -= ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4);
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)), false);
-                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4))));
+                        offsetY = 1;
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)) * offsetY), false);
+                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)) * offsetY)));
                     }else if (shipCounter % 4 == 1){
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY - ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)), false);
-                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY - ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4))));
+                        offsetY = -1;
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)) * offsetY), false);
+                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4) * offsetY))));
                     }else if (shipCounter % 4 == 2){
                         offsetX -= ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4);
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY - ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)), false);
-                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY - ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4))));
+                        offsetY = -1;
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4) * offsetY)), false);
+                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4) * offsetY))));
                     }else if (shipCounter % 4 == 3){
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)), false);
-                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4))));
+                        offsetY = 1;
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4) * offsetY)), false);
+                        points.add(new PointObject((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + (((Fighter.constRadius * 5 * Math.sqrt(3)) / 4) * offsetY))));
                     }
                 }
                 shipCounter++;
