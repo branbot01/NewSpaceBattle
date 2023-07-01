@@ -36,7 +36,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
-    FloatingActionButton nextFormation;
+    FloatingActionButton nextFormation, controlFormation;
     FloatingActionButton rectangleFormation;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
     GameScreen gameScreen;
@@ -530,6 +530,7 @@ public class Main extends AppCompatActivity {
         progressSpaceStation = findViewById(R.id.progressSpaceStation);
         currentFormations = findViewById(R.id.currentFormations);
         nextFormation = findViewById(R.id.nextFormation);
+        controlFormation = findViewById(R.id.controlFormation);
         buildFormation = findViewById(R.id.buildFormation);
         rectangleFormation = findViewById(R.id.rectangleFormation);
         numFormations = findViewById(R.id.numFormations);
@@ -953,6 +954,8 @@ public class Main extends AppCompatActivity {
     public void formationButton(View view){
         shipBar(false);
         formationBar(true);
+        startSelection = false;
+        select.setBackgroundTintList(fabColor);
     }
 
     public void formationBar(boolean hiddenOrNot){
@@ -963,6 +966,7 @@ public class Main extends AppCompatActivity {
 
             numFormations.setVisibility(View.VISIBLE);
             nextFormation.setVisibility(View.VISIBLE);
+            controlFormation.setVisibility(View.VISIBLE);
 
             numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
 
@@ -973,6 +977,7 @@ public class Main extends AppCompatActivity {
             buildFormation.setVisibility(View.INVISIBLE);
             numFormations.setVisibility(View.INVISIBLE);
             nextFormation.setVisibility(View.INVISIBLE);
+            controlFormation.setVisibility(View.INVISIBLE);
 
             rectangleFormation.setVisibility(View.INVISIBLE);
         }
@@ -989,6 +994,7 @@ public class Main extends AppCompatActivity {
 
         numFormations.setVisibility(View.INVISIBLE);
         nextFormation.setVisibility(View.INVISIBLE);
+        controlFormation.setVisibility(View.INVISIBLE);
     }
 
     public void buildFormation(View view){
@@ -997,6 +1003,7 @@ public class Main extends AppCompatActivity {
 
         numFormations.setVisibility(View.VISIBLE);
         nextFormation.setVisibility(View.VISIBLE);
+        controlFormation.setVisibility(View.VISIBLE);
 
         rectangleFormation.setVisibility(View.INVISIBLE);
     }
@@ -1005,17 +1012,25 @@ public class Main extends AppCompatActivity {
         if (GameScreen.formationsTeam1.size() == 0){
             return;
         }
-        System.out.println("Formation Selected: " + formationSelected);
         for(int i = 0; i < GameScreen.formationsTeam1.size(); i++){
             if (formationSelected == i){
                 clearSelectionReferences();
                 GameScreen.groupSelect(GameScreen.formationsTeam1.get(i).ships);
+                following = true;
             }
         }
         formationSelected++;
         if (formationSelected == GameScreen.formationsTeam1.size()){
             formationSelected = 0;
         }
+    }
+
+    public void controlFormation(View view){
+        if (selectShips.size() == 0){
+            return;
+        }
+        shipBar(true);
+        formationBar(false);
     }
 
     public void setRectangleFormation(View view){

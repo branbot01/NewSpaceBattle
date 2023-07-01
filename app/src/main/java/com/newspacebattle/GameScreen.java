@@ -323,7 +323,6 @@ public class GameScreen extends View {
             return;
         }
         if (shipsToSelect.size() == 0) {
-            System.out.println("No ships to select");
             return;
         }
 

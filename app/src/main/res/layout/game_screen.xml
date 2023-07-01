@@ -86,6 +86,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_media_next" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/controlFormation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        android:onClick="controlFormation"
+        android:rotation="34"
+        android:visibility="invisible"
+        app:backgroundTint="#4CAF50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_greenarrow" />
+
     <Button
         android:id="@+id/buildFormation"
         android:layout_width="223dp"
