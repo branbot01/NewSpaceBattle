@@ -24,12 +24,10 @@ public class GameScreen extends View {
     static float[] starXPos, starYPos;
     static boolean paused;
 
-    static ArrayList<ArrayList<Formation>> formations = new ArrayList<>();
-    static {
-        for (int i = 0; i < 4; i++) {
-            formations.add(new ArrayList<Formation>());
-        }
-    }
+    static ArrayList<Formation> formationsTeam1 = new ArrayList<>();
+    static ArrayList<Formation> formationsTeam2 = new ArrayList<>();
+    static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
+    static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
 
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
@@ -781,11 +779,13 @@ public class GameScreen extends View {
             }
         }
 
-        /*for (int i = 0; i < 4; i++){
-            for (int j = 0; j < formations.get(i).size(); j++){
-                canvas.drawBitmap(bitFighter, formations.get(i).get(j), null);
+        for(int i = 0; i < formationsTeam1.size(); i++){
+            for (int j = 0; j < formationsTeam1.get(i).points.size(); j++){
+                if (formationsTeam1.get(i).points != null) {
+                    canvas.drawCircle((float) formationsTeam1.get(i).points.get(j).x, (float) formationsTeam1.get(i).points.get(j).y, 50, green);
+                }
             }
-        }*/
+        }
 
         if (Main.startSelection) {
             canvas.drawLine(startSelX, startSelY, endSelX, startSelY, green);
