@@ -16,6 +16,7 @@ class Ship extends GameObject {
     float preScaleX, preScaleY;
     float avoidanceRadius;
     boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
+    Formation formation;
     Matrix arrow = new Matrix();
     Paint selector = new Paint();
     private ValueAnimator stopperX, stopperY;
