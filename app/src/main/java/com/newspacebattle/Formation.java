@@ -9,6 +9,8 @@ class Formation {
 
     ArrayList<Ship> ships;
 
+    int initialSize;
+
     //visualize ship locations
     ArrayList<PointObject> points = new ArrayList<>();
     double centerX, centerY;
@@ -17,15 +19,18 @@ class Formation {
     //Constructor method
     Formation(ArrayList<Ship> ships, int type) {
         this.type = type;
-        this.ships = ships;
+        this.ships = new ArrayList<>();
+        this.ships.addAll(ships);
+        initialSize = ships.size();
         setShips();
         setCenter();
         if (type == 0) {
             rectangleFormation();
         }
     }
-
+    //update's the formation's properties
     void update() {
+        remakeFormation();
 
     }
 
@@ -47,6 +52,21 @@ class Formation {
         }
     }
 
+    void remakeFormation() {
+        for(int i = 0; i < ships.size(); i++) {
+            if(ships.get(i).formation != this){
+                ships.remove(ships.get(i));
+            }
+        }
+        if(ships.size() <= initialSize / 2) {
+            setCenter();
+           if(type == 0) {
+               rectangleFormation();
+           }
+        }
+    }
+
+    //Creates a rectangle formation
     void rectangleFormation() {
         int shipCounter = 0;
         float offsetX = 0, offsetY;

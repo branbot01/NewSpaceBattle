@@ -939,6 +939,9 @@ public class GameScreen extends View {
                             Main.selectShips.remove(Main.selectShips.get(i));
                         }
                     }
+                    for (int i = 0; i <= formationsTeam1.size() - 1; i++) {
+                        formationsTeam1.get(i).update();
+                    }
                     followShips();
                 }
                 gameLoop();
