@@ -36,6 +36,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
+    FloatingActionButton rectangleFormation;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
@@ -528,6 +529,7 @@ public class Main extends AppCompatActivity {
         progressSpaceStation = findViewById(R.id.progressSpaceStation);
         currentFormations = findViewById(R.id.currentFormations);
         buildFormation = findViewById(R.id.buildFormation);
+        rectangleFormation = findViewById(R.id.rectangleFormation);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -958,17 +960,33 @@ public class Main extends AppCompatActivity {
             formationBar.setVisibility(View.INVISIBLE);
             currentFormations.setVisibility(View.INVISIBLE);
             buildFormation.setVisibility(View.INVISIBLE);
+
+            rectangleFormation.setVisibility(View.INVISIBLE);
         }
     }
 
     public void currentFormations(View view){
+        if (selectShips.size() == 0){
+            return;
+        }
         currentFormations.setVisibility(View.INVISIBLE);
         buildFormation.setVisibility(View.VISIBLE);
+
+        rectangleFormation.setVisibility(View.VISIBLE);
     }
 
     public void buildFormation(View view){
         buildFormation.setVisibility(View.INVISIBLE);
         currentFormations.setVisibility(View.VISIBLE);
+
+        rectangleFormation.setVisibility(View.INVISIBLE);
+    }
+
+    public void setRectangleFormation(View view){
+        formationBar(false);
+        shipBar(true);
+
+        GameScreen.formations[0].add(new Formation(selectShips));
     }
 
     public FlagShip checkIfOneFlagship(){

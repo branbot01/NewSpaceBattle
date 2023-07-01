@@ -24,6 +24,7 @@ public class GameScreen extends View {
     static float[] starXPos, starYPos;
     static boolean paused;
 
+    static ArrayList<Formation>[] formations = new ArrayList[4];
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
     static ArrayList<FlagShip> flagShips = new ArrayList<>();
