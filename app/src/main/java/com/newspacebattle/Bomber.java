@@ -23,6 +23,7 @@ class Bomber extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 8;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 1500;

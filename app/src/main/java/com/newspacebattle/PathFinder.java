@@ -4,14 +4,13 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
  */
 class PathFinder {
 
-    float destX, destY, tempX, tempY, avoidanceRadius;
+    float destX, destY, tempX, tempY;
     private boolean pointOrObj;
     private Ship ship;
     private GameObject targetObj;
@@ -100,21 +99,6 @@ class PathFinder {
     private PointObject pathFind() {
         PointObject direction = new PointObject(destX, destY);
         ArrayList<GameObject> nearbyObjects = new ArrayList<>();
-        if (Objects.equals(ship.type, "ResourceCollector")) {
-            avoidanceRadius = ship.radius * 9;
-        } else if (Objects.equals(ship.type, "Scout")) {
-            avoidanceRadius = ship.radius * 9.5f;
-        } else if (Objects.equals(ship.type, "Fighter")) {
-            avoidanceRadius = ship.radius * 10;
-        } else if (Objects.equals(ship.type, "Bomber")) {
-            avoidanceRadius = ship.radius * 8;
-        } else if (Objects.equals(ship.type, "LaserCruiser")) {
-            avoidanceRadius = ship.radius * 3.5f;
-        } else if (Objects.equals(ship.type, "BattleShip")) {
-            avoidanceRadius = ship.radius * 2;
-        } else if (Objects.equals(ship.type, "FlagShip")) {
-            avoidanceRadius = ship.radius * 2.25f;
-        }
 
         for (int i = 0; i < GameScreen.objects.size(); i++) {
             GameObject obj = GameScreen.objects.get(i);
@@ -126,7 +110,7 @@ class PathFinder {
             if (obj instanceof SpaceStation) {
                 addedDistance = obj.radius * 1.5f;
             }
-            if (distance <= avoidanceRadius + obj.radius + addedDistance) {
+            if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
                 nearbyObjects.add(obj);
                 if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship){
                     nearbyObjects.remove(obj);
@@ -158,8 +142,8 @@ class PathFinder {
         Arrays.fill(distances, Double.MAX_VALUE);
         for (int i = 0; i < MAX_POINTS; i++) {
             float angle = ship.degrees + (float) (i * (360 / MAX_POINTS));
-            double newX = Utilities.circleAngleX(angle, ship.centerPosX, avoidanceRadius);
-            double newY = Utilities.circleAngleY(angle, ship.centerPosY, avoidanceRadius);
+            double newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
+            double newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
             distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
             for (int ii = 0; ii < nearbyObjects.size(); ii++) {
                 GameObject obj = nearbyObjects.get(ii);
@@ -168,7 +152,7 @@ class PathFinder {
                 if (obj instanceof SpaceStation) {
                     addedDistance = obj.radius / 2;
                 }
-                if (distance <= avoidanceRadius + addedDistance) {
+                if (distance <= ship.avoidanceRadius + addedDistance) {
                     possiblePoints[i] = false;
                 }
             }
@@ -186,8 +170,8 @@ class PathFinder {
             return direction;
         }
         float angle = ship.degrees + (float) (minIndex * (360 / MAX_POINTS));
-        direction.x = Utilities.circleAngleX(angle, ship.centerPosX, avoidanceRadius);
-        direction.y = Utilities.circleAngleY(angle, ship.centerPosY, avoidanceRadius);
+        direction.x = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
+        direction.y = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
         return direction;
     }
 

@@ -23,6 +23,7 @@ class Fighter extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 10;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 2500;

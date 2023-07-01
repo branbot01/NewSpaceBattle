@@ -7,4 +7,6 @@
     <string name="NormalOptions">NORMAL</string>
     <string name="DockedShipsOptions">DOCKED SHIPS</string>
     <string name="BuildShipsOptions">BUILD SHIPS</string>
+    <string name="CurrentFormations">CURRENT FORMATIONS</string>
+    <string name="BuildFormation">BUILD FORMATION</string>
 </resources>

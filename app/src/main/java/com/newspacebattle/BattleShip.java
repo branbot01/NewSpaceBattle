@@ -23,6 +23,7 @@ class BattleShip extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 2;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 10000;

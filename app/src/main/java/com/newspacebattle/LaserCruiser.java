@@ -27,6 +27,7 @@ class LaserCruiser extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 3.5f;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 3000;

@@ -36,7 +36,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
-    Button special, normal, dockedShips, buildShips;
+    Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -50,7 +50,7 @@ public class Main extends AppCompatActivity {
             rickRoll.start();
         }
     });
-    View decorView, gameView, bar;
+    View decorView, gameView, bar, formationBar;
 
     private ScaleGestureDetector mScaleDetector;
 
@@ -438,6 +438,7 @@ public class Main extends AppCompatActivity {
                         clearSelectionReferences();
                         following = false;
                         shipBar(false);
+                        formationBar(false);
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -476,6 +477,7 @@ public class Main extends AppCompatActivity {
     //Get references for all of the buttons and ui elements
     public void findIds() {
         bar = findViewById(R.id.bottomBar);
+        formationBar = findViewById(R.id.bottomFormationBar);
         move = findViewById(R.id.moveButton);
         stop = findViewById(R.id.stopButton);
         destroy = findViewById(R.id.destroyButton);
@@ -524,6 +526,8 @@ public class Main extends AppCompatActivity {
         progressLaserCruiser = findViewById(R.id.progressLaserCruiser);
         progressBattleShip = findViewById(R.id.progressBattleShip);
         progressSpaceStation = findViewById(R.id.progressSpaceStation);
+        currentFormations = findViewById(R.id.currentFormations);
+        buildFormation = findViewById(R.id.buildFormation);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -789,6 +793,7 @@ public class Main extends AppCompatActivity {
         }
         clearSelectionReferences();
         shipBar(false);
+        formationBar(false);
 
         if (!startSelection) {
             select.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
@@ -940,8 +945,30 @@ public class Main extends AppCompatActivity {
         progressSpaceStation.setVisibility(View.VISIBLE);
     }
 
-    public void formationMenu(View view){
+    public void formationButton(View view){
+        shipBar(false);
+        formationBar(true);
+    }
 
+    public void formationBar(boolean hiddenOrNot){
+        if (hiddenOrNot){
+            formationBar.setVisibility(View.VISIBLE);
+            currentFormations.setVisibility(View.VISIBLE);
+        } else {
+            formationBar.setVisibility(View.INVISIBLE);
+            currentFormations.setVisibility(View.INVISIBLE);
+            buildFormation.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void currentFormations(View view){
+        currentFormations.setVisibility(View.INVISIBLE);
+        buildFormation.setVisibility(View.VISIBLE);
+    }
+
+    public void buildFormation(View view){
+        buildFormation.setVisibility(View.INVISIBLE);
+        currentFormations.setVisibility(View.VISIBLE);
     }
 
     public FlagShip checkIfOneFlagship(){

@@ -20,6 +20,7 @@ class Scout extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 9.5f;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 500;

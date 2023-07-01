@@ -28,6 +28,7 @@ class ResourceCollector extends Ship {
         midX = width / 2;
         midY = height / 2;
         radius = midY;
+        avoidanceRadius = radius * 9;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 1250;
