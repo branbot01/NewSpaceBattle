@@ -318,6 +318,21 @@ public class GameScreen extends View {
         return oneWasSelected;
     }
 
+    public static void groupSelect(ArrayList<Ship> shipsToSelect){
+        if (shipsToSelect == null) {
+            return;
+        }
+        if (shipsToSelect.size() == 0) {
+            System.out.println("No ships to select");
+            return;
+        }
+
+        for (int i = 0; i <= shipsToSelect.size() - 1; i++) {
+            Main.selectShips.add(shipsToSelect.get(i));
+            shipsToSelect.get(i).selected = true;
+        }
+    }
+
     //Attacks ships in its given x and y range
     public static ArrayList<Ship> attackSelect(double x1, double y1, double x2, double y2) {
         double holder;

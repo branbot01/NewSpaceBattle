@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 //Main class handles ui elements like the menus and buttons
 public class Main extends AppCompatActivity {
 
-    static int screenX, screenY, movedX, movedY;
+    static int screenX, screenY, movedX, movedY, formationSelected;
     static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
@@ -36,11 +36,13 @@ public class Main extends AppCompatActivity {
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
+    FloatingActionButton nextFormation;
     FloatingActionButton rectangleFormation;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
+    TextView numFormations;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
     MediaPlayer rickRoll;
     Thread loader = new Thread(new Runnable() {
@@ -95,10 +97,8 @@ public class Main extends AppCompatActivity {
 
     //Clears any ships that are selected
     public static void clearSelectionReferences() {
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            selectShips.get(i).selected = false;
-        }
         for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
+            GameScreen.ships.get(i).selected = false;
             GameScreen.ships.get(i).attSelected = false;
         }
         selectShips.clear();
@@ -179,6 +179,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void run() {
                 if (loaded) {
+                    formationSelected = 0;
                     mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleListener());
                     setContentView(gameScreen);
                     addContentView(gameView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
@@ -528,8 +529,10 @@ public class Main extends AppCompatActivity {
         progressBattleShip = findViewById(R.id.progressBattleShip);
         progressSpaceStation = findViewById(R.id.progressSpaceStation);
         currentFormations = findViewById(R.id.currentFormations);
+        nextFormation = findViewById(R.id.nextFormation);
         buildFormation = findViewById(R.id.buildFormation);
         rectangleFormation = findViewById(R.id.rectangleFormation);
+        numFormations = findViewById(R.id.numFormations);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -956,10 +959,20 @@ public class Main extends AppCompatActivity {
         if (hiddenOrNot){
             formationBar.setVisibility(View.VISIBLE);
             currentFormations.setVisibility(View.VISIBLE);
+            buildFormation.setVisibility(View.INVISIBLE);
+
+            numFormations.setVisibility(View.VISIBLE);
+            nextFormation.setVisibility(View.VISIBLE);
+
+            numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
+
+            rectangleFormation.setVisibility(View.INVISIBLE);
         } else {
             formationBar.setVisibility(View.INVISIBLE);
             currentFormations.setVisibility(View.INVISIBLE);
             buildFormation.setVisibility(View.INVISIBLE);
+            numFormations.setVisibility(View.INVISIBLE);
+            nextFormation.setVisibility(View.INVISIBLE);
 
             rectangleFormation.setVisibility(View.INVISIBLE);
         }
@@ -973,13 +986,36 @@ public class Main extends AppCompatActivity {
         buildFormation.setVisibility(View.VISIBLE);
 
         rectangleFormation.setVisibility(View.VISIBLE);
+
+        numFormations.setVisibility(View.INVISIBLE);
+        nextFormation.setVisibility(View.INVISIBLE);
     }
 
     public void buildFormation(View view){
         buildFormation.setVisibility(View.INVISIBLE);
         currentFormations.setVisibility(View.VISIBLE);
 
+        numFormations.setVisibility(View.VISIBLE);
+        nextFormation.setVisibility(View.VISIBLE);
+
         rectangleFormation.setVisibility(View.INVISIBLE);
+    }
+
+    public void setNextFormation(View view){
+        if (GameScreen.formationsTeam1.size() == 0){
+            return;
+        }
+        System.out.println("Formation Selected: " + formationSelected);
+        for(int i = 0; i < GameScreen.formationsTeam1.size(); i++){
+            if (formationSelected == i){
+                clearSelectionReferences();
+                GameScreen.groupSelect(GameScreen.formationsTeam1.get(i).ships);
+            }
+        }
+        formationSelected++;
+        if (formationSelected == GameScreen.formationsTeam1.size()){
+            formationSelected = 0;
+        }
     }
 
     public void setRectangleFormation(View view){
