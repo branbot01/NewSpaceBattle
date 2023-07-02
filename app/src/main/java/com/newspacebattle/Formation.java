@@ -3,7 +3,7 @@ package com.newspacebattle;
 import java.util.ArrayList;
 
 /**
- * Created by Dylan and Brandon on 2023-06-29. Defines a formation, which is a structured group of ships.
+ * Created by Brandon and Dylan on 2023-06-29. Defines a formation, which is a structured group of ships.
  */
 class Formation {
 
