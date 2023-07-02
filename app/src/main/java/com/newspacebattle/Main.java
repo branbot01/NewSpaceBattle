@@ -1014,7 +1014,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void currentFormations(View view){
-        if (selectShips.size() == 0){
+        if (selectShips.size() <= 1){
             return;
         }
         currentFormations.setVisibility(View.INVISIBLE);
