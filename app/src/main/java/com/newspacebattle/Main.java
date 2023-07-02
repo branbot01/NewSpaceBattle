@@ -33,7 +33,7 @@ public class Main extends AppCompatActivity {
     static ColorStateList fabColor;
     static Collisions collisions;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation, pause;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
     FloatingActionButton nextFormation, controlFormation;
@@ -139,6 +139,9 @@ public class Main extends AppCompatActivity {
         super.onResume();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         decorView.setSystemUiVisibility(uiOptions);
+        if (GameScreen.paused){
+            pauseButton(null);
+        }
         GameScreen.paused = false;
     }
 
@@ -146,6 +149,29 @@ public class Main extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         GameScreen.paused = true;
+    }
+
+    public void pauseButton(View view) {
+        if (!GameScreen.paused) {
+            GameScreen.paused = true;
+
+            select.setVisibility(View.INVISIBLE);
+            formation.setVisibility(View.INVISIBLE);
+            shipBar(false);
+            formationBar(false);
+            clearSelectionReferences();
+
+            pause.setImageResource(R.drawable.ic_blackhole);
+            pause.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+        } else {
+            GameScreen.paused = false;
+
+            select.setVisibility(View.VISIBLE);
+            formation.setVisibility(View.VISIBLE);
+
+            pause.setImageResource(R.drawable.ic_stop);
+            pause.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF4081")));
+        }
     }
 
     //If user hits back button
@@ -342,6 +368,9 @@ public class Main extends AppCompatActivity {
     //When user touches the screen, not any buttons
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (GameScreen.paused) {
+            return true;
+        }
         if (mScaleDetector == null) {
             return true;
         }
@@ -478,6 +507,7 @@ public class Main extends AppCompatActivity {
 
     //Get references for all of the buttons and ui elements
     public void findIds() {
+        pause = findViewById(R.id.pauseButton);
         bar = findViewById(R.id.bottomBar);
         formationBar = findViewById(R.id.bottomFormationBar);
         move = findViewById(R.id.moveButton);
@@ -1016,7 +1046,7 @@ public class Main extends AppCompatActivity {
             if (formationSelected == i){
                 clearSelectionReferences();
                 GameScreen.groupSelect(GameScreen.formationsTeam1.get(i).ships);
-                following = true;
+                followShip(null);
             }
         }
         formationSelected++;

@@ -657,6 +657,10 @@ public class GameScreen extends View {
             if (flagShips.get(i).centerPosX + flagShips.get(i).radius + flagShips.get(i).radius * 0.2f >= offsetX / scaleX && flagShips.get(i).centerPosX - flagShips.get(i).radius + flagShips.get(i).radius * 0.2f <= offsetX / scaleX + extraOffsetX && flagShips.get(i).centerPosY + flagShips.get(i).radius + flagShips.get(i).radius * 0.2f >= offsetY / scaleY && flagShips.get(i).centerPosY - flagShips.get(i).radius + flagShips.get(i).radius * 0.2f <= offsetY / scaleY + extraOffsetY) {
                 if (flagShips.get(i).selected || flagShips.get(i).attSelected) {
                     canvas.drawCircle(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).radius * 1.1f, flagShips.get(i).selector);
+
+                    float health = flagShips.get(i).health / flagShips.get(i).MAX_HEALTH;
+                    canvas.drawRect(flagShips.get(i).positionX, flagShips.get(i).positionY - flagShips.get(i).radius / 5, flagShips.get(i).positionX + flagShips.get(i).radius * 2, flagShips.get(i).positionY - flagShips.get(i).radius / 4, red);
+                    canvas.drawRect(flagShips.get(i).positionX, flagShips.get(i).positionY - flagShips.get(i).radius / 5, flagShips.get(i).positionX + (flagShips.get(i).radius * 2 * health), flagShips.get(i).positionY - flagShips.get(i).radius / 4, green);
                 }
                 if (flagShips.get(i).team == 1) {
                     canvas.drawBitmap(bitFlagShip, flagShips.get(i).appearance, null);
@@ -674,6 +678,10 @@ public class GameScreen extends View {
             if (resourceCollectors.get(i).centerPosX + resourceCollectors.get(i).radius >= offsetX / scaleX && resourceCollectors.get(i).centerPosX - resourceCollectors.get(i).radius <= offsetX / scaleX + extraOffsetX && resourceCollectors.get(i).centerPosY + resourceCollectors.get(i).radius >= offsetY / scaleY && resourceCollectors.get(i).centerPosY - resourceCollectors.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (resourceCollectors.get(i).selected || resourceCollectors.get(i).attSelected) {
                     canvas.drawCircle(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).radius, resourceCollectors.get(i).selector);
+
+                    float health = resourceCollectors.get(i).health / resourceCollectors.get(i).MAX_HEALTH;
+                    canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 5.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 3, red);
+                    canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 5.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2 * health, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 3, green);
                 }
                 if (resourceCollectors.get(i).team == 1) {
                     canvas.drawBitmap(bitResCollector, resourceCollectors.get(i).appearance, null);
@@ -696,6 +704,10 @@ public class GameScreen extends View {
             if (fighters.get(i).centerPosX + fighters.get(i).radius >= offsetX / scaleX && fighters.get(i).centerPosX - fighters.get(i).radius <= offsetX / scaleX + extraOffsetX && fighters.get(i).centerPosY + fighters.get(i).radius >= offsetY / scaleY && fighters.get(i).centerPosY - fighters.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (fighters.get(i).selected || fighters.get(i).attSelected) {
                     canvas.drawCircle(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).radius, fighters.get(i).selector);
+
+                    float health = fighters.get(i).health / fighters.get(i).MAX_HEALTH;
+                    canvas.drawRect(fighters.get(i).positionX, fighters.get(i).positionY - fighters.get(i).radius / 5.5f, fighters.get(i).positionX + fighters.get(i).radius * 2, fighters.get(i).positionY - fighters.get(i).radius / 3.5f, red);
+                    canvas.drawRect(fighters.get(i).positionX, fighters.get(i).positionY - fighters.get(i).radius / 5.5f, fighters.get(i).positionX + fighters.get(i).radius * 2 * health, fighters.get(i).positionY - fighters.get(i).radius / 3.5f, green);
                 }
                 if (fighters.get(i).team == 1) {
                     canvas.drawBitmap(bitFighter, fighters.get(i).appearance, null);
@@ -713,6 +725,10 @@ public class GameScreen extends View {
             if (battleShips.get(i).centerPosX + battleShips.get(i).radius >= offsetX / scaleX && battleShips.get(i).centerPosX - battleShips.get(i).radius <= offsetX / scaleX + extraOffsetX && battleShips.get(i).centerPosY + battleShips.get(i).radius >= offsetY / scaleY && battleShips.get(i).centerPosY - battleShips.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (battleShips.get(i).selected || battleShips.get(i).attSelected) {
                     canvas.drawCircle(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).radius, battleShips.get(i).selector);
+
+                    float health = battleShips.get(i).health / battleShips.get(i).MAX_HEALTH;
+                    canvas.drawRect(battleShips.get(i).positionX, battleShips.get(i).positionY - battleShips.get(i).radius / 4, battleShips.get(i).positionX + battleShips.get(i).radius * 2, battleShips.get(i).positionY - battleShips.get(i).radius / 3.75f, red);
+                    canvas.drawRect(battleShips.get(i).positionX, battleShips.get(i).positionY - battleShips.get(i).radius / 4, battleShips.get(i).positionX + battleShips.get(i).radius * 2 * health, battleShips.get(i).positionY - battleShips.get(i).radius / 3.75f, green);
                 }
                 if (battleShips.get(i).team == 1) {
                     canvas.drawBitmap(bitBattleShip, battleShips.get(i).appearance, null);
@@ -730,6 +746,10 @@ public class GameScreen extends View {
             if (bombers.get(i).centerPosX + bombers.get(i).radius >= offsetX / scaleX && bombers.get(i).centerPosX - bombers.get(i).radius <= offsetX / scaleX + extraOffsetX && bombers.get(i).centerPosY + bombers.get(i).radius >= offsetY / scaleY && bombers.get(i).centerPosY - bombers.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (bombers.get(i).selected || bombers.get(i).attSelected) {
                     canvas.drawCircle(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).radius, bombers.get(i).selector);
+
+                    float health = bombers.get(i).health / bombers.get(i).MAX_HEALTH;
+                    canvas.drawRect(bombers.get(i).positionX, bombers.get(i).positionY - bombers.get(i).radius / 4, bombers.get(i).positionX + bombers.get(i).radius * 2, bombers.get(i).positionY - bombers.get(i).radius / 3, red);
+                    canvas.drawRect(bombers.get(i).positionX, bombers.get(i).positionY - bombers.get(i).radius / 4, bombers.get(i).positionX + bombers.get(i).radius * 2 * health, bombers.get(i).positionY - bombers.get(i).radius / 3, green);
                 }
                 if (bombers.get(i).team == 1) {
                     canvas.drawBitmap(bitBomber, bombers.get(i).appearance, null);
@@ -747,6 +767,10 @@ public class GameScreen extends View {
             if (scouts.get(i).centerPosX + scouts.get(i).radius >= offsetX / scaleX && scouts.get(i).centerPosX - scouts.get(i).radius <= offsetX / scaleX + extraOffsetX && scouts.get(i).centerPosY + scouts.get(i).radius >= offsetY / scaleY && scouts.get(i).centerPosY - scouts.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (scouts.get(i).selected || scouts.get(i).attSelected) {
                     canvas.drawCircle(scouts.get(i).centerPosX, scouts.get(i).centerPosY, scouts.get(i).radius, scouts.get(i).selector);
+
+                    float health = scouts.get(i).health / scouts.get(i).MAX_HEALTH;
+                    canvas.drawRect(scouts.get(i).positionX, scouts.get(i).positionY - scouts.get(i).radius / 4.5f, scouts.get(i).positionX + scouts.get(i).radius * 2, scouts.get(i).positionY - scouts.get(i).radius / 3, red);
+                    canvas.drawRect(scouts.get(i).positionX, scouts.get(i).positionY - scouts.get(i).radius / 4.5f, scouts.get(i).positionX + scouts.get(i).radius * 2 * health, scouts.get(i).positionY - scouts.get(i).radius / 3, green);
                 }
                 if (scouts.get(i).team == 1) {
                     canvas.drawBitmap(bitScout, scouts.get(i).appearance, null);
@@ -764,6 +788,10 @@ public class GameScreen extends View {
             if (laserCruisers.get(i).centerPosX + laserCruisers.get(i).radius >= offsetX / scaleX && laserCruisers.get(i).centerPosX - laserCruisers.get(i).radius <= offsetX / scaleX + extraOffsetX && laserCruisers.get(i).centerPosY + laserCruisers.get(i).radius >= offsetY / scaleY && laserCruisers.get(i).centerPosY - laserCruisers.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (laserCruisers.get(i).selected || laserCruisers.get(i).attSelected) {
                     canvas.drawCircle(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).radius, laserCruisers.get(i).selector);
+
+                    float health = laserCruisers.get(i).health / laserCruisers.get(i).MAX_HEALTH;
+                    canvas.drawRect(laserCruisers.get(i).positionX, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 4, laserCruisers.get(i).positionX + laserCruisers.get(i).radius * 2, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 3, red);
+                    canvas.drawRect(laserCruisers.get(i).positionX, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 4, laserCruisers.get(i).positionX + laserCruisers.get(i).radius * 2 * health, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 3, green);
                 }
                 if (laserCruisers.get(i).team == 1) {
                     canvas.drawBitmap(bitLaserCruiser, laserCruisers.get(i).appearance, null);
@@ -781,6 +809,10 @@ public class GameScreen extends View {
             if (spaceStations.get(i).centerPosX + spaceStations.get(i).radius >= offsetX / scaleX && spaceStations.get(i).centerPosX - spaceStations.get(i).radius <= offsetX / scaleX + extraOffsetX && spaceStations.get(i).centerPosY + spaceStations.get(i).radius >= offsetY / scaleY && spaceStations.get(i).centerPosY - spaceStations.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (spaceStations.get(i).selected || spaceStations.get(i).attSelected) {
                     canvas.drawCircle(spaceStations.get(i).centerPosX, spaceStations.get(i).centerPosY, spaceStations.get(i).radius, spaceStations.get(i).selector);
+
+                    float health = spaceStations.get(i).health / spaceStations.get(i).MAX_HEALTH;
+                    canvas.drawRect(spaceStations.get(i).positionX, spaceStations.get(i).positionY - spaceStations.get(i).radius / 9, spaceStations.get(i).positionX + spaceStations.get(i).radius * 2, spaceStations.get(i).positionY - spaceStations.get(i).radius / 8, red);
+                    canvas.drawRect(spaceStations.get(i).positionX, spaceStations.get(i).positionY - spaceStations.get(i).radius / 9, spaceStations.get(i).positionX + spaceStations.get(i).radius * 2 * health, spaceStations.get(i).positionY - spaceStations.get(i).radius / 8, green);
                 }
                 if (spaceStations.get(i).team == 1) {
                     canvas.drawBitmap(bitStation, spaceStations.get(i).appearance, null);

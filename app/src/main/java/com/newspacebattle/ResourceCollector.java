@@ -33,6 +33,7 @@ class ResourceCollector extends Ship {
         centerPosY = positionY + midY;
         mass = 1250;
         health = 1000;
+        MAX_HEALTH = 1000;
         resources = 0;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;

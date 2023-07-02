@@ -9,6 +9,18 @@
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="pauseButton"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_stop" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
