@@ -831,6 +831,7 @@ public class GameScreen extends View {
                     canvas.drawCircle((float) formationsTeam1.get(i).points.get(j).x, (float) formationsTeam1.get(i).points.get(j).y, 50, green);
                 }
             }
+            canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);
         }
 
         if (Main.startSelection) {
