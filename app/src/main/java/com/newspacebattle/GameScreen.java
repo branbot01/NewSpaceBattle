@@ -972,7 +972,11 @@ public class GameScreen extends View {
                         }
                     }
                     for (int i = 0; i <= formationsTeam1.size() - 1; i++) {
-                        formationsTeam1.get(i).update();
+                        if(formationsTeam1.get(i).ships.size() == 0){
+                            formationsTeam1.remove(formationsTeam1.get(i));
+                        }else{
+                            formationsTeam1.get(i).update();
+                        }
                     }
                     followShips();
                 }

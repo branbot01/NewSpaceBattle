@@ -26,7 +26,7 @@ class Formation {
                 this.ships.remove(this.ships.get(i));
             }
         }
-        initialSize = ships.size();
+        initialSize = this.ships.size();
         setShips();
         setCenter();
         if (type == 0) {
@@ -57,6 +57,7 @@ class Formation {
     }
 
     void remakeFormation() {
+
         for(int i = 0; i < ships.size(); i++) {
             if(ships.get(i).formation != this || !ships.get(i).exists){
                 System.out.println(ships.get(i));
@@ -67,8 +68,8 @@ class Formation {
             return;
         }
         if((float) ships.size() <= initialSize / 2) {
-            System.out.println("initialSize = " + initialSize + "ships.size() = " + ships.size());
-            initialSize = ships.size();
+            System.out.println("initialSize = " + initialSize + "this.ships.size() = " + this.ships.size());
+            initialSize = this.ships.size();
             setCenter();
            if(type == 0) {
                rectangleFormation();
@@ -81,6 +82,10 @@ class Formation {
         int shipCounter = 0;
         float offsetX = 0, offsetY = 0;
         points.clear();
+
+        if(ships.size() <= 1){
+            return;
+        }
 
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i) instanceof BattleShip || ships.get(i) instanceof FlagShip) {
