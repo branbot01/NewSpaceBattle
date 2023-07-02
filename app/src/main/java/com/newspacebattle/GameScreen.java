@@ -683,6 +683,9 @@ public class GameScreen extends View {
                     float health = resourceCollectors.get(i).health / resourceCollectors.get(i).MAX_HEALTH;
                     canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 5.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 3, red);
                     canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 5.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2 * health, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 3, green);
+
+                    float resources = (float) (resourceCollectors.get(i).resources / resourceCollectors.get(i).RESOURCE_CAPACITY);
+                    canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 2.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2 * resources, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 2f, yellow);
                 }
                 if (resourceCollectors.get(i).team == 1) {
                     canvas.drawBitmap(bitResCollector, resourceCollectors.get(i).appearance, null);

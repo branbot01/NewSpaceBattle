@@ -7,7 +7,7 @@ import android.os.Looper;
  */
 class ResourceCollector extends Ship {
 
-    private final double RESOURCE_CAPACITY = 2500;
+    final double RESOURCE_CAPACITY = 2500;
     boolean harvesting, unloading;
     double resources;
     private Asteroid asteroidSelected;
@@ -59,6 +59,7 @@ class ResourceCollector extends Ship {
         }
         unloading = false;
         harvesting = true;
+        docking = false;
         double nearest = 99999999999999999.0;
         if(asteroidSelected != null){
             asteroidSelected.incomingResourceCollector = false;
