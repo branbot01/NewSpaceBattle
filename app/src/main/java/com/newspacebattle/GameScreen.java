@@ -487,6 +487,7 @@ public class GameScreen extends View {
     public static void generateFaceoff() {
         blackHole.add(new BlackHole(0, 0));
         generateStars(3000);
+        generateAsteroids(40, 5);
 
         final int flagShipNum = 0;
         final int fighterNum = 0;
@@ -690,7 +691,7 @@ public class GameScreen extends View {
                 }
             }
             if (resourceCollectors.get(i).destination) {
-                if (resourceCollectors.get(i).harvesting) {
+                if (resourceCollectors.get(i).harvesting && !resourceCollectors.get(i).docking) {
                     canvas.drawLine(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).destinationFinder.destX, resourceCollectors.get(i).destinationFinder.destY, yellow);
                     canvas.drawBitmap(bitHarvestArrow, resourceCollectors.get(i).arrow, null);
                 } else {

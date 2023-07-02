@@ -60,6 +60,9 @@ class ResourceCollector extends Ship {
         unloading = false;
         harvesting = true;
         double nearest = 99999999999999999.0;
+        if(asteroidSelected != null){
+            asteroidSelected.incomingResourceCollector = false;
+        }
         asteroidSelected = null;
         for (int i = 0; i <= GameScreen.asteroids.size() - 1; i++) {
             if (Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2))) < nearest && GameScreen.asteroids.get(i).resources > 0) {
@@ -71,6 +74,7 @@ class ResourceCollector extends Ship {
         }
         if (asteroidSelected != null) {
             asteroidSelected.incomingResourceCollector = true;
+            formation = null;
             setDestination(asteroidSelected.centerPosX, asteroidSelected.centerPosY, false);
         }
     }

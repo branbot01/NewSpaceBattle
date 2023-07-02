@@ -33,6 +33,10 @@ class PathFinder {
 
     //Follow this object
     void run(GameObject target) {
+        if (ship.formation != null) {
+            run(target.centerPosX, target.centerPosY);
+            return;
+        }
         pointOrObj = true;
         targetObj = target;
         destX = targetObj.centerPosX;
@@ -167,7 +171,7 @@ class PathFinder {
 
     //Checks how close ship is to the destination
     private void checkDestination() {
-        double stopDistance = ship.radius / 6;
+        double stopDistance = ship.radius / 4;
         if (pointOrObj) {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;
