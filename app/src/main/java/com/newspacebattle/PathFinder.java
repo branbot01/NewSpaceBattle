@@ -63,9 +63,6 @@ class PathFinder {
             public void run() {
                 Looper.prepare();
                 PointObject direction = pathFind();
-                if (direction == null) {
-                    return;
-                }
                 tempX = (float) direction.x;
                 tempY = (float) direction.y;
                 ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
@@ -73,9 +70,6 @@ class PathFinder {
                 Utilities.delay(500);
                 while (ship.exists && ship.destination) {
                     direction = pathFind();
-                    if (direction == null) {
-                        return;
-                    }
                     tempX = (float) direction.x;
                     tempY = (float) direction.y;
                     driveShip(direction.x, direction.y);
@@ -121,12 +115,8 @@ class PathFinder {
                     if (ship instanceof ResourceCollector) {
                         if (((ResourceCollector) ship).harvesting || ((ResourceCollector) ship).unloading) {
                             nearbyObjects.remove(obj);
-                            continue;
                         }
                     }
-                    ship.stop();
-                    ship.destination = false;
-                    return null;
                 }
             }
         }
