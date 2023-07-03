@@ -61,7 +61,7 @@ public class GameScreen extends View {
     static Bitmap bitLaser, bitLaser2;
     static Bitmap[] bitExplosionLow = new Bitmap[26];
 
-    static Paint green = new Paint(), red = new Paint(), yellow = new Paint();
+    static Paint green = new Paint(), red = new Paint(), yellow = new Paint(), blue = new Paint();
 
     //Initiates the game
     public GameScreen(Context context) {
@@ -174,6 +174,10 @@ public class GameScreen extends View {
         yellow.setColor(Color.YELLOW);
         yellow.setStrokeWidth(20);
         yellow.setAntiAlias(true);
+
+        blue.setColor(Color.BLUE);
+        blue.setStrokeWidth(20);
+        blue.setAntiAlias(true);
 
         try {
             bitLoader.join();
@@ -579,6 +583,97 @@ public class GameScreen extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.BLACK);
+        if (Main.minimapOn){
+            Paint color;
+            canvas.translate(Main.screenX / 2, Main.screenY / 2);
+            canvas.scale(0.8f, 0.8f);
+
+            canvas.drawLine(-Main.screenX / 2, -Main.screenY / 2, Main.screenX / 2, -Main.screenY / 2, red);
+            canvas.drawLine(-Main.screenX / 2, -Main.screenY / 2, -Main.screenX / 2, Main.screenY / 2, red);
+            canvas.drawLine(Main.screenX / 2, -Main.screenY / 2, Main.screenX / 2, Main.screenY / 2, red);
+            canvas.drawLine(-Main.screenX / 2, Main.screenY / 2, Main.screenX / 2, Main.screenY / 2, red);
+
+            for (int i = 0; i <= blackHole.size() - 1; i++) {
+                canvas.drawCircle(Main.screenX * ((blackHole.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((blackHole.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 20, blue);
+            }
+
+            for (int i = 0; i <= asteroids.size() - 1; i++) {
+                canvas.drawCircle(Main.screenX * ((asteroids.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((asteroids.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, yellow);
+            }
+
+            for (int i = 0; i <= flagShips.size() - 1; i++) {
+                if (flagShips.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((flagShips.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((flagShips.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
+            }
+
+            for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
+                if (resourceCollectors.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((resourceCollectors.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((resourceCollectors.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, color);
+            }
+
+            for (int i = 0; i <= fighters.size() - 1; i++) {
+                if (fighters.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((fighters.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((fighters.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 4, color);
+            }
+
+            for (int i = 0; i <= battleShips.size() - 1; i++) {
+                if (battleShips.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((battleShips.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((battleShips.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
+            }
+
+            for (int i = 0; i <= bombers.size() - 1; i++) {
+                if (bombers.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((bombers.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((bombers.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 4, color);
+            }
+
+            for (int i = 0; i <= scouts.size() - 1; i++) {
+                if (scouts.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((scouts.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((scouts.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, color);
+            }
+
+            for (int i = 0; i <= laserCruisers.size() - 1; i++) {
+                if (laserCruisers.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((laserCruisers.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((laserCruisers.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 7, color);
+            }
+
+            for (int i = 0; i <= spaceStations.size() - 1; i++) {
+                if (spaceStations.get(i).team == 1){
+                    color = green;
+                } else {
+                    color = red;
+                }
+                canvas.drawCircle(Main.screenX * ((spaceStations.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((spaceStations.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
+            }
+            return;
+        }
         canvas.translate(-offsetX, -offsetY);
         canvas.scale(scaleX, scaleY);
 
@@ -856,8 +951,8 @@ public class GameScreen extends View {
         Main.refresh.postDelayed(new Runnable() {
             @Override
             public void run() {
+                invalidate();
                 if (!paused) {
-                    invalidate();
                     for (int i = 0; i <= blackHole.size() - 1; i++) {
                         blackHole.get(i).update();
                     }

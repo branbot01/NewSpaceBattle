@@ -26,14 +26,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class Main extends AppCompatActivity {
 
     static int screenX, screenY, movedX, movedY, formationSelected;
-    static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded;
+    static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded, minimapOn;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
     static ColorStateList fabColor;
     static Collisions collisions;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation, pause;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation, pause, minimap;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
     FloatingActionButton nextFormation, controlFormation;
@@ -139,7 +139,7 @@ public class Main extends AppCompatActivity {
         super.onResume();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         decorView.setSystemUiVisibility(uiOptions);
-        if (GameScreen.paused){
+        if (GameScreen.paused && loaded) {
             pauseButton(null);
         }
         GameScreen.paused = false;
@@ -157,6 +157,7 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
+            minimap.setVisibility(View.INVISIBLE);
             shipBar(false);
             formationBar(false);
             clearSelectionReferences();
@@ -168,6 +169,7 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.VISIBLE);
             formation.setVisibility(View.VISIBLE);
+            minimap.setVisibility(View.VISIBLE);
 
             pause.setImageResource(R.drawable.ic_stop);
             pause.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF4081")));
@@ -226,133 +228,154 @@ public class Main extends AppCompatActivity {
         selectionChecker.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (selectShips.size() == 0) {
-                    shipBar(false);
-                } else {
-                    boolean allDocked = true;
-                    for (int i = 0; i <= selectShips.size() - 1; i++) {
-                        if (!selectShips.get(i).docked) {
-                            allDocked = false;
-                        }
-                    }
-                    if (allDocked) {
+                if (!GameScreen.paused) {
+                    if (selectShips.size() == 0) {
                         shipBar(false);
-                    }
-                    for (int i = 0; i <= selectShips.size() - 1; i++) {
-                        if (selectShips.get(i).docked) {
-                            selectShips.remove(selectShips.get(i));
-                        }
-                    }
-                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, flagShipCount = 0;
-                    SpaceStation spaceStation = null;
-                    FlagShip flagShip = null;
-                    for (int i = 0; i <= selectShips.size() - 1; i++) {
-                        if (selectShips.get(i) instanceof SpaceStation) {
-                            spaceStationCount++;
-                            spaceStation = (SpaceStation) selectShips.get(i);
-                        }
-                        if (selectShips.get(i) instanceof ResourceCollector) {
-                            resourceCollectorCount++;
-                        }
-                        if (selectShips.get(i).dockable) {
-                            dockableShipsCount++;
-                        }
-                        if (selectShips.get(i) instanceof FlagShip) {
-                            flagShipCount++;
-                            flagShip = (FlagShip) selectShips.get(i);
-                        }
-                    }
-                    if (spaceStationCount == 1){
-                        countDockedShips(spaceStation);
                     } else {
-                        dockMenu.setAlpha(0.5f);
-                    }
-                    if (resourceCollectorCount == 0) {
-                        harvest.setAlpha(0.5f);
-                    }
-                    if (dockableShipsCount == 0) {
-                        dock.setAlpha(0.5f);
-                    }
-                    if (flagShipCount == 1) {
-                        if(GameScreen.resources[0] < 10000 || flagShip.buildingResourceCollector){
-                            buildResourceCollector.setAlpha(0.5f);
-                        } else {
-                            buildResourceCollector.setAlpha(1f);
+                        boolean allDocked = true;
+                        for (int i = 0; i <= selectShips.size() - 1; i++) {
+                            if (!selectShips.get(i).docked) {
+                                allDocked = false;
+                            }
                         }
-                        if(GameScreen.resources[0] < 3000 || flagShip.buildingScout){
-                            buildScout.setAlpha(0.5f);
-                        } else {
-                            buildScout.setAlpha(1f);
+                        if (allDocked) {
+                            shipBar(false);
                         }
-                        if(GameScreen.resources[0] < 5000 || flagShip.buildingFighter){
-                            buildFighter.setAlpha(0.5f);
-                        } else {
-                            buildFighter.setAlpha(1f);
+                        for (int i = 0; i <= selectShips.size() - 1; i++) {
+                            if (selectShips.get(i).docked) {
+                                selectShips.remove(selectShips.get(i));
+                            }
                         }
-                        if(GameScreen.resources[0] < 7500 || flagShip.buildingBomber){
-                            buildBomber.setAlpha(0.5f);
-                        } else {
-                            buildBomber.setAlpha(1f);
+                        int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, flagShipCount = 0;
+                        SpaceStation spaceStation = null;
+                        FlagShip flagShip = null;
+                        for (int i = 0; i <= selectShips.size() - 1; i++) {
+                            if (selectShips.get(i) instanceof SpaceStation) {
+                                spaceStationCount++;
+                                spaceStation = (SpaceStation) selectShips.get(i);
+                            }
+                            if (selectShips.get(i) instanceof ResourceCollector) {
+                                resourceCollectorCount++;
+                            }
+                            if (selectShips.get(i).dockable) {
+                                dockableShipsCount++;
+                            }
+                            if (selectShips.get(i) instanceof FlagShip) {
+                                flagShipCount++;
+                                flagShip = (FlagShip) selectShips.get(i);
+                            }
                         }
-                        if(GameScreen.resources[0] < 25000 || flagShip.buildingLaserCruiser){
-                            buildLaserCruiser.setAlpha(0.5f);
+                        if (spaceStationCount == 1) {
+                            countDockedShips(spaceStation);
                         } else {
-                            buildLaserCruiser.setAlpha(1f);
+                            dockMenu.setAlpha(0.5f);
                         }
-                        if(GameScreen.resources[0] < 50000 || flagShip.buildingBattleShip){
-                            buildBattleShip.setAlpha(0.5f);
-                        } else {
-                            buildBattleShip.setAlpha(1f);
+                        if (resourceCollectorCount == 0) {
+                            harvest.setAlpha(0.5f);
                         }
-                        if (GameScreen.resources[0] < 120000 || flagShip.buildingSpaceStation) {
-                            buildSpaceStation.setAlpha(0.5f);
-                        } else {
-                            buildSpaceStation.setAlpha(1f);
+                        if (dockableShipsCount == 0) {
+                            dock.setAlpha(0.5f);
                         }
+                        if (flagShipCount == 1) {
+                            if (GameScreen.resources[0] < 10000 || flagShip.buildingResourceCollector) {
+                                buildResourceCollector.setAlpha(0.5f);
+                            } else {
+                                buildResourceCollector.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 3000 || flagShip.buildingScout) {
+                                buildScout.setAlpha(0.5f);
+                            } else {
+                                buildScout.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 5000 || flagShip.buildingFighter) {
+                                buildFighter.setAlpha(0.5f);
+                            } else {
+                                buildFighter.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 7500 || flagShip.buildingBomber) {
+                                buildBomber.setAlpha(0.5f);
+                            } else {
+                                buildBomber.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 25000 || flagShip.buildingLaserCruiser) {
+                                buildLaserCruiser.setAlpha(0.5f);
+                            } else {
+                                buildLaserCruiser.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 50000 || flagShip.buildingBattleShip) {
+                                buildBattleShip.setAlpha(0.5f);
+                            } else {
+                                buildBattleShip.setAlpha(1f);
+                            }
+                            if (GameScreen.resources[0] < 120000 || flagShip.buildingSpaceStation) {
+                                buildSpaceStation.setAlpha(0.5f);
+                            } else {
+                                buildSpaceStation.setAlpha(1f);
+                            }
 
-                        if (flagShip.buildingResourceCollector){
-                            progressResourceCollector.setProgress((int)(flagShip.costCounter[6] / (double)(ResourceCollector.cost) * 100));
+                            if (flagShip.buildingResourceCollector) {
+                                progressResourceCollector.setProgress((int) (flagShip.costCounter[6] / (double) (ResourceCollector.cost) * 100));
+                            } else {
+                                progressResourceCollector.setProgress(0);
+                            }
+                            if (flagShip.buildingScout) {
+                                progressScout.setProgress((int) (flagShip.costCounter[5] / (double) (Scout.cost) * 100));
+                            } else {
+                                progressScout.setProgress(0);
+                            }
+                            if (flagShip.buildingFighter) {
+                                progressFighter.setProgress((int) (flagShip.costCounter[4] / (double) (Fighter.cost) * 100));
+                            } else {
+                                progressFighter.setProgress(0);
+                            }
+                            if (flagShip.buildingBomber) {
+                                progressBomber.setProgress((int) (flagShip.costCounter[3] / (double) (Bomber.cost) * 100));
+                            } else {
+                                progressBomber.setProgress(0);
+                            }
+                            if (flagShip.buildingLaserCruiser) {
+                                progressLaserCruiser.setProgress((int) (flagShip.costCounter[2] / (double) (LaserCruiser.cost) * 100));
+                            } else {
+                                progressLaserCruiser.setProgress(0);
+                            }
+                            if (flagShip.buildingBattleShip) {
+                                progressBattleShip.setProgress((int) (flagShip.costCounter[1] / (double) (BattleShip.cost) * 100));
+                            } else {
+                                progressBattleShip.setProgress(0);
+                            }
+                            if (flagShip.buildingSpaceStation) {
+                                progressSpaceStation.setProgress((int) (flagShip.costCounter[0] / (double) (SpaceStation.cost) * 100));
+                            } else {
+                                progressSpaceStation.setProgress(0);
+                            }
                         } else {
-                            progressResourceCollector.setProgress(0);
+                            buildMenu.setAlpha(0.5f);
                         }
-                        if (flagShip.buildingScout){
-                            progressScout.setProgress((int)(flagShip.costCounter[5] / (double)(Scout.cost) * 100));
-                        } else {
-                            progressScout.setProgress(0);
-                        }
-                        if (flagShip.buildingFighter){
-                            progressFighter.setProgress((int)(flagShip.costCounter[4] / (double)(Fighter.cost) * 100));
-                        } else {
-                            progressFighter.setProgress(0);
-                        }
-                        if (flagShip.buildingBomber){
-                            progressBomber.setProgress((int)(flagShip.costCounter[3] / (double)(Bomber.cost) * 100));
-                        } else {
-                            progressBomber.setProgress(0);
-                        }
-                        if (flagShip.buildingLaserCruiser){
-                            progressLaserCruiser.setProgress((int)(flagShip.costCounter[2] / (double)(LaserCruiser.cost) * 100));
-                        } else {
-                            progressLaserCruiser.setProgress(0);
-                        }
-                        if (flagShip.buildingBattleShip){
-                            progressBattleShip.setProgress((int)(flagShip.costCounter[1] / (double)(BattleShip.cost) * 100));
-                        } else {
-                            progressBattleShip.setProgress(0);
-                        }
-                        if (flagShip.buildingSpaceStation){
-                            progressSpaceStation.setProgress((int)(flagShip.costCounter[0] / (double)(SpaceStation.cost) * 100));
-                        } else {
-                            progressSpaceStation.setProgress(0);
-                        }
-                    } else {
-                        buildMenu.setAlpha(0.5f);
                     }
+                    resourceCount.setText("Resources: " + GameScreen.resources[0]);
                 }
-                resourceCount.setText("Resources: " + GameScreen.resources[0]);
                 UILoop();
             }
         }, 16);
+    }
+
+    public void minimap(View view){
+        if (minimapOn){
+            minimapOn = false;
+
+            select.setVisibility(View.VISIBLE);
+            formation.setVisibility(View.VISIBLE);
+            pause.setVisibility(View.VISIBLE);
+        } else {
+            minimapOn = true;
+
+            select.setVisibility(View.INVISIBLE);
+            formation.setVisibility(View.INVISIBLE);
+            pause.setVisibility(View.INVISIBLE);
+            shipBar(false);
+            formationBar(false);
+            clearSelectionReferences();
+        }
     }
 
     private class ScaleListener
@@ -368,12 +391,10 @@ public class Main extends AppCompatActivity {
     //When user touches the screen, not any buttons
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (GameScreen.paused) {
+        if (GameScreen.paused || minimapOn || mScaleDetector == null) {
             return true;
         }
-        if (mScaleDetector == null) {
-            return true;
-        }
+
         int x = (int) (event.getX()), y = (int) (event.getY()), eventAction = event.getAction();
         float trueX = (x + GameScreen.offsetX) / GameScreen.scaleX;
         float trueY = (y + GameScreen.offsetY) / GameScreen.scaleY;
@@ -508,6 +529,7 @@ public class Main extends AppCompatActivity {
     //Get references for all of the buttons and ui elements
     public void findIds() {
         pause = findViewById(R.id.pauseButton);
+        minimap = findViewById(R.id.minimapButton);
         bar = findViewById(R.id.bottomBar);
         formationBar = findViewById(R.id.bottomFormationBar);
         move = findViewById(R.id.moveButton);
