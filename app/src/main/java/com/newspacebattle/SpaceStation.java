@@ -14,6 +14,7 @@ class SpaceStation extends Ship {
     private int ring1Degrees, ring2Degrees, ring3Degrees;
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int cost;
 
@@ -39,6 +40,7 @@ class SpaceStation extends Ship {
         MAX_HEALTH = 40000;
         accelerate = 0;
         maxSpeed = 0;
+        MAX_SPEED = maxSpeed;
         preScaleX = 7;
         preScaleY = 7;
         dockable = false;

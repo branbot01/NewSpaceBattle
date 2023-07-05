@@ -6,6 +6,7 @@ package com.newspacebattle;
 class Scout extends Ship {
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int buildTime, cost;
 
@@ -28,6 +29,7 @@ class Scout extends Ship {
         MAX_HEALTH = 1000;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;
         dockable = true;

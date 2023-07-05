@@ -13,6 +13,7 @@ class ResourceCollector extends Ship {
     private Asteroid asteroidSelected;
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int cost;
     FlagShip flagShipSelected = null;
@@ -37,6 +38,7 @@ class ResourceCollector extends Ship {
         resources = 0;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;
         harvesting = false;
