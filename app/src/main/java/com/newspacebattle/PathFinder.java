@@ -21,9 +21,6 @@ class PathFinder {
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
-        if (ship.canAttack){
-            attacker = new NeuralNetwork(ship.type);
-        }
     }
 
     //Go to these coordinates
@@ -66,6 +63,13 @@ class PathFinder {
     }
 
     private void startAttacker(){
+        if (attacker == null) {
+            if (ship instanceof Fighter) {
+                attacker = new NeuralNetwork(Main.fighterBrain);
+            } else {
+                throw new RuntimeException("Ship type not supported");
+            }
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -75,11 +79,11 @@ class PathFinder {
                         ship.attacking = false;
                         return;
                     }
-                    double[] reaction = attacker.forwardPropagation(new double[]{ship.health, ship.centerPosX, ship.centerPosY, ship.velocityX, ship.velocityY, ship.accelerationX, ship.accelerationY, enemies.get(0).centerPosX, enemies.get(0).centerPosY, enemies.get(0).velocityX, enemies.get(0).velocityY, enemies.get(0).accelerationX, enemies.get(0).accelerationY, enemies.get(0).health});
-                    if (reaction[0] > 0.5) {
+                    double[] inputs = new double[]{ship.health, ship.centerPosX, ship.centerPosY, ship.velocityX, ship.velocityY, ship.accelerationX, ship.accelerationY, enemies.get(0).centerPosX, enemies.get(0).centerPosY, enemies.get(0).velocityX, enemies.get(0).velocityY, enemies.get(0).accelerationX, enemies.get(0).accelerationY, enemies.get(0).health};
+                    double[] reaction = attacker.forwardPropagation(inputs);
+                    if (reaction[0] >= 0) {
                         ship.shoot();
                     }
-
                     Utilities.delay(500);
                 }
             }

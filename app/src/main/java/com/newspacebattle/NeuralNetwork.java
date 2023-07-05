@@ -51,14 +51,7 @@ class NeuralNetwork {
         }
     }
 
-    NeuralNetwork(String type) {
-        List csv;
-        if (Objects.equals(type, "Fighter")) {
-            csv = Main.fighterBrain;
-        } else {
-            throw new IllegalArgumentException("Invalid type");
-        }
-
+    NeuralNetwork(List csv) {
         String[] sizesArray = (String[]) csv.get(0);
         for (int i = 0; i < sizesArray.length; i++) {
             sizesArray[i] = sizesArray[i].replaceAll("[^\\d]", "");
@@ -119,7 +112,7 @@ class NeuralNetwork {
             for (int i = 0; i < hiddenSize; i++) {
                 sum += hiddenLayerOutput[i] * weightsHiddenOutput[i][j];
             }
-            outputLayerOutput[j] = reLU(sum + biasesOutput[j]);
+            outputLayerOutput[j] = sigmoid(sum + biasesOutput[j]);
         }
 
         System.out.println("Input Neurons:");
@@ -257,5 +250,22 @@ class NeuralNetwork {
         } catch (IOException e) {
             System.out.println(e);
         }
+    }
+
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        s.append("Input to Hidden Weights:\n");
+        for (double[] doubles : weightsInputHidden) {
+            s.append(Arrays.toString(doubles)).append("\n");
+        }
+        s.append("\nHidden Biases:\n");
+        s.append(Arrays.toString(biasesHidden)).append("\n\n");
+        s.append("Hidden to Output Weights:\n");
+        for (double[] doubles : weightsHiddenOutput) {
+            s.append(Arrays.toString(doubles)).append("\n");
+        }
+        s.append("\nOutput Biases:\n");
+        s.append(Arrays.toString(biasesOutput)).append("\n\n");
+        return s.toString();
     }
 }

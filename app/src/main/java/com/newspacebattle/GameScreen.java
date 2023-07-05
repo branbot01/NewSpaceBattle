@@ -785,7 +785,7 @@ public class GameScreen extends View {
                     //canvas.drawCircle(bullets.get(i).centerPosX, bullets.get(i).centerPosY, bullets.get(i).radius, green);
                     if (bullets.get(i).team == 1) {
                         canvas.drawBitmap(bitBullet, bullets.get(i).appearance, null);
-                    } else if (bullets.get(i).team == 2) {
+                    } else {
                         canvas.drawBitmap(bitBullet2, bullets.get(i).appearance, null);
                     }
                 }

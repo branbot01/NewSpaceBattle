@@ -197,6 +197,8 @@ public class Main extends AppCompatActivity {
             screenX = size.x;
             GameScreen.circleRatio = (float) screenY / screenX;
 
+            makeCSVFiles();
+
             loader.start();
             loadingBar = findViewById(R.id.loading);
             loadingBar.setVisibility(View.VISIBLE);
