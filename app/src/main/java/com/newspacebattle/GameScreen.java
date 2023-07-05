@@ -130,10 +130,10 @@ public class GameScreen extends View {
         });
         bitLoader.start();
 
-        //offsetX = 0 - Main.screenX / 2;
-        //offsetY = 0 - Main.screenY / 2;
-        offsetX = -227;
-        offsetY = -12554;
+        offsetX = 0 - Main.screenX / 2;
+        offsetY = 0 - Main.screenY / 2;
+        //offsetX = -227;
+        //offsetY = -12554;
 
         scaleX = 0.05f;
         scaleY = 0.05f;
@@ -161,7 +161,7 @@ public class GameScreen extends View {
 
         resources[0] = 2000000;
 
-        generateFaceoff();
+        geneticAlgorithm();
 
         green.setColor(Color.GREEN);
         green.setStrokeWidth(20);
@@ -569,6 +569,88 @@ public class GameScreen extends View {
         placeShips();
     }
 
+    public static void geneticAlgorithm(){
+        final int flagShipNum = 0;
+        final int resCollectorsNum = 0;
+        final int fighterNum = 300;
+        final int battleShipNum = 0;
+        final int bomberNum = 0;
+        final int scoutNum = 0;
+        final int laserCruiserNum = 0;
+        final int spaceStationNum = 0;
+        final int bulletNum = 500;
+        final int explosionNum = 500;
+        final int missileNum = 0;
+        final int laserNum = 0;
+
+        generateStars(3000);
+        generateAsteroids(0, 5);
+
+        do {
+            resourceCollectors.clear();
+            for (int i = 0; i <= resCollectorsNum - 1; i++) {
+                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
+            }
+
+            flagShips.clear();
+            for (int i = 0; i <= flagShipNum - 1; i++) {
+                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
+            }
+
+            fighters.clear();
+            for (int i = 0; i <= fighterNum - 1; i++) {
+                fighters.add(new Fighter((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, i));
+            }
+
+            battleShips.clear();
+            for (int i = 0; i <= battleShipNum - 1; i++) {
+                battleShips.add(new BattleShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+            }
+
+            bombers.clear();
+            for (int i = 0; i <= bomberNum - 1; i++) {
+                bombers.add(new Bomber((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+            }
+
+            scouts.clear();
+            for (int i = 0; i <= scoutNum - 1; i++) {
+                scouts.add(new Scout((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+            }
+
+            laserCruisers.clear();
+            for (int i = 0; i <= laserCruiserNum - 1; i++) {
+                laserCruisers.add(new LaserCruiser((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+            }
+
+            spaceStations.clear();
+            for (int i = 0; i <= spaceStationNum - 1; i++) {
+                spaceStations.add(new SpaceStation((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+            }
+
+            bullets.clear();
+            for (int i = 0; i <= bulletNum - 1; i++) {
+                bullets.add(new Bullet());
+            }
+
+            missiles.clear();
+            for (int i = 0; i <= missileNum - 1; i++) {
+                missiles.add(new Missile());
+            }
+
+            lasers.clear();
+            for (int i = 0; i <= laserNum - 1; i++) {
+                lasers.add(new Laser());
+            }
+
+            explosions.clear();
+            for (int i = 0; i <= explosionNum - 1; i++) {
+                explosions.add(new Explosion());
+            }
+
+            placeShips();
+        } while (doShipsCollide());
+    }
+
     void makeExplosion(GameObject object) {
         for (int i = 0; i <= explosions.size() - 1; i++) {
             if (!explosions.get(i).active) {
@@ -810,7 +892,7 @@ public class GameScreen extends View {
                 }
                 if (fighters.get(i).team == 1) {
                     canvas.drawBitmap(bitFighter, fighters.get(i).appearance, null);
-                } else if (fighters.get(i).team == 2) {
+                } else {
                     canvas.drawBitmap(enFighter1, fighters.get(i).appearance, null);
                 }
             }

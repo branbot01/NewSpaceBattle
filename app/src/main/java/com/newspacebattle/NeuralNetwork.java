@@ -8,9 +8,9 @@ import com.opencsv.CSVWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 class NeuralNetwork {
@@ -51,12 +51,15 @@ class NeuralNetwork {
         }
     }
 
-    NeuralNetwork (Context context){
-        InputStream inputStream = context.getResources().openRawResource(R.raw.nn);
-        CSVFile csvFile = new CSVFile(inputStream);
-        List scoreList = csvFile.read();
+    NeuralNetwork(String type) {
+        List csv;
+        if (Objects.equals(type, "Fighter")) {
+            csv = Main.fighterBrain;
+        } else {
+            throw new IllegalArgumentException("Invalid type");
+        }
 
-        String[] sizesArray = (String[]) scoreList.get(0);
+        String[] sizesArray = (String[]) csv.get(0);
         for (int i = 0; i < sizesArray.length; i++) {
             sizesArray[i] = sizesArray[i].replaceAll("[^\\d]", "");
         }
@@ -64,7 +67,7 @@ class NeuralNetwork {
         hiddenSize = Integer.parseInt(sizesArray[1]);
         outputSize = Integer.parseInt(sizesArray[2]);
 
-        String[] weightsAndBiases = (String[]) scoreList.get(1);
+        String[] weightsAndBiases = (String[]) csv.get(1);
         for (int i = 0; i < weightsAndBiases.length; i++) {
             weightsAndBiases[i] = weightsAndBiases[i].replaceAll("[^\\d.-]", "");
         }
@@ -147,7 +150,7 @@ class NeuralNetwork {
         return outputLayerOutput;
     }
 
-    public void applyMutation(double probability){
+    public void applyMutation(double probability) {
         for (int i = 0; i < inputSize; i++) {
             for (int j = 0; j < hiddenSize; j++) {
                 if (rand.nextDouble() < probability) {
@@ -174,8 +177,8 @@ class NeuralNetwork {
         }
     }
 
-    public static NeuralNetwork merge(NeuralNetwork nn1, NeuralNetwork nn2){
-        if(nn1.inputSize != nn2.inputSize || nn1.hiddenSize != nn2.hiddenSize || nn1.outputSize != nn2.outputSize){
+    public static NeuralNetwork merge(NeuralNetwork nn1, NeuralNetwork nn2) {
+        if (nn1.inputSize != nn2.inputSize || nn1.hiddenSize != nn2.hiddenSize || nn1.outputSize != nn2.outputSize) {
             throw new IllegalArgumentException("Neural networks must have the same size");
         }
         Random rand = new Random();
