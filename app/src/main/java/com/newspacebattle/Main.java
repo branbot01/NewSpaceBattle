@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 import static android.view.WindowManager.LayoutParams.*;
@@ -32,6 +34,7 @@ public class Main extends AppCompatActivity {
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
     static ColorStateList fabColor;
     static Collisions collisions;
+    static List fighterBrain;
     ProgressBar loadingBar;
     FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation, pause, minimap;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
@@ -221,6 +224,12 @@ public class Main extends AppCompatActivity {
                 }
             }
         }, 16);
+    }
+
+    public void makeCSVFiles(){
+        InputStream inputStream = getResources().openRawResource(R.raw.nn);
+        CSVFile csvFile = new CSVFile(inputStream);
+        fighterBrain = csvFile.read();
     }
 
     //Loop updating ui elements
@@ -469,7 +478,9 @@ public class Main extends AppCompatActivity {
                     GameScreen.endAttY = trueY;
                     shipBar(false);
                     for (int i = 0; i <= Main.selectShips.size() - 1; i++) {
-                        Main.selectShips.get(i).destinationFinder.runAttack(GameScreen.attackSelect(GameScreen.startAttX, GameScreen.startAttY, GameScreen.endAttX, GameScreen.endAttY));
+                        if (selectShips.get(i).canAttack) {
+                            selectShips.get(i).destinationFinder.runAttack(GameScreen.attackSelect(GameScreen.startAttX, GameScreen.startAttY, GameScreen.endAttX, GameScreen.endAttY));
+                        }
                     }
                     clearSelectionReferences();
                     break;
