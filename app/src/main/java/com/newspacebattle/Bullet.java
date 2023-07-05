@@ -8,6 +8,7 @@ class Bullet extends GameObject {
     final static float SIZE = Main.screenY / GameScreen.circleRatio / 6f / 2, MAX_SPEED = 600;
     private float scale, damage;
     private int timeLeft;
+    private Ship ownShip;
 
     //Constructor method
     Bullet() {
@@ -21,13 +22,15 @@ class Bullet extends GameObject {
         maxSpeed = MAX_SPEED;
         scale = 1;
         exists = false;
+
     }
 
     //Spawns a bullet where a ship has fired, doesn't create a new bullet object
-    void createBullet(float x, float y, int team, float xVel, float yVel, float angle, float damage) {
+    void createBullet(float x, float y, int team, float xVel, float yVel, float angle, float damage, Ship ownShip) {
         exists = true;
         this.team = team;
         this.damage = damage;
+        this.ownShip = ownShip;
         degrees = angle;
         velocityX = xVel;
         velocityY = yVel;
@@ -64,6 +67,7 @@ class Bullet extends GameObject {
     void impact(GameObject object) {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
+            this.ownShip.dmgDone += damage;
         }
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
             if (!GameScreen.explosions.get(i).active) {

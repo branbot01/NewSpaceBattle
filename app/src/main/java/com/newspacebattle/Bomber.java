@@ -8,6 +8,7 @@ class Bomber extends Ship {
     private PointObject missile1, missile2;
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int buildTime, cost;
 
@@ -31,6 +32,7 @@ class Bomber extends Ship {
         MAX_HEALTH = 3000;
         accelerate = 0.4f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;
         dockable = true;

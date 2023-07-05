@@ -10,6 +10,7 @@ class Laser extends GameObject {
     private float scale, damage;
 
     private int timeLeft;
+    private Ship ownShip;
 
     //Constructor method
     Laser() {
@@ -27,10 +28,11 @@ class Laser extends GameObject {
     }
 
     //Spawns a laser from a ship
-    void createLaser(float x, float y, int team, float xVel, float yVel, float angle, float damage) {
+    void createLaser(float x, float y, int team, float xVel, float yVel, float angle, float damage, Ship ownShip) {
         exists = true;
         this.team = team;
         this.damage = damage;
+        this.ownShip = ownShip;
         degrees = angle;
         velocityX = xVel;
         velocityY = yVel;
@@ -67,6 +69,7 @@ class Laser extends GameObject {
     void impact(GameObject object) {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
+            this.ownShip.dmgDone += damage;
         }
 
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {

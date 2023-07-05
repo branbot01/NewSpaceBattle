@@ -15,6 +15,7 @@ class Ship extends GameObject {
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     float avoidanceRadius;
+    int dmgDone;
     boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
     Formation formation;
     Matrix arrow = new Matrix();

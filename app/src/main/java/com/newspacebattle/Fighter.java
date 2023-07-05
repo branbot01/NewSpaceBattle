@@ -8,6 +8,7 @@ class Fighter extends Ship {
     private PointObject gun1, gun2;
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int buildTime, cost;
 
@@ -31,6 +32,7 @@ class Fighter extends Ship {
         MAX_HEALTH = 3000;
         accelerate = 0.6f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;
         dockable = true;
@@ -63,7 +65,8 @@ class Fighter extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }
@@ -77,7 +80,8 @@ class Fighter extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }

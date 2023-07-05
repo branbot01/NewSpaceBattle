@@ -13,7 +13,7 @@ class Missile extends GameObject {
     private int timeLeft;
     private boolean followingShip;
     private Handler delay = new Handler(Looper.getMainLooper());
-    private Ship target, shooter;
+    private Ship target, ownShip;
 
     //Constuctor method
     Missile() {
@@ -35,6 +35,7 @@ class Missile extends GameObject {
         exists = true;
         this.team = team;
         this.damage = damage;
+        this.ownShip = ownShip;
         degrees = angle;
         velocityX = xVel;
         velocityY = yVel;
@@ -43,7 +44,6 @@ class Missile extends GameObject {
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         timeLeft = 10000;
-        shooter = ownShip;
         followingShip = false;
         delay.postDelayed(new Runnable() {
             @Override
@@ -68,7 +68,7 @@ class Missile extends GameObject {
         Ship closest = null;
         double distance = 9999999999999999f;
         for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
-            if (GameScreen.ships.get(i) != shooter && GameScreen.ships.get(i).team != team) {
+            if (GameScreen.ships.get(i) != ownShip && GameScreen.ships.get(i).team != team) {
                 if (Utilities.distanceFormula(centerPosX, centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) < distance) {
                     closest = GameScreen.ships.get(i);
                     distance = Utilities.distanceFormula(centerPosX, centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
@@ -123,6 +123,7 @@ class Missile extends GameObject {
     void impact(GameObject object) {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
+            this.ownShip.dmgDone += damage;
         }
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
             if (!GameScreen.explosions.get(i).active) {

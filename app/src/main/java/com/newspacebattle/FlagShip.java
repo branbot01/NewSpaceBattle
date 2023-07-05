@@ -10,6 +10,7 @@ class FlagShip extends Ship {
     private PointObject gun1, gun2, gun3, gun4;
     boolean buildingSpaceStation, buildingBattleShip, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
     static float constRadius;
+    static float MAX_SPEED;
     int[] costCounter = new int[7];
 
     //Constructor method
@@ -32,6 +33,7 @@ class FlagShip extends Ship {
         MAX_HEALTH = 15000;
         accelerate = 0.2f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 4;
         preScaleY = 4;
         dockable = false;
@@ -73,7 +75,8 @@ class FlagShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }
@@ -87,7 +90,8 @@ class FlagShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }
@@ -101,7 +105,8 @@ class FlagShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }
@@ -115,7 +120,8 @@ class FlagShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }

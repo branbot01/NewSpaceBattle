@@ -8,7 +8,8 @@ class BattleShip extends Ship {
     private PointObject gun1, gun2, missile1, missile2;
 
     static float constRadius;
-
+    static float MAX_SPEED;
+;
     static int buildTime, cost;
 
     //Constructor method
@@ -31,6 +32,7 @@ class BattleShip extends Ship {
         MAX_HEALTH = 20000;
         accelerate = 0.175f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 3.5f;
         preScaleY = 3.5f;
         dockable = false;
@@ -72,7 +74,8 @@ class BattleShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }
@@ -86,7 +89,8 @@ class BattleShip extends Ship {
                         , (float) (Bullet.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Bullet.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , bulletPower);
+                        , bulletPower
+                        , this);
                 break;
             }
         }

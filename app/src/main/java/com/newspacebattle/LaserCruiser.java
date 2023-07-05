@@ -12,6 +12,7 @@ class LaserCruiser extends Ship {
     private PointObject laser1, laser2;
 
     static float constRadius;
+    static float MAX_SPEED;
 
     static int buildTime, cost;
 
@@ -35,6 +36,7 @@ class LaserCruiser extends Ship {
         MAX_HEALTH = 7500;
         accelerate = 0.35f;
         maxSpeed = accelerate * 75;
+        MAX_SPEED = maxSpeed;
         preScaleX = 1.75f;
         preScaleY = 1.75f;
         dockable = false;
@@ -67,7 +69,8 @@ class LaserCruiser extends Ship {
                         , (float) (Laser.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Laser.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , laserPower);
+                        , laserPower
+                        , this);
                 break;
             }
         }
@@ -81,7 +84,8 @@ class LaserCruiser extends Ship {
                         , (float) (Laser.MAX_SPEED * Math.sin(degrees * Math.PI / 180))
                         , (float) (Laser.MAX_SPEED * Math.cos(degrees * Math.PI / 180))
                         , degrees
-                        , laserPower);
+                        , laserPower
+                        , this);
                 break;
             }
         }
