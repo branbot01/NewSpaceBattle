@@ -1,5 +1,11 @@
 package com.newspacebattle;
 
+import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  * Created by Dylan on 2018-07-12. Some math functions that come in very handy.
  */
@@ -160,5 +166,45 @@ class Utilities {
     static double circleAngleY(double degrees, double originY, double radius) {
         degrees = 180 + degrees + 90;
         return originY + radius * Math.sin(degrees * Math.PI / 180);
+    }
+
+    static Ship rouletteWheelSelection(ArrayList<Ship> population){
+        Ship parent;
+        int[] scores = new int[population.size()];
+        for (int i = 0; i <= population.size() - 1; i++) {
+            population.get(i).calculateFitness();
+            scores[i] = population.get(i).fitness;
+        }
+
+        Arrays.sort(scores);
+
+        parent = population.get(scores.length - 1);
+
+        if (scores[0] < 0){
+            for (int i = 0; i <= scores.length - 1; i++) {
+                scores[i] += Math.abs(scores[0]);
+            }
+        }
+
+        int sum = 0;
+        for (int score : scores) {
+            sum += score;
+        }
+
+        double[] percentages = new double[scores.length];
+        for (int i = 0; i < scores.length; i++) {
+            percentages[i] = (double) scores[i] / sum;
+        }
+
+        double random = Math.random();
+        double total = 0;
+        for (int i = 0; i < percentages.length; i++) {
+            total += percentages[i];
+            if (random <= total) {
+                parent = population.get(i);
+                break;
+            }
+        }
+        return parent;
     }
 }

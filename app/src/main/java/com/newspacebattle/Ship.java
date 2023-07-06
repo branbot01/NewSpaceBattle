@@ -61,7 +61,12 @@ class Ship extends GameObject {
     //Checks if ship still has health left
     boolean checkIfAlive() {
         setSelectColor();
-        return health > 0;
+        if (health > 0) {
+            return true;
+        } else {
+            GameScreen.deadShips.add(this);
+            return false;
+        }
     }
 
     //Stops the ship
@@ -167,5 +172,13 @@ class Ship extends GameObject {
         }
         docking = true;
         setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
+    }
+
+    void calculateFitness(){
+        if(!exists) {
+            fitness = (dmgDone / 50) - 50 - 5 * missedShots;
+        } else {
+            fitness = (dmgDone / 50) - 5 * missedShots;
+        }
     }
 }

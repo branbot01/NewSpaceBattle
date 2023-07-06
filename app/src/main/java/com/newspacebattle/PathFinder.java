@@ -5,6 +5,7 @@ import android.os.Looper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
@@ -15,7 +16,7 @@ class PathFinder {
     private boolean pointOrObj;
     private Ship ship;
     private GameObject targetObj;
-    private ArrayList<Ship> enemies;
+    ArrayList<Ship> enemies;
     NeuralNetwork attacker;
 
     //Constructor method
@@ -63,13 +64,14 @@ class PathFinder {
             public void run() {
                 Looper.prepare();
                 while (ship.exists) {
-                    for (int i = 0; i < GameScreen.ships.size(); i++) {
-                        if (GameScreen.ships.get(i).team != ship.team) {
-                            if (Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) < ship.radius * 50) {
-                                stopFinder();
-                                ship.attacking = true;
-                                runAttack(new ArrayList<Ship>(Collections.singletonList(GameScreen.ships.get(i))));
-                                return;
+                    if (!ship.attacking) {
+                        for (int i = 0; i < GameScreen.ships.size(); i++) {
+                            if (GameScreen.ships.get(i).team != ship.team) {
+                                double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
+                                if (distance < ship.radius * 200) {
+                                    runAttack(new ArrayList<Ship>(Collections.singletonList(GameScreen.ships.get(i))));
+                                    break;
+                                }
                             }
                         }
                     }
@@ -87,10 +89,22 @@ class PathFinder {
 
     private void startAttacker(){
         if (attacker == null) {
-            if (ship instanceof Fighter) {
-                attacker = new NeuralNetwork(Main.fighterBrain);
+            if (GameScreen.generation == 0) {
+                attacker = new NeuralNetwork(14, 12, 3);
             } else {
-                throw new RuntimeException("Ship type not supported");
+                Random random = new Random();
+                double crossoverRate = 0.9;
+                double mutationRate = 0.001;
+
+                if (random.nextDouble() < crossoverRate) {
+                    Ship parent1 = Utilities.rouletteWheelSelection(GameScreen.population);
+                    Ship parent2 = Utilities.rouletteWheelSelection(GameScreen.population);
+                    attacker = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
+                    attacker.applyMutation(mutationRate);
+                } else {
+                    attacker = Utilities.rouletteWheelSelection(GameScreen.population).destinationFinder.attacker;
+                    attacker.applyMutation(mutationRate);
+                }
             }
         }
         new Thread(new Runnable() {
@@ -102,16 +116,18 @@ class PathFinder {
                         ship.attacking = false;
                         return;
                     }
-                    double[] inputs = new double[]{ship.health, ship.centerPosX, ship.centerPosY, ship.velocityX, ship.velocityY, ship.accelerationX, ship.accelerationY, enemies.get(0).centerPosX, enemies.get(0).centerPosY, enemies.get(0).velocityX, enemies.get(0).velocityY, enemies.get(0).accelerationX, enemies.get(0).accelerationY, enemies.get(0).health};
+                    double[] inputs;
+                    try {
+                        inputs = new double[]{ship.health, ship.centerPosX, ship.centerPosY, ship.velocityX, ship.velocityY, ship.accelerationX, ship.accelerationY, enemies.get(0).centerPosX, enemies.get(0).centerPosY, enemies.get(0).velocityX, enemies.get(0).velocityY, enemies.get(0).accelerationX, enemies.get(0).accelerationY, enemies.get(0).health};
+                    } catch (Exception e) {
+                        continue;
+                    }
                     double[] reaction = attacker.forwardPropagation(inputs);
                     if (reaction[0] >= 0) {
                         ship.shoot();
                     }
                     double angle = Utilities.angleDim((float)reaction[1], (float)reaction[2]);
                     driveShip(Utilities.circleAngleX(angle, ship.centerPosX, ship.radius), Utilities.circleAngleY(angle, ship.centerPosY, ship.radius));
-
-                    // print ship.health
-                    System.out.println(Arrays.toString(reaction));
                     Utilities.delay(500);
                 }
             }

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class GameScreen extends View {
 
-    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize;
+    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, generation;
     static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
@@ -28,6 +28,9 @@ public class GameScreen extends View {
     static ArrayList<Formation> formationsTeam2 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
+
+    static ArrayList<Ship> deadShips = new ArrayList<>();
+    static ArrayList<Ship> population = new ArrayList<>();
 
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
@@ -161,8 +164,6 @@ public class GameScreen extends View {
 
         resources[0] = 2000000;
 
-        geneticAlgorithm();
-
         green.setColor(Color.GREEN);
         green.setStrokeWidth(20);
         green.setAntiAlias(true);
@@ -184,6 +185,37 @@ public class GameScreen extends View {
         } catch (InterruptedException e) {
             System.out.println("Nope");
         }
+
+        generation = 0;
+        geneticSetup();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    if (generation != 0) {
+                        geneticSetup();
+                    }
+
+                    int time = 0;
+                    while (time < 30000) {
+                        Utilities.delay(1000);
+                        time += 1000;
+                    }
+
+                    paused = true;
+                    population.clear();
+                    population.addAll(fighters);
+                    population.addAll(deadShips);
+
+                    for (int i = 0; i < ships.size(); i++) {
+                        ships.get(i).health = 0;
+                    }
+
+                    generation++;
+                }
+            }
+        }).start();
     }
 
     //Converts vector drawables into bitmaps
@@ -569,7 +601,7 @@ public class GameScreen extends View {
         placeShips();
     }
 
-    public static void geneticAlgorithm(){
+    public static void geneticSetup(){
         final int flagShipNum = 0;
         final int resCollectorsNum = 0;
         final int fighterNum = 300;
@@ -904,6 +936,9 @@ public class GameScreen extends View {
                 canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.destX, fighters.get(i).destinationFinder.destY, green);
                 canvas.drawBitmap(bitArrow, fighters.get(i).arrow, null);
             }
+//            if(fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0){
+//                canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.enemies.get(0).centerPosX, fighters.get(i).destinationFinder.enemies.get(0).centerPosY, red);
+//            }
         }
 
         for (int i = 0; i <= battleShips.size() - 1; i++) {
