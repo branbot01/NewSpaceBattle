@@ -1,8 +1,5 @@
 package com.newspacebattle;
 
-import android.content.Context;
-
-import com.example.newspacebattle.R;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -10,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 class NeuralNetwork {
@@ -103,7 +99,7 @@ class NeuralNetwork {
             for (int i = 0; i < inputSize; i++) {
                 sum += input[i] * weightsInputHidden[i][j];
             }
-            hiddenLayerOutput[j] = reLU(sum + biasesHidden[j]);
+            hiddenLayerOutput[j] = sigmoid(sum + biasesHidden[j]);
         }
 
         double[] outputLayerOutput = new double[outputSize];
@@ -115,7 +111,7 @@ class NeuralNetwork {
             outputLayerOutput[j] = sigmoid(sum + biasesOutput[j]);
         }
 
-        System.out.println("Input Neurons:");
+        /*System.out.println("Input Neurons:");
         System.out.println(Arrays.toString(input));
 
         System.out.println("Input to Hidden Weights:");
@@ -138,7 +134,7 @@ class NeuralNetwork {
         System.out.println(Arrays.toString(biasesOutput));
 
         System.out.println("Output Neurons:");
-        System.out.println(Arrays.toString(outputLayerOutput));
+        System.out.println(Arrays.toString(outputLayerOutput));*/
 
         return outputLayerOutput;
     }

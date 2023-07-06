@@ -578,8 +578,8 @@ public class GameScreen extends View {
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 0;
-        final int bulletNum = 500;
-        final int explosionNum = 500;
+        final int bulletNum = 1000;
+        final int explosionNum = 1000;
         final int missileNum = 0;
         final int laserNum = 0;
 
@@ -649,6 +649,12 @@ public class GameScreen extends View {
 
             placeShips();
         } while (doShipsCollide());
+
+        for (int i = 0; i <= fighters.size() - 1; i++) {
+            ArrayList<Ship> allShips = new ArrayList<>(fighters);
+            allShips.remove(fighters.get(i));
+            fighters.get(i).destinationFinder.runAttack(allShips);
+        }
     }
 
     void makeExplosion(GameObject object) {

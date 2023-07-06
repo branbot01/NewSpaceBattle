@@ -84,6 +84,11 @@ class PathFinder {
                     if (reaction[0] >= 0) {
                         ship.shoot();
                     }
+                    double angle = Utilities.angleDim((float)reaction[1], (float)reaction[2]);
+                    driveShip(Utilities.circleAngleX(angle, ship.centerPosX, ship.radius), Utilities.circleAngleY(angle, ship.centerPosY, ship.radius));
+
+                    // print ship.health
+                    System.out.println(Arrays.toString(reaction));
                     Utilities.delay(500);
                 }
             }
