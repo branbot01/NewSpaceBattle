@@ -4,6 +4,7 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
@@ -54,6 +55,28 @@ class PathFinder {
         }
         ship.attacking = true;
         startAttacker();
+    }
+
+    void autoAttack() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Looper.prepare();
+                while (ship.exists) {
+                    for (int i = 0; i < GameScreen.ships.size(); i++) {
+                        if (GameScreen.ships.get(i).team != ship.team) {
+                            if (Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) < ship.radius * 50) {
+                                stopFinder();
+                                ship.attacking = true;
+                                runAttack(new ArrayList<Ship>(Collections.singletonList(GameScreen.ships.get(i))));
+                                return;
+                            }
+                        }
+                    }
+                    Utilities.delay(500);
+                }
+            }
+        }).start();
     }
 
     //Stop going to destination or attacking

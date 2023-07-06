@@ -651,9 +651,7 @@ public class GameScreen extends View {
         } while (doShipsCollide());
 
         for (int i = 0; i <= fighters.size() - 1; i++) {
-            ArrayList<Ship> allShips = new ArrayList<>(fighters);
-            allShips.remove(fighters.get(i));
-            fighters.get(i).destinationFinder.runAttack(allShips);
+            fighters.get(i).destinationFinder.autoAttack();
         }
     }
 
