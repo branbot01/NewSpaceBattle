@@ -363,7 +363,8 @@ public class Main extends AppCompatActivity {
                             buildMenu.setAlpha(0.5f);
                         }
                     }
-                    resourceCount.setText("Resources: " + GameScreen.resources[0]);
+                    //resourceCount.setText("Resources: " + GameScreen.resources[0]);
+                    resourceCount.setText("Generation: " + GameScreen.generation);
                 }
                 UILoop();
             }

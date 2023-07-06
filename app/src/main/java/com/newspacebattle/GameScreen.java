@@ -29,6 +29,7 @@ public class GameScreen extends View {
     static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
 
+    static int time = 0;
     static ArrayList<Ship> deadShips = new ArrayList<>();
     static ArrayList<Ship> population = new ArrayList<>();
 
@@ -146,13 +147,13 @@ public class GameScreen extends View {
         clusterSize = (int) (Main.screenX / 0.2);
 
         BattleShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 3.5);
-        Bomber.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.25);
-        Fighter.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.5);
-        FlagShip.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 4);
-        LaserCruiser.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 1.75);
-        ResourceCollector.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 2);
-        Scout.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
-        SpaceStation.constRadius = (float)(((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
+        Bomber.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 1.25);
+        Fighter.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 1.5);
+        FlagShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 4);
+        LaserCruiser.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 1.75);
+        ResourceCollector.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) / 2);
+        Scout.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
+        SpaceStation.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
 
         BattleShip.cost = 50000;
         Bomber.cost = 7500;
@@ -187,35 +188,11 @@ public class GameScreen extends View {
         }
 
         generation = 0;
+
         geneticSetup();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    if (generation != 0) {
-                        geneticSetup();
-                    }
-
-                    int time = 0;
-                    while (time < 30000) {
-                        Utilities.delay(1000);
-                        time += 1000;
-                    }
-
-                    paused = true;
-                    population.clear();
-                    population.addAll(fighters);
-                    population.addAll(deadShips);
-
-                    for (int i = 0; i < ships.size(); i++) {
-                        ships.get(i).health = 0;
-                    }
-
-                    generation++;
-                }
-            }
-        }).start();
+        for (int i = 0; i <= ships.size() - 1; i++) {
+            ships.get(i).destinationFinder.autoAttack();
+        }
     }
 
     //Converts vector drawables into bitmaps
@@ -354,7 +331,7 @@ public class GameScreen extends View {
         return oneWasSelected;
     }
 
-    public static void groupSelect(ArrayList<Ship> shipsToSelect){
+    public static void groupSelect(ArrayList<Ship> shipsToSelect) {
         if (shipsToSelect == null) {
             return;
         }
@@ -601,7 +578,7 @@ public class GameScreen extends View {
         placeShips();
     }
 
-    public static void geneticSetup(){
+    public static void geneticSetup() {
         final int flagShipNum = 0;
         final int resCollectorsNum = 0;
         final int fighterNum = 300;
@@ -610,10 +587,15 @@ public class GameScreen extends View {
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 0;
-        final int bulletNum = 1000;
-        final int explosionNum = 1000;
+        int bulletNum = 1000;
+        int explosionNum = 1000;
         final int missileNum = 0;
         final int laserNum = 0;
+
+        if (generation != 0) {
+            bulletNum = 0;
+            explosionNum = 0;
+        }
 
         generateStars(3000);
         generateAsteroids(0, 5);
@@ -681,10 +663,6 @@ public class GameScreen extends View {
 
             placeShips();
         } while (doShipsCollide());
-
-        for (int i = 0; i <= fighters.size() - 1; i++) {
-            fighters.get(i).destinationFinder.autoAttack();
-        }
     }
 
     void makeExplosion(GameObject object) {
@@ -701,7 +679,7 @@ public class GameScreen extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawColor(Color.BLACK);
-        if (Main.minimapOn){
+        if (Main.minimapOn) {
             Paint color;
             canvas.translate(Main.screenX / 2, Main.screenY / 2);
             canvas.scale(0.8f, 0.8f);
@@ -720,7 +698,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= flagShips.size() - 1; i++) {
-                if (flagShips.get(i).team == 1){
+                if (flagShips.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -729,7 +707,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
-                if (resourceCollectors.get(i).team == 1){
+                if (resourceCollectors.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -738,7 +716,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= fighters.size() - 1; i++) {
-                if (fighters.get(i).team == 1){
+                if (fighters.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -747,7 +725,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= battleShips.size() - 1; i++) {
-                if (battleShips.get(i).team == 1){
+                if (battleShips.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -756,7 +734,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= bombers.size() - 1; i++) {
-                if (bombers.get(i).team == 1){
+                if (bombers.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -765,7 +743,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= scouts.size() - 1; i++) {
-                if (scouts.get(i).team == 1){
+                if (scouts.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -774,7 +752,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= laserCruisers.size() - 1; i++) {
-                if (laserCruisers.get(i).team == 1){
+                if (laserCruisers.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -783,7 +761,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= spaceStations.size() - 1; i++) {
-                if (spaceStations.get(i).team == 1){
+                if (spaceStations.get(i).team == 1) {
                     color = green;
                 } else {
                     color = red;
@@ -1045,8 +1023,8 @@ public class GameScreen extends View {
             }
         }
 
-        for(int i = 0; i < formationsTeam1.size(); i++){
-            for (int j = 0; j < formationsTeam1.get(i).points.size(); j++){
+        for (int i = 0; i < formationsTeam1.size(); i++) {
+            for (int j = 0; j < formationsTeam1.get(i).points.size(); j++) {
                 if (formationsTeam1.get(i).points != null) {
                     canvas.drawCircle((float) formationsTeam1.get(i).points.get(j).x, (float) formationsTeam1.get(i).points.get(j).y, 50, green);
                 }
@@ -1072,8 +1050,8 @@ public class GameScreen extends View {
         Main.refresh.postDelayed(new Runnable() {
             @Override
             public void run() {
-                invalidate();
                 if (!paused) {
+                    invalidate();
                     for (int i = 0; i <= blackHole.size() - 1; i++) {
                         blackHole.get(i).update();
                     }
@@ -1192,13 +1170,41 @@ public class GameScreen extends View {
                         }
                     }
                     for (int i = 0; i <= formationsTeam1.size() - 1; i++) {
-                        if(formationsTeam1.get(i).ships.size() == 0){
+                        if (formationsTeam1.get(i).ships.size() == 0) {
                             formationsTeam1.remove(formationsTeam1.get(i));
-                        }else{
+                        } else {
                             formationsTeam1.get(i).update();
                         }
                     }
                     followShips();
+                    time += 16;
+                    if (time >= 5000) {
+                        paused = true;
+                        time = 0;
+
+                        population.clear();
+                        population.addAll(ships);
+                        population.addAll(deadShips);
+
+                        for (int i = 0; i <= ships.size() - 1; i++) {
+                            ships.get(i).health = 0;
+                        }
+
+                        fighters.clear();
+                        ships.clear();
+                        objects.clear();
+                        bullets.clear();
+                        explosions.clear();
+                        deadShips.clear();
+
+                        generation++;
+
+                        geneticSetup();
+                        for (int i = 0; i <= ships.size() - 1; i++) {
+                            ships.get(i).destinationFinder.autoAttack();
+                        }
+                        paused = false;
+                    }
                 }
                 gameLoop();
             }

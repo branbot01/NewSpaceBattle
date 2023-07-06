@@ -23,6 +23,26 @@ class PathFinder {
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
+        if (GameScreen.generation == 0) {
+            attacker = new NeuralNetwork(14, 12, 3);
+        } else {
+            Random random = new Random();
+            double crossoverRate = 0.9;
+            double mutationRate = 0.001;
+
+            if (random.nextDouble() < crossoverRate) {
+                Ship parent1 = Utilities.rouletteWheelSelection(GameScreen.population);
+                Ship parent2 = Utilities.rouletteWheelSelection(GameScreen.population);
+                if (parent1 == null || parent2 == null) {
+                    System.out.println("Null parent");
+                }
+                attacker = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
+                attacker.applyMutation(mutationRate);
+            } else {
+                attacker = Utilities.rouletteWheelSelection(GameScreen.population).destinationFinder.attacker;
+                attacker.applyMutation(mutationRate);
+            }
+        }
     }
 
     //Go to these coordinates
@@ -87,26 +107,7 @@ class PathFinder {
         enemies.clear();
     }
 
-    private void startAttacker(){
-        if (attacker == null) {
-            if (GameScreen.generation == 0) {
-                attacker = new NeuralNetwork(14, 12, 3);
-            } else {
-                Random random = new Random();
-                double crossoverRate = 0.9;
-                double mutationRate = 0.001;
-
-                if (random.nextDouble() < crossoverRate) {
-                    Ship parent1 = Utilities.rouletteWheelSelection(GameScreen.population);
-                    Ship parent2 = Utilities.rouletteWheelSelection(GameScreen.population);
-                    attacker = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
-                    attacker.applyMutation(mutationRate);
-                } else {
-                    attacker = Utilities.rouletteWheelSelection(GameScreen.population).destinationFinder.attacker;
-                    attacker.applyMutation(mutationRate);
-                }
-            }
-        }
+    private void startAttacker() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -126,7 +127,7 @@ class PathFinder {
                     if (reaction[0] >= 0) {
                         ship.shoot();
                     }
-                    double angle = Utilities.angleDim((float)reaction[1], (float)reaction[2]);
+                    double angle = Utilities.angleDim((float) reaction[1], (float) reaction[2]);
                     driveShip(Utilities.circleAngleX(angle, ship.centerPosX, ship.radius), Utilities.circleAngleY(angle, ship.centerPosY, ship.radius));
                     Utilities.delay(500);
                 }
@@ -184,7 +185,7 @@ class PathFinder {
             }
             if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
                 nearbyObjects.add(obj);
-                if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship){
+                if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship) {
                     nearbyObjects.remove(obj);
                     continue;
                 }
