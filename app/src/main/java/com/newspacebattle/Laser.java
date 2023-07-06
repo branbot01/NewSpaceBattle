@@ -70,8 +70,9 @@ class Laser extends GameObject {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
             this.ownShip.dmgDone += damage;
+        }else{
+            this.ownShip.missedShots++;
         }
-
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
             if (!GameScreen.explosions.get(i).active) {
                 GameScreen.explosions.get(i).createExplosion(this);
