@@ -14,7 +14,7 @@ class Collisions {
             }
         }).start();
 
-        new Thread(() -> {
+        /*new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
                     checkObjectBoundariesX();
@@ -36,7 +36,7 @@ class Collisions {
                     checkBulletBoundaries();
                 }
             }
-        }).start();
+        }).start();*/
 
         for (int i = 0; i <= GameScreen.bullets.size(); i += 375) {
             int temp_i = i;
