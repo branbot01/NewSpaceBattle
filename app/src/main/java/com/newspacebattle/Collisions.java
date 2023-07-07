@@ -38,12 +38,12 @@ class Collisions {
             }
         }).start();
 
-        for (int i = 0; i <= GameScreen.bullets.size(); i += 2000) {
+        for (int i = 0; i <= GameScreen.bullets.size(); i += 375) {
             int temp_i = i;
             new Thread(() -> {
                 while (true) {
                     if (!GameScreen.paused) {
-                        bulletCollision(temp_i, temp_i + 2000);
+                        bulletCollision(temp_i, temp_i + 375);
                     }
                 }
             }).start();
@@ -133,42 +133,50 @@ class Collisions {
     //Checks that no object has gone outside of the map
     private void checkObjectBoundariesX() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
-            if (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
-                GameScreen.objects.get(i).velocityX = -GameScreen.objects.get(i).velocityX;
-                GameScreen.objects.get(i).accelerationX = 0;
-                GameScreen.objects.get(i).accelerationY = 0;
-                GameScreen.objects.get(i).destination = false;
+            try {
+                if (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
+                    GameScreen.objects.get(i).velocityX = -GameScreen.objects.get(i).velocityX;
+                    GameScreen.objects.get(i).accelerationX = 0;
+                    GameScreen.objects.get(i).accelerationY = 0;
+                    GameScreen.objects.get(i).destination = false;
 
-                if (GameScreen.objects.get(i) instanceof ResourceCollector) {
-                    ((ResourceCollector) GameScreen.objects.get(i)).harvesting = false;
+                    if (GameScreen.objects.get(i) instanceof ResourceCollector) {
+                        ((ResourceCollector) GameScreen.objects.get(i)).harvesting = false;
+                    }
+                    if (GameScreen.objects.get(i) instanceof Ship) {
+                        GameScreen.objects.get(i).destinationFinder.stopFinder();
+                    }
+                    while (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
+                        //System.out.println("borderx collision detected");
+                    }
                 }
-                if (GameScreen.objects.get(i) instanceof Ship) {
-                    GameScreen.objects.get(i).destinationFinder.stopFinder();
-                }
-                while (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
-                    //System.out.println("borderx collision detected");
-                }
+            } catch (Exception e) {
+                System.out.println("Error in checkObjectBoundariesX");
             }
         }
     }
 
     private void checkObjectBoundariesY() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
-            if (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
-                GameScreen.objects.get(i).velocityY = -GameScreen.objects.get(i).velocityY;
-                GameScreen.objects.get(i).accelerationX = 0;
-                GameScreen.objects.get(i).accelerationY = 0;
-                GameScreen.objects.get(i).destination = false;
+            try {
+                if (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
+                    GameScreen.objects.get(i).velocityY = -GameScreen.objects.get(i).velocityY;
+                    GameScreen.objects.get(i).accelerationX = 0;
+                    GameScreen.objects.get(i).accelerationY = 0;
+                    GameScreen.objects.get(i).destination = false;
 
-                if (GameScreen.objects.get(i) instanceof ResourceCollector) {
-                    ((ResourceCollector) GameScreen.objects.get(i)).harvesting = false;
+                    if (GameScreen.objects.get(i) instanceof ResourceCollector) {
+                        ((ResourceCollector) GameScreen.objects.get(i)).harvesting = false;
+                    }
+                    if (GameScreen.objects.get(i) instanceof Ship) {
+                        GameScreen.objects.get(i).destinationFinder.stopFinder();
+                    }
+                    while (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
+                        //System.out.println("bordery collision detected");
+                    }
                 }
-                if (GameScreen.objects.get(i) instanceof Ship) {
-                    GameScreen.objects.get(i).destinationFinder.stopFinder();
-                }
-                while (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
-                    //System.out.println("bordery collision detected");
-                }
+            } catch (Exception e) {
+                System.out.println("Error in checkObjectBoundariesY");
             }
         }
     }

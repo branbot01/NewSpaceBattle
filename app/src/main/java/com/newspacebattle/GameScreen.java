@@ -152,8 +152,8 @@ public class GameScreen extends View {
         scaleX = 0.05f;
         scaleY = 0.05f;
 
-        mapSizeX = (int) (Main.screenX / scaleX * 32);
-        mapSizeY = (int) (Main.screenY / scaleY * 32);
+        mapSizeX = (int) (Main.screenX / scaleX * 8);
+        mapSizeY = (int) (Main.screenY / scaleY * 8);
         clusterSize = (int) (Main.screenX / 0.2);
 
         BattleShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 3.5);
@@ -660,18 +660,18 @@ public class GameScreen extends View {
     public static void geneticSetup() {
         final int flagShipNum = 0;
         final int resCollectorsNum = 0;
-        final int fighterNum = 300;
+        final int fighterNum = 100;
         final int battleShipNum = 0;
         final int bomberNum = 0;
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 0;
-        int bulletNum = 8000;
-        int explosionNum = 8000;
+        int bulletNum = 1500;
+        int explosionNum = 1500;
         final int missileNum = 0;
         final int laserNum = 0;
 
-        generateStars(3000);
+        generateStars(0);
         generateAsteroids(0, 5);
 
         do {
@@ -847,8 +847,8 @@ public class GameScreen extends View {
         canvas.translate(-offsetX, -offsetY);
         canvas.scale(scaleX, scaleY);
 
-        double extraOffsetX = mapSizeX / 6;
-        double extraOffsetY = mapSizeY / 6;
+        double extraOffsetX = mapSizeX;
+        double extraOffsetY = mapSizeY;
 
         for (int i = 0; i <= starXPos.length - 1; i++) {
             if (starXPos[i] >= offsetX / scaleX && starXPos[i] <= offsetX / scaleX + extraOffsetX && starYPos[i] >= offsetY / scaleY && starYPos[i] <= offsetY / scaleY + extraOffsetY) {
@@ -1138,11 +1138,14 @@ public class GameScreen extends View {
                             asteroids.remove(i);
                         }
                     }
+                    //int count = 0;
                     for (int i = 0; i <= bullets.size() - 1; i++) {
                         if (bullets.get(i).exists) {
                             bullets.get(i).update();
+                            //count++;
                         }
                     }
+                    //System.out.println("Bullets: " + count);
                     for (int i = 0; i <= missiles.size() - 1; i++) {
                         if (missiles.get(i).exists) {
                             missiles.get(i).update();
