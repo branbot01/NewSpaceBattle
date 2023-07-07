@@ -169,34 +169,22 @@ class Utilities {
     }
 
     static Ship rouletteWheelSelection(ArrayList<Ship> population){
-        if (population.size() == 0){
-            System.out.println("empty population");
-        }
         Ship parent = null;
         int[] scores = new int[population.size()];
         for (int i = 0; i <= population.size() - 1; i++) {
-            population.get(i).calculateFitness();
             scores[i] = population.get(i).fitness;
         }
 
-        int lowestScore = scores[0];
-        int indexLowestScore = 0;
-        int highestScore = scores[0];
-        int indexHighestScore = 0;
-        for (int i = 1; i < scores.length; i++) {
-            if (scores[i] < lowestScore) {
-                lowestScore = scores[i];
-                indexLowestScore = i;
-            }
-            if (scores[i] > highestScore) {
-                highestScore = scores[i];
-                indexHighestScore = i;
+        int lowestScore = Integer.MAX_VALUE;
+        for (int j : scores) {
+            if (j < lowestScore) {
+                lowestScore = j;
             }
         }
 
-        if (scores[indexLowestScore] < 0){
+        if (lowestScore < 0){
             for (int i = 0; i <= scores.length - 1; i++) {
-                scores[i] += Math.abs(scores[indexLowestScore]);
+                scores[i] += Math.abs(lowestScore);
             }
         }
 
@@ -218,9 +206,6 @@ class Utilities {
                 parent = population.get(i);
                 break;
             }
-        }
-        if (parent == null){
-            parent = population.get(indexHighestScore);
         }
         return parent;
     }

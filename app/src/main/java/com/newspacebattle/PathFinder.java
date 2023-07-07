@@ -5,7 +5,6 @@ import android.os.Looper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
@@ -23,26 +22,6 @@ class PathFinder {
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
-        if (GameScreen.generation == 0) {
-            attacker = new NeuralNetwork(14, 12, 3);
-        } else {
-            Random random = new Random();
-            double crossoverRate = 0.9;
-            double mutationRate = 0.001;
-
-            if (random.nextDouble() < crossoverRate) {
-                Ship parent1 = Utilities.rouletteWheelSelection(GameScreen.population);
-                Ship parent2 = Utilities.rouletteWheelSelection(GameScreen.population);
-                if (parent1 == null || parent2 == null) {
-                    System.out.println("Null parent");
-                }
-                attacker = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
-                attacker.applyMutation(mutationRate);
-            } else {
-                attacker = Utilities.rouletteWheelSelection(GameScreen.population).destinationFinder.attacker;
-                attacker.applyMutation(mutationRate);
-            }
-        }
     }
 
     //Go to these coordinates

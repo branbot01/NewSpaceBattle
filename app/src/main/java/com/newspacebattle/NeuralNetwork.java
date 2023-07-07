@@ -1,10 +1,13 @@
 package com.newspacebattle;
 
+import android.os.Environment;
+
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -199,14 +202,12 @@ class NeuralNetwork {
         return Math.max(0, x);
     }
 
-    public void saveWeightsAndBiases() {
-        String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-        baseDir += File.separator + "Download";
-        String fileName = "nn.csv";
-        String filePath = baseDir + File.separator + fileName;
-
+    public void saveWeightsAndBiases(int generation, String name) {
+        // abcdefghi
+        //
+        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "i.csv");
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(filePath));
+            CSVWriter writer = new CSVWriter(new FileWriter(f));
 
             double[] data = new double[inputSize * hiddenSize + hiddenSize * outputSize + hiddenSize + outputSize];
             int index = 0;
@@ -230,14 +231,17 @@ class NeuralNetwork {
                 data[index] = biasesOutput[i];
                 index++;
             }
-            String[] sizes = new String[3];
+            String[] sizes = new String[5];
             sizes[0] = String.valueOf(inputSize);
             sizes[1] = String.valueOf(hiddenSize);
             sizes[2] = String.valueOf(outputSize);
+            sizes[3] = String.valueOf(generation);
             writer.writeNext(sizes);
             String[] dataString = new String[data.length];
+            DecimalFormat df = new DecimalFormat("#");
+            df.setMaximumFractionDigits(8);
             for (int i = 0; i < data.length; i++) {
-                dataString[i] = String.valueOf(data[i]);
+                dataString[i] = df.format(data[i]);
             }
 
             writer.writeNext(dataString);
@@ -250,6 +254,9 @@ class NeuralNetwork {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
+        s.append("Input Size: ").append(inputSize).append("\n");
+        s.append("Hidden Size: ").append(hiddenSize).append("\n");
+        s.append("Output Size: ").append(outputSize).append("\n\n");
         s.append("Input to Hidden Weights:\n");
         for (double[] doubles : weightsInputHidden) {
             s.append(Arrays.toString(doubles)).append("\n");

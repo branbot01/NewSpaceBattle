@@ -4,11 +4,21 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.view.View;
 
 import com.example.newspacebattle.R;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Dylan on 2018-06-18. Handles the graphics of the game.
@@ -29,7 +39,7 @@ public class GameScreen extends View {
     static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
 
-    static int time = 0;
+    static int time;
     static ArrayList<Ship> deadShips = new ArrayList<>();
     static ArrayList<Ship> population = new ArrayList<>();
 
@@ -188,8 +198,77 @@ public class GameScreen extends View {
         }
 
         generation = 0;
+        String gen_pattern = "gen(\\d+)";
+        String ship_pattern = "ship(\\d+)";
+        Pattern gen_regex = Pattern.compile(gen_pattern);
+        Pattern ship_regex = Pattern.compile(ship_pattern);
+
+        File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                Matcher matcher = gen_regex.matcher(file.getName());
+                if (matcher.find()) {
+                    String genNumber = matcher.group(1);
+                    if (genNumber == null) {
+                        throw new IllegalArgumentException("Gen Number was null.");
+                    }
+                    if (Integer.parseInt(genNumber) > generation) {
+                        generation = Integer.parseInt(genNumber);
+                    }
+                } else {
+                    throw new IllegalArgumentException("Gen Number not found.");
+                }
+            }
+        }
 
         geneticSetup();
+        List<String[]> data = new ArrayList<>();
+        for (int i = 0; i <= ships.size() - 1; i++) {
+            if (generation == 0) {
+                ships.get(i).destinationFinder.attacker = new NeuralNetwork(14, 12, 3);
+            } else {
+                for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
+                    Matcher matcher = gen_regex.matcher(file.getName());
+                    if (matcher.find()) {
+                        String genNumber = matcher.group(1);
+                        if (genNumber == null) {
+                            throw new IllegalArgumentException("Gen Number was null.");
+                        }
+                        if (Integer.parseInt(genNumber) == generation) {
+                            matcher = ship_regex.matcher(file.getName());
+                            if (matcher.find()) {
+                                String shipNumber = matcher.group(1);
+                                if (shipNumber == null) {
+                                    throw new IllegalArgumentException("Ship Number was null.");
+                                }
+                                if (Integer.parseInt(shipNumber) == i) {
+                                    System.out.println("Loading ship " + i);
+                                    data.clear();
+                                    BufferedReader reader;
+                                    try {
+                                        reader = new BufferedReader(new FileReader(file));
+                                        String line;
+                                        while ((line = reader.readLine()) != null) {
+                                            data.add(line.split(","));
+                                        }
+
+                                        ships.get(i).destinationFinder.attacker = new NeuralNetwork(data);
+
+                                        reader.close();
+                                    } catch (FileNotFoundException e) {
+                                        throw new IllegalArgumentException("File not found.");
+                                    } catch (IOException e) {
+                                        throw new IllegalArgumentException("IO Exception.");
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        throw new IllegalArgumentException("Gen Number not found.");
+                    }
+                }
+            }
+        }
         for (int i = 0; i <= ships.size() - 1; i++) {
             ships.get(i).destinationFinder.autoAttack();
         }
@@ -587,15 +666,10 @@ public class GameScreen extends View {
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 0;
-        int bulletNum = 1000;
-        int explosionNum = 1000;
+        int bulletNum = 8000;
+        int explosionNum = 8000;
         final int missileNum = 0;
         final int laserNum = 0;
-
-        if (generation != 0) {
-            bulletNum = 0;
-            explosionNum = 0;
-        }
 
         generateStars(3000);
         generateAsteroids(0, 5);
@@ -1177,33 +1251,41 @@ public class GameScreen extends View {
                         }
                     }
                     followShips();
+                    //System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
                     time += 16;
-                    if (time >= 5000) {
+                    if (time >= 150000) {
                         paused = true;
-                        time = 0;
 
                         population.clear();
                         population.addAll(ships);
                         population.addAll(deadShips);
 
-                        for (int i = 0; i <= ships.size() - 1; i++) {
-                            ships.get(i).health = 0;
+                        double highestFitness = Double.MIN_VALUE;
+                        for (int i = 0; i <= population.size() - 1; i++) {
+                            population.get(i).calculateFitness();
+                            if (population.get(i).fitness > highestFitness) {
+                                highestFitness = population.get(i).fitness;
+                            }
                         }
 
-                        fighters.clear();
-                        ships.clear();
-                        objects.clear();
-                        bullets.clear();
-                        explosions.clear();
-                        deadShips.clear();
-
-                        generation++;
-
-                        geneticSetup();
-                        for (int i = 0; i <= ships.size() - 1; i++) {
-                            ships.get(i).destinationFinder.autoAttack();
+                        Random random = new Random();
+                        double crossoverRate = 0.9;
+                        double mutationRate = 0.001;
+                        for (int i = 0; i <= population.size() - 1; i++) {
+                            NeuralNetwork child;
+                            if (random.nextDouble() < crossoverRate) {
+                                Ship parent1 = Utilities.rouletteWheelSelection(population);
+                                Ship parent2 = Utilities.rouletteWheelSelection(population);
+                                child = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
+                                child.applyMutation(mutationRate);
+                            } else {
+                                child = Utilities.rouletteWheelSelection(population).destinationFinder.attacker;
+                                child.applyMutation(mutationRate);
+                            }
+                            System.out.println("Child " + i + " created");
+                            child.saveWeightsAndBiases(generation + 1, String.valueOf(i));
                         }
-                        paused = false;
+                        Main.restart = true;
                     }
                 }
                 gameLoop();

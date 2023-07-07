@@ -154,12 +154,12 @@ class Ship extends GameObject {
     }
 
     //tell ship to dock
-    void dock(){
+    void dock() {
         float distanceToClosestSS = Float.MAX_VALUE, distanceToSS;
         SpaceStation closestSS = null;
 
-        for(int i = 0; i <= GameScreen.spaceStations.size() - 1; i++){
-            if(GameScreen.spaceStations.get(i).team == team) {
+        for (int i = 0; i <= GameScreen.spaceStations.size() - 1; i++) {
+            if (GameScreen.spaceStations.get(i).team == team) {
                 distanceToSS = (float) Utilities.distanceFormula(GameScreen.spaceStations.get(i).centerPosX, GameScreen.spaceStations.get(i).centerPosY, centerPosX, centerPosY);
                 if (distanceToSS < distanceToClosestSS && GameScreen.spaceStations.get(i).dockedShips.size() < GameScreen.spaceStations.get(i).maxDockedNum) {
                     distanceToClosestSS = distanceToSS;
@@ -174,11 +174,11 @@ class Ship extends GameObject {
         setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
     }
 
-    void calculateFitness(){
-        if(!exists) {
-            fitness = (dmgDone / 50) - 50 - 5 * missedShots;
+    void calculateFitness() {
+        if (!exists) {
+            fitness = (dmgDone / 10) - 50 - 5 * missedShots;
         } else {
-            fitness = (dmgDone / 50) - 5 * missedShots;
+            fitness = (dmgDone / 10) - 5 * missedShots;
         }
     }
 }

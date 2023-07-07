@@ -23,12 +23,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.newspacebattle.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 //Main class handles ui elements like the menus and buttons
 public class Main extends AppCompatActivity {
 
     static int screenX, screenY, movedX, movedY, formationSelected;
-    static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded, minimapOn;
+    static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded, minimapOn, restart;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
@@ -135,6 +136,7 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         setContentView(R.layout.title_screen);
+        playGame(null);
     }
 
     //When the app is resumed
@@ -228,7 +230,7 @@ public class Main extends AppCompatActivity {
         }, 16);
     }
 
-    public void makeCSVFiles(){
+    public void makeCSVFiles() {
         InputStream inputStream = getResources().openRawResource(R.raw.nn);
         CSVFile csvFile = new CSVFile(inputStream);
         fighterBrain = csvFile.read();
@@ -236,6 +238,9 @@ public class Main extends AppCompatActivity {
 
     //Loop updating ui elements
     public void UILoop() {
+        if (restart) {
+            ProcessPhoenix.triggerRebirth(getApplicationContext());
+        }
         selectionChecker.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -364,15 +369,15 @@ public class Main extends AppCompatActivity {
                         }
                     }
                     //resourceCount.setText("Resources: " + GameScreen.resources[0]);
-                    resourceCount.setText("Generation: " + GameScreen.generation);
+                    resourceCount.setText("Gen/time: " + GameScreen.generation + "/" + GameScreen.time);
                 }
                 UILoop();
             }
         }, 16);
     }
 
-    public void minimap(View view){
-        if (minimapOn){
+    public void minimap(View view) {
+        if (minimapOn) {
             minimapOn = false;
 
             select.setVisibility(View.VISIBLE);
@@ -784,7 +789,7 @@ public class Main extends AppCompatActivity {
                 spaceStation = (SpaceStation) selectShips.get(i);
             }
         }
-        if (spaceStationCount != 1){
+        if (spaceStationCount != 1) {
             return;
         }
         countDockedShips(spaceStation);
@@ -816,7 +821,7 @@ public class Main extends AppCompatActivity {
         numBombers.setVisibility(View.VISIBLE);
     }
 
-    private void countDockedShips(SpaceStation spaceStation){
+    private void countDockedShips(SpaceStation spaceStation) {
         int dockedResourceCollectors = 0, dockedScouts = 0, dockedFighters = 0, dockedBombers = 0;
         for (int i = 0; i <= spaceStation.dockedShips.size() - 1; i++) {
             if (spaceStation.dockedShips.get(i) instanceof ResourceCollector) {
@@ -978,8 +983,8 @@ public class Main extends AppCompatActivity {
         progressSpaceStation.setVisibility(View.INVISIBLE);
     }
 
-    public void buildMenu(View view){
-        if (checkIfOneFlagship() == null){
+    public void buildMenu(View view) {
+        if (checkIfOneFlagship() == null) {
             return;
         }
 
@@ -1017,15 +1022,15 @@ public class Main extends AppCompatActivity {
         progressSpaceStation.setVisibility(View.VISIBLE);
     }
 
-    public void formationButton(View view){
+    public void formationButton(View view) {
         shipBar(false);
         formationBar(true);
         startSelection = false;
         select.setBackgroundTintList(fabColor);
     }
 
-    public void formationBar(boolean hiddenOrNot){
-        if (hiddenOrNot){
+    public void formationBar(boolean hiddenOrNot) {
+        if (hiddenOrNot) {
             formationBar.setVisibility(View.VISIBLE);
             currentFormations.setVisibility(View.VISIBLE);
             buildFormation.setVisibility(View.INVISIBLE);
@@ -1049,8 +1054,8 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    public void currentFormations(View view){
-        if (selectShips.size() <= 1){
+    public void currentFormations(View view) {
+        if (selectShips.size() <= 1) {
             return;
         }
         currentFormations.setVisibility(View.INVISIBLE);
@@ -1063,7 +1068,7 @@ public class Main extends AppCompatActivity {
         controlFormation.setVisibility(View.INVISIBLE);
     }
 
-    public void buildFormation(View view){
+    public void buildFormation(View view) {
         buildFormation.setVisibility(View.INVISIBLE);
         currentFormations.setVisibility(View.VISIBLE);
 
@@ -1074,39 +1079,39 @@ public class Main extends AppCompatActivity {
         rectangleFormation.setVisibility(View.INVISIBLE);
     }
 
-    public void setNextFormation(View view){
-        if (GameScreen.formationsTeam1.size() == 0){
+    public void setNextFormation(View view) {
+        if (GameScreen.formationsTeam1.size() == 0) {
             return;
         }
-        for(int i = 0; i < GameScreen.formationsTeam1.size(); i++){
-            if (formationSelected == i){
+        for (int i = 0; i < GameScreen.formationsTeam1.size(); i++) {
+            if (formationSelected == i) {
                 clearSelectionReferences();
                 GameScreen.groupSelect(GameScreen.formationsTeam1.get(i).ships);
                 followShip(null);
             }
         }
         formationSelected++;
-        if (formationSelected == GameScreen.formationsTeam1.size()){
+        if (formationSelected == GameScreen.formationsTeam1.size()) {
             formationSelected = 0;
         }
     }
 
-    public void controlFormation(View view){
-        if (selectShips.size() == 0){
+    public void controlFormation(View view) {
+        if (selectShips.size() == 0) {
             return;
         }
         shipBar(true);
         formationBar(false);
     }
 
-    public void setRectangleFormation(View view){
+    public void setRectangleFormation(View view) {
         formationBar(false);
         shipBar(true);
 
         GameScreen.formationsTeam1.add(new Formation(selectShips, 0));
     }
 
-    public FlagShip checkIfOneFlagship(){
+    public FlagShip checkIfOneFlagship() {
         int flagShipCount = 0;
         FlagShip flagShip = null;
         for (int i = 0; i <= selectShips.size() - 1; i++) {
@@ -1115,7 +1120,7 @@ public class Main extends AppCompatActivity {
                 flagShip = (FlagShip) selectShips.get(i);
             }
         }
-        if(flagShipCount == 1){
+        if (flagShipCount == 1) {
             return flagShip;
         }
         return null;
@@ -1179,82 +1184,82 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    public void buildSpaceStation(View view){
+    public void buildSpaceStation(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingSpaceStation && flagShip.costCounter[0] > 0){
+        if (flagShip.buildingSpaceStation && flagShip.costCounter[0] > 0) {
             flagShip.stopBuilding("SpaceStation");
         }
         flagShip.buildingSpaceStation = true;
     }
 
-    public void buildBattleShip(View view){
+    public void buildBattleShip(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingBattleShip && flagShip.costCounter[1] > 0){
+        if (flagShip.buildingBattleShip && flagShip.costCounter[1] > 0) {
             flagShip.stopBuilding("BattleShip");
         }
         flagShip.buildingBattleShip = true;
     }
 
-    public void buildLaserCruiser(View view){
+    public void buildLaserCruiser(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingLaserCruiser && flagShip.costCounter[2] > 0){
+        if (flagShip.buildingLaserCruiser && flagShip.costCounter[2] > 0) {
             flagShip.stopBuilding("LaserCruiser");
         } else {
             flagShip.buildingLaserCruiser = true;
         }
     }
 
-    public void buildBomber(View view){
+    public void buildBomber(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingBomber && flagShip.costCounter[3] > 0){
+        if (flagShip.buildingBomber && flagShip.costCounter[3] > 0) {
             flagShip.stopBuilding("Bomber");
         } else {
             flagShip.buildingBomber = true;
         }
     }
 
-    public void buildFighter(View view){
+    public void buildFighter(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingFighter && flagShip.costCounter[4] > 0){
+        if (flagShip.buildingFighter && flagShip.costCounter[4] > 0) {
             flagShip.stopBuilding("Fighter");
         } else {
             flagShip.buildingFighter = true;
         }
     }
 
-    public void buildScout(View view){
+    public void buildScout(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingScout && flagShip.costCounter[5] > 0){
+        if (flagShip.buildingScout && flagShip.costCounter[5] > 0) {
             flagShip.stopBuilding("Scout");
         } else {
             flagShip.buildingScout = true;
         }
     }
 
-    public void buildResourceCollector(View view){
+    public void buildResourceCollector(View view) {
         FlagShip flagShip = checkIfOneFlagship();
-        if(flagShip == null){
+        if (flagShip == null) {
             return;
         }
-        if (flagShip.buildingResourceCollector && flagShip.costCounter[6] > 0){
+        if (flagShip.buildingResourceCollector && flagShip.costCounter[6] > 0) {
             flagShip.stopBuilding("ResourceCollector");
         } else {
             flagShip.buildingResourceCollector = true;
