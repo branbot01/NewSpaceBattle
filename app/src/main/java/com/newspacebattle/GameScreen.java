@@ -1273,7 +1273,7 @@ public class GameScreen extends View {
 
                         Random random = new Random();
                         double crossoverRate = 0.9;
-                        double mutationRate = 0.001;
+                        double mutationRate = 0.025;
                         for (int i = 0; i <= population.size() - 1; i++) {
                             NeuralNetwork child;
                             if (random.nextDouble() < crossoverRate) {
