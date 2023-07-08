@@ -64,14 +64,22 @@ class PathFinder {
                 Looper.prepare();
                 while (ship.exists) {
                     if (!ship.attacking) {
+                        double closestDistance = 1000000000;
+                        int closestIndex = -1;
                         for (int i = 0; i < GameScreen.ships.size(); i++) {
                             if (GameScreen.ships.get(i).team != ship.team) {
                                 double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
-                                if (distance < ship.radius * 200) {
-                                    runAttack(new ArrayList<Ship>(Collections.singletonList(GameScreen.ships.get(i))));
-                                    break;
+                                if (distance < closestDistance) {
+                                    closestDistance = distance;
+                                    closestIndex = i;
                                 }
                             }
+                        }
+                        if (closestIndex != -1) {
+                            stopFinder();
+                            ship.attacking = true;
+                            enemies.add(GameScreen.ships.get(closestIndex));
+                            startAttacker();
                         }
                     }
                     Utilities.delay(500);
@@ -92,13 +100,15 @@ class PathFinder {
             public void run() {
                 Looper.prepare();
                 while (ship.attacking && ship.exists) {
-                    if (enemies.size() == 0) {
-                        ship.attacking = false;
-                        return;
-                    }
                     double[] inputs;
                     try {
-                        inputs = new double[]{ship.health, ship.centerPosX, ship.centerPosY, ship.velocityX, ship.velocityY, ship.accelerationX, ship.accelerationY, enemies.get(0).centerPosX, enemies.get(0).centerPosY, enemies.get(0).velocityX, enemies.get(0).velocityY, enemies.get(0).accelerationX, enemies.get(0).accelerationY, enemies.get(0).health};
+                        if (!enemies.get(0).exists) {
+                            ship.attacking = false;
+                            return;
+                        }
+                        double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
+                        angle = angle / 360d;
+                        inputs = new double[]{ship.degrees / 360d, angle};
                     } catch (Exception e) {
                         continue;
                     }
@@ -107,7 +117,8 @@ class PathFinder {
                         ship.shoot();
                     }
                     double angle = Utilities.angleDim((float) reaction[1], (float) reaction[2]);
-                    driveShip(Utilities.circleAngleX(angle, ship.centerPosX, ship.radius), Utilities.circleAngleY(angle, ship.centerPosY, ship.radius));
+                    ship.accelerationX = (float) (ship.accelerate * Math.cos(angle));
+                    ship.accelerationY = (float) (ship.accelerate * Math.sin(angle));
                     Utilities.delay(500);
                 }
             }

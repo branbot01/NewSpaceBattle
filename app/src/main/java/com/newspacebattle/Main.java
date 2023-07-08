@@ -54,7 +54,7 @@ public class Main extends AppCompatActivity {
         public void run() {
             gameScreen = new GameScreen(getApplicationContext());
             loaded = true;
-            rickRoll.start();
+            //rickRoll.start();
         }
     });
     View decorView, gameView, bar, formationBar;
@@ -130,6 +130,7 @@ public class Main extends AppCompatActivity {
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         rickRoll = MediaPlayer.create(this, R.raw.music);
 

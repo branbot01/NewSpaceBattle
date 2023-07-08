@@ -176,9 +176,9 @@ class Ship extends GameObject {
 
     void calculateFitness() {
         if (!exists) {
-            fitness = (dmgDone / 10) - 50 - 5 * missedShots;
+            fitness = (dmgDone / 5) - 200 - 10 * missedShots;
         } else {
-            fitness = (dmgDone / 10) - 5 * missedShots;
+            fitness = (dmgDone / 5) - 10 * missedShots;
         }
     }
 }

@@ -1,7 +1,5 @@
 package com.newspacebattle;
 
-import android.os.Environment;
-
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -203,9 +201,9 @@ class NeuralNetwork {
     }
 
     public void saveWeightsAndBiases(int generation, String name) {
-        // abcdefghi
+        // abcdefghijkl
         //
-        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "i.csv");
+        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "l.csv");
         try {
             CSVWriter writer = new CSVWriter(new FileWriter(f));
 

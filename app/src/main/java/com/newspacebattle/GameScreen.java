@@ -8,14 +8,19 @@ import android.os.Environment;
 import android.view.View;
 
 import com.example.newspacebattle.R;
+import com.opencsv.CSVWriter;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +47,7 @@ public class GameScreen extends View {
     static int time;
     static ArrayList<Ship> deadShips = new ArrayList<>();
     static ArrayList<Ship> population = new ArrayList<>();
+    static File fitness;
 
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
@@ -206,6 +212,9 @@ public class GameScreen extends View {
         File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
         if (files != null) {
             for (File file : files) {
+                if (Objects.equals(file.getName(), "fitness.txt")){
+                    fitness = file;
+                }
                 Matcher matcher = gen_regex.matcher(file.getName());
                 if (matcher.find()) {
                     String genNumber = matcher.group(1);
@@ -215,17 +224,19 @@ public class GameScreen extends View {
                     if (Integer.parseInt(genNumber) > generation) {
                         generation = Integer.parseInt(genNumber);
                     }
-                } else {
-                    throw new IllegalArgumentException("Gen Number not found.");
                 }
             }
+        }
+        if (fitness == null){
+            System.out.println("Fitness file not found, creating new one.");
+            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "fitness.txt");
         }
 
         geneticSetup();
         List<String[]> data = new ArrayList<>();
         for (int i = 0; i <= ships.size() - 1; i++) {
             if (generation == 0) {
-                ships.get(i).destinationFinder.attacker = new NeuralNetwork(14, 12, 3);
+                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 3, 3);
             } else {
                 for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
                     Matcher matcher = gen_regex.matcher(file.getName());
@@ -263,8 +274,6 @@ public class GameScreen extends View {
                                 }
                             }
                         }
-                    } else {
-                        throw new IllegalArgumentException("Gen Number not found.");
                     }
                 }
             }
@@ -666,8 +675,8 @@ public class GameScreen extends View {
         final int scoutNum = 0;
         final int laserCruiserNum = 0;
         final int spaceStationNum = 0;
-        int bulletNum = 1500;
-        int explosionNum = 1500;
+        int bulletNum = 2500;
+        int explosionNum = 2500;
         final int missileNum = 0;
         final int laserNum = 0;
 
@@ -682,7 +691,7 @@ public class GameScreen extends View {
 
             flagShips.clear();
             for (int i = 0; i <= flagShipNum - 1; i++) {
-                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
+                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, i));
             }
 
             fighters.clear();
@@ -930,13 +939,16 @@ public class GameScreen extends View {
                 }
                 if (flagShips.get(i).team == 1) {
                     canvas.drawBitmap(bitFlagShip, flagShips.get(i).appearance, null);
-                } else if (flagShips.get(i).team == 2) {
+                } else  {
                     canvas.drawBitmap(enFlagShip1, flagShips.get(i).appearance, null);
                 }
             }
             if (flagShips.get(i).destination) {
                 canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.destX, flagShips.get(i).destinationFinder.destY, green);
                 canvas.drawBitmap(bitArrow, flagShips.get(i).arrow, null);
+            }
+            if(flagShips.get(i).attacking && flagShips.get(i).destinationFinder.enemies.size() > 0){
+                canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.enemies.get(0).centerPosX, flagShips.get(i).destinationFinder.enemies.get(0).centerPosY, red);
             }
         }
 
@@ -988,9 +1000,9 @@ public class GameScreen extends View {
                 canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.destX, fighters.get(i).destinationFinder.destY, green);
                 canvas.drawBitmap(bitArrow, fighters.get(i).arrow, null);
             }
-//            if(fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0){
-//                canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.enemies.get(0).centerPosX, fighters.get(i).destinationFinder.enemies.get(0).centerPosY, red);
-//            }
+            if(fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0){
+                canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.enemies.get(0).centerPosX, fighters.get(i).destinationFinder.enemies.get(0).centerPosY, red);
+            }
         }
 
         for (int i = 0; i <= battleShips.size() - 1; i++) {
@@ -1254,20 +1266,41 @@ public class GameScreen extends View {
                         }
                     }
                     followShips();
-                    //System.out.println(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS));
                     time += 16;
-                    if (time >= 150000) {
+                    if (time >= 100000) {
                         paused = true;
 
                         population.clear();
                         population.addAll(ships);
                         population.addAll(deadShips);
 
-                        double highestFitness = Double.MIN_VALUE;
+                        double avgFitness = 0;
                         for (int i = 0; i <= population.size() - 1; i++) {
                             population.get(i).calculateFitness();
-                            if (population.get(i).fitness > highestFitness) {
-                                highestFitness = population.get(i).fitness;
+                            avgFitness += population.get(i).fitness;
+                        }
+                        avgFitness /= population.size();
+
+                        try {
+                            FileOutputStream fileinput = new FileOutputStream(fitness, true);
+                            fileinput.write((generation + "," + avgFitness + "\n").getBytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        String gen_pattern = "gen(\\d+)";
+                        Pattern gen_regex = Pattern.compile(gen_pattern);
+
+                        for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
+                            Matcher matcher = gen_regex.matcher(file.getName());
+                            if (matcher.find()) {
+                                String genNumber = matcher.group(1);
+                                if (genNumber == null) {
+                                    throw new IllegalArgumentException("Gen Number was null.");
+                                }
+                                if (Integer.parseInt(genNumber) % 20 != 0) {
+                                    file.delete();
+                                }
                             }
                         }
 
