@@ -200,35 +200,39 @@ class NeuralNetwork {
         return Math.max(0, x);
     }
 
+    public double[] getAllWeightsAndBiases() {
+        double[] data = new double[inputSize * hiddenSize + hiddenSize * outputSize + hiddenSize + outputSize];
+        int index = 0;
+        for (int i = 0; i < inputSize; i++) {
+            for (int j = 0; j < hiddenSize; j++) {
+                data[index] = weightsInputHidden[i][j];
+                index++;
+            }
+        }
+        for (int i = 0; i < hiddenSize; i++) {
+            for (int j = 0; j < outputSize; j++) {
+                data[index] = weightsHiddenOutput[i][j];
+                index++;
+            }
+        }
+        for (int i = 0; i < hiddenSize; i++) {
+            data[index] = biasesHidden[i];
+            index++;
+        }
+        for (int i = 0; i < outputSize; i++) {
+            data[index] = biasesOutput[i];
+            index++;
+        }
+        return data;
+    }
+
     public void saveWeightsAndBiases(int generation, String name) {
-        // abcdefghijkl
-        //
-        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "l.csv");
+        // abcdefghijklmn
+        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "n.csv");
         try {
             CSVWriter writer = new CSVWriter(new FileWriter(f));
 
-            double[] data = new double[inputSize * hiddenSize + hiddenSize * outputSize + hiddenSize + outputSize];
-            int index = 0;
-            for (int i = 0; i < inputSize; i++) {
-                for (int j = 0; j < hiddenSize; j++) {
-                    data[index] = weightsInputHidden[i][j];
-                    index++;
-                }
-            }
-            for (int i = 0; i < hiddenSize; i++) {
-                for (int j = 0; j < outputSize; j++) {
-                    data[index] = weightsHiddenOutput[i][j];
-                    index++;
-                }
-            }
-            for (int i = 0; i < hiddenSize; i++) {
-                data[index] = biasesHidden[i];
-                index++;
-            }
-            for (int i = 0; i < outputSize; i++) {
-                data[index] = biasesOutput[i];
-                index++;
-            }
+            double[] data = getAllWeightsAndBiases();
             String[] sizes = new String[5];
             sizes[0] = String.valueOf(inputSize);
             sizes[1] = String.valueOf(hiddenSize);

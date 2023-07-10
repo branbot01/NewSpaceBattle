@@ -124,6 +124,15 @@ class Collisions {
             ((ResourceCollector) object2).unloading = false;
         }
 
+        if (object1 instanceof Ship && object2 instanceof Ship) {
+            if(object1.destinationFinder.enemies.contains(object2)) {
+                ((Ship) object1).colls += 500;
+            }
+            if(object2.destinationFinder.enemies.contains(object1)) {
+                ((Ship) object2).colls += 500;
+            }
+        }
+
         //To avoid objects colliding more than once
         while (Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY) <= object1.radius + object2.radius && object1.exists && object2.exists) {
             //System.out.println("collision detected");

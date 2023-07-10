@@ -15,7 +15,7 @@ class Ship extends GameObject {
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     float avoidanceRadius;
-    int fitness, dmgDone, missedShots;
+    int fitness, dmgDone, missedShots, colls, distanceAway, kills;
     boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
     Formation formation;
     Matrix arrow = new Matrix();
@@ -175,10 +175,6 @@ class Ship extends GameObject {
     }
 
     void calculateFitness() {
-        if (!exists) {
-            fitness = (dmgDone / 5) - 200 - 10 * missedShots;
-        } else {
-            fitness = (dmgDone / 5) - 10 * missedShots;
-        }
+        fitness = dmgDone * 100 - distanceAway;
     }
 }

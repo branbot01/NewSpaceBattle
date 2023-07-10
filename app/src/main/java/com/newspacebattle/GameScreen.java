@@ -8,16 +8,13 @@ import android.os.Environment;
 import android.view.View;
 
 import com.example.newspacebattle.R;
-import com.opencsv.CSVWriter;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -212,7 +209,7 @@ public class GameScreen extends View {
         File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
         if (files != null) {
             for (File file : files) {
-                if (Objects.equals(file.getName(), "fitness.txt")){
+                if (Objects.equals(file.getName(), "fitnessa.txt")){
                     fitness = file;
                 }
                 Matcher matcher = gen_regex.matcher(file.getName());
@@ -229,14 +226,14 @@ public class GameScreen extends View {
         }
         if (fitness == null){
             System.out.println("Fitness file not found, creating new one.");
-            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "fitness.txt");
+            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "fitnessa.txt");
         }
 
         geneticSetup();
         List<String[]> data = new ArrayList<>();
         for (int i = 0; i <= ships.size() - 1; i++) {
             if (generation == 0) {
-                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 3, 3);
+                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 2, 2);
             } else {
                 for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
                     Matcher matcher = gen_regex.matcher(file.getName());
@@ -1267,7 +1264,7 @@ public class GameScreen extends View {
                     }
                     followShips();
                     time += 16;
-                    if (time >= 100000) {
+                    if (time >= 30000) {
                         paused = true;
 
                         population.clear();
@@ -1275,15 +1272,36 @@ public class GameScreen extends View {
                         population.addAll(deadShips);
 
                         double avgFitness = 0;
+                        ArrayList<double[]> standardDeviations = new ArrayList<>();
                         for (int i = 0; i <= population.size() - 1; i++) {
                             population.get(i).calculateFitness();
                             avgFitness += population.get(i).fitness;
+                            standardDeviations.add(population.get(i).destinationFinder.attacker.getAllWeightsAndBiases());
                         }
                         avgFitness /= population.size();
 
+                        double[] averageWeightsAndBiases = new double[standardDeviations.get(0).length];
+                        for (int i = 0; i <= standardDeviations.size() - 1; i++) {
+                            for (int j = 0; j <= standardDeviations.get(i).length - 1; j++) {
+                                averageWeightsAndBiases[j] += standardDeviations.get(i)[j];
+                            }
+                        }
+                        for (int i = 0; i <= averageWeightsAndBiases.length - 1; i++) {
+                            averageWeightsAndBiases[i] /= standardDeviations.size();
+                        }
+
+                        double norm = 0;
+                        for (int i = 0; i <= standardDeviations.size() - 1; i++) {
+                            for (int j = 0; j <= standardDeviations.get(i).length - 1; j++) {
+                                standardDeviations.get(i)[j] = Math.sqrt(Math.pow(standardDeviations.get(i)[j] - averageWeightsAndBiases[j], 2) / population.size());
+                                norm += Math.pow(standardDeviations.get(i)[j], 2);
+                            }
+                        }
+                        norm = Math.sqrt(norm);
+
                         try {
                             FileOutputStream fileinput = new FileOutputStream(fitness, true);
-                            fileinput.write((generation + "," + avgFitness + "\n").getBytes());
+                            fileinput.write((generation + "," + avgFitness + "," + norm + "\n").getBytes());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

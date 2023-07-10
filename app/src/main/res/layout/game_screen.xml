@@ -5,7 +5,8 @@
     android:id="@+id/game_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:keepScreenOn="true">
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

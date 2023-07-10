@@ -130,7 +130,6 @@ public class Main extends AppCompatActivity {
         uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         rickRoll = MediaPlayer.create(this, R.raw.music);
 
@@ -219,6 +218,7 @@ public class Main extends AppCompatActivity {
                     mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleListener());
                     setContentView(gameScreen);
                     addContentView(gameView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                     collisions = new Collisions();
                     gameScreen.gameLoop();
                     UILoop();

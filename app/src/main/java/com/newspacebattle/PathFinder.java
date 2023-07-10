@@ -99,27 +99,48 @@ class PathFinder {
             @Override
             public void run() {
                 Looper.prepare();
+                int time = 0;
+                double[] inputs;
                 while (ship.attacking && ship.exists) {
-                    double[] inputs;
+                    Utilities.delay(10);
+                    double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
+                    if (distance > FlagShip.constRadius * 5 && ship.kills == 0){
+                        ship.distanceAway += 10;
+                    }
+                    if (time >= 500){
+                        time = 0;
+                    } else {
+                        time += 10;
+                        continue;
+                    }
+
                     try {
                         if (!enemies.get(0).exists) {
                             ship.attacking = false;
                             return;
                         }
                         double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
+                        if (Math.abs(angle - ship.degrees) <= 10) {
+                            ship.shoot();
+                        }
                         angle = angle / 360d;
+
                         inputs = new double[]{ship.degrees / 360d, angle};
                     } catch (Exception e) {
                         continue;
                     }
+
                     double[] reaction = attacker.forwardPropagation(inputs);
-                    if (reaction[0] >= 0) {
-                        ship.shoot();
+                    if (reaction[0] > 0.5) {
+                        ship.accelerationX = (float) (Math.cos(Math.toRadians(ship.degrees)) * ship.accelerate);
+                    } else {
+                        ship.accelerationX = (float) (Math.cos(Math.toRadians(ship.degrees)) * -ship.accelerate);
                     }
-                    double angle = Utilities.angleDim((float) reaction[1], (float) reaction[2]);
-                    ship.accelerationX = (float) (ship.accelerate * Math.cos(angle));
-                    ship.accelerationY = (float) (ship.accelerate * Math.sin(angle));
-                    Utilities.delay(500);
+                    if (reaction[1] > 0.5) {
+                        ship.accelerationY = (float) (Math.sin(Math.toRadians(ship.degrees)) * ship.accelerate);
+                    } else {
+                        ship.accelerationY = (float) (Math.sin(Math.toRadians(ship.degrees)) * -ship.accelerate);
+                    }
                 }
             }
         }).start();
