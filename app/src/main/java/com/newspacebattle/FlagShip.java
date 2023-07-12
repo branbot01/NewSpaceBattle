@@ -29,10 +29,10 @@ class FlagShip extends Ship {
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         mass = 11000;
-        health = 15000;
-        MAX_HEALTH = 15000;
+        health = 30000;
+        MAX_HEALTH = 30000;
         accelerate = 0.2f;
-        maxSpeed = accelerate * 75;
+        maxSpeed = accelerate * 100;
         MAX_SPEED = maxSpeed;
         preScaleX = 4;
         preScaleY = 4;
@@ -42,6 +42,8 @@ class FlagShip extends Ship {
         gun2 = new PointObject(0, 0);
         gun3 = new PointObject(0, 0);
         gun4 = new PointObject(0, 0);
+        shootTime = 1000;
+        driveTime = 1000;
     }
 
     //Updates the object's properties

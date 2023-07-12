@@ -100,7 +100,7 @@ class NeuralNetwork {
             for (int i = 0; i < inputSize; i++) {
                 sum += input[i] * weightsInputHidden[i][j];
             }
-            hiddenLayerOutput[j] = sigmoid(sum + biasesHidden[j]);
+            hiddenLayerOutput[j] = reLU(sum + biasesHidden[j]);
         }
 
         double[] outputLayerOutput = new double[outputSize];
@@ -227,8 +227,8 @@ class NeuralNetwork {
     }
 
     public void saveWeightsAndBiases(int generation, String name) {
-        // abcdefghijklmn
-        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "n.csv");
+        // abcdefghijklmno
+        File f = new File("/storage/emulated/0/Download/", "/ship" + name + "gen" + generation + "o.csv");
         try {
             CSVWriter writer = new CSVWriter(new FileWriter(f));
 

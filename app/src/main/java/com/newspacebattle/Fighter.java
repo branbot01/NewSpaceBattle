@@ -39,6 +39,8 @@ class Fighter extends Ship {
         bulletPower = 100;
         gun1 = new PointObject(0, 0);
         gun2 = new PointObject(0, 0);
+        shootTime = 650;
+        driveTime = 500;
     }
 
     //Updates the object's properties

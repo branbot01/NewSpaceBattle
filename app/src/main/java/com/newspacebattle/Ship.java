@@ -11,11 +11,12 @@ import android.view.animation.LinearInterpolator;
  */
 class Ship extends GameObject {
 
+    int shootTime, driveTime;
     float health, MAX_HEALTH;
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     float avoidanceRadius;
-    int fitness, dmgDone, missedShots, colls, distanceAway, kills;
+    int fitness, dmgDone, missedShots, kills, angleAway;
     boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
     Formation formation;
     Matrix arrow = new Matrix();
@@ -64,7 +65,7 @@ class Ship extends GameObject {
         if (health > 0) {
             return true;
         } else {
-            GameScreen.deadShips.add(this);
+            //GameScreen.deadShips.add(this);
             return false;
         }
     }
@@ -175,6 +176,6 @@ class Ship extends GameObject {
     }
 
     void calculateFitness() {
-        fitness = dmgDone * 100 - distanceAway;
+        fitness = dmgDone * 200 - angleAway;
     }
 }

@@ -31,7 +31,7 @@ class BattleShip extends Ship {
         health = 20000;
         MAX_HEALTH = 20000;
         accelerate = 0.175f;
-        maxSpeed = accelerate * 75;
+        maxSpeed = accelerate * 100;
         MAX_SPEED = maxSpeed;
         preScaleX = 3.5f;
         preScaleY = 3.5f;
@@ -42,6 +42,8 @@ class BattleShip extends Ship {
         gun2 = new PointObject(0, 0);
         missile1 = new PointObject(0, 0);
         missile2 = new PointObject(0, 0);
+        shootTime = 2000;
+        driveTime = 1000;
     }
 
     //Updates the object's properties

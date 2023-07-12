@@ -4,7 +4,6 @@ import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by Dylan on 2018-09-16. Defines the brain behind how a ship moves.
@@ -54,7 +53,12 @@ class PathFinder {
             return;
         }
         ship.attacking = true;
-        startAttacker();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startAttacker();
+            }
+        }).start();
     }
 
     void autoAttack() {
@@ -66,14 +70,24 @@ class PathFinder {
                     if (!ship.attacking) {
                         double closestDistance = 1000000000;
                         int closestIndex = -1;
+                        boolean isShip = false;
                         for (int i = 0; i < GameScreen.ships.size(); i++) {
-                            if (GameScreen.ships.get(i).team != ship.team) {
-                                double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
-                                if (distance < closestDistance) {
-                                    closestDistance = distance;
-                                    closestIndex = i;
+                            try {
+                                if (GameScreen.ships.get(i).team != ship.team) {
+                                    isShip = true;
+                                    double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
+                                    if (distance < closestDistance) {
+                                        closestDistance = distance;
+                                        closestIndex = i;
+                                    }
                                 }
+                            } catch (Exception e) {
+                                System.out.println("Error: " + e);
                             }
+                        }
+                        if (!isShip) {
+                            ship.stop();
+                            break;
                         }
                         if (closestIndex != -1) {
                             stopFinder();
@@ -82,7 +96,6 @@ class PathFinder {
                             startAttacker();
                         }
                     }
-                    Utilities.delay(500);
                 }
             }
         }).start();
@@ -95,55 +108,84 @@ class PathFinder {
     }
 
     private void startAttacker() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                int time = 0;
-                double[] inputs;
-                while (ship.attacking && ship.exists) {
-                    Utilities.delay(10);
-                    double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
-                    if (distance > FlagShip.constRadius * 5 && ship.kills == 0){
-                        ship.distanceAway += 10;
-                    }
-                    if (time >= 500){
-                        time = 0;
-                    } else {
-                        time += 10;
-                        continue;
-                    }
+        int driveTime = 0;
+        int shootTime = 0;
 
-                    try {
-                        if (!enemies.get(0).exists) {
-                            ship.attacking = false;
-                            return;
+        while (ship.attacking && ship.exists) {
+            Utilities.delay(10);
+            if (ship.selected) {
+                System.out.println(ship);
+            }
+
+            try {
+                if (!enemies.get(0).exists) {
+                    ship.attacking = false;
+                    return;
+                }
+                double enemyAngle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
+                boolean turn = false;
+                for (int i = 0; i < GameScreen.objects.size(); i++) {
+                    GameObject obj = GameScreen.objects.get(i);
+                    if (obj != ship && obj.exists) {
+                        double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
+                        double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
+                        double extraRadius = 0;
+                        if (obj.team != ship.team) {
+                            if (ship instanceof BattleShip || ship instanceof Bomber) {
+                                if (shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                                    ship.shoot();
+                                    shootTime = 0;
+                                }
+                            } else {
+                                if (Math.abs(angle - ship.degrees) <= 10 && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                                    ship.shoot();
+                                    shootTime = 0;
+                                }
+                            }
+
+                            if (ship instanceof FlagShip || ship instanceof BattleShip || ship instanceof LaserCruiser){
+                                if (!(obj instanceof FlagShip || obj instanceof BattleShip || obj instanceof LaserCruiser)){
+                                    extraRadius = -ship.avoidanceRadius;
+                                }
+                            }
+                        } else {
+                            if (!(obj instanceof FlagShip || obj instanceof BattleShip || obj instanceof LaserCruiser)){
+                                extraRadius = -ship.avoidanceRadius / 3;
+                            }
                         }
-                        double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY);
-                        if (Math.abs(angle - ship.degrees) <= 10) {
-                            ship.shoot();
+                        if (distance < ship.avoidanceRadius + extraRadius) {
+                            if (angle - ship.degrees >= 180)
+                                enemyAngle -= 160;
+                            else if (angle - ship.degrees < 180)
+                                enemyAngle += 160;
                         }
-                        angle = angle / 360d;
-
-                        inputs = new double[]{ship.degrees / 360d, angle};
-                    } catch (Exception e) {
-                        continue;
-                    }
-
-                    double[] reaction = attacker.forwardPropagation(inputs);
-                    if (reaction[0] > 0.5) {
-                        ship.accelerationX = (float) (Math.cos(Math.toRadians(ship.degrees)) * ship.accelerate);
-                    } else {
-                        ship.accelerationX = (float) (Math.cos(Math.toRadians(ship.degrees)) * -ship.accelerate);
-                    }
-                    if (reaction[1] > 0.5) {
-                        ship.accelerationY = (float) (Math.sin(Math.toRadians(ship.degrees)) * ship.accelerate);
-                    } else {
-                        ship.accelerationY = (float) (Math.sin(Math.toRadians(ship.degrees)) * -ship.accelerate);
                     }
                 }
+
+                if (Math.abs(ship.degrees - enemyAngle) > 5) {
+                    if (driveTime >= ship.driveTime) {
+                        driveTime = 0;
+                        int turnAngle = 100;
+                        if (ship instanceof FlagShip || ship instanceof BattleShip || ship instanceof LaserCruiser) {
+                            turnAngle = 160;
+                        }
+                        if (ship.degrees <= enemyAngle) {
+                            turnAngle = -turnAngle;
+                        }
+
+                        ship.accelerationX = ship.accelerate * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
+                        ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
+                    }
+                } else {
+                    ship.accelerationX = ship.accelerate * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees, ship.centerPosY, ship.radius)) * Math.PI / 180);
+                    ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees, ship.centerPosY, ship.radius)) * Math.PI / 180);
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
             }
-        }).start();
+            driveTime += 10;
+            shootTime += 10;
+        }
     }
 
     //Starts the pathfinding process
@@ -310,15 +352,15 @@ class PathFinder {
         double requiredAngle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y);
         if (Math.abs(ship.degrees - requiredAngle) > 5) {
             int turnAngle = 160;
-            if (ship.degrees - requiredAngle <= 0) {
-                turnAngle *= -1;
+            if (ship.degrees < requiredAngle) {
+                turnAngle = -turnAngle;
             }
 
             ship.accelerationX = ship.accelerate / 1.5f * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
             ship.accelerationY = ship.accelerate / 1.5f * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
         } else {
-            ship.accelerationX = ship.accelerate * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y) * Math.PI / 180);
-            ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y) * Math.PI / 180);
+            ship.accelerationX = ship.accelerate * (float) Math.sin(requiredAngle * Math.PI / 180);
+            ship.accelerationY = ship.accelerate * (float) Math.cos(requiredAngle * Math.PI / 180);
         }
     }
 }

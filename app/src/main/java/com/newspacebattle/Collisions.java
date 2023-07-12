@@ -11,14 +11,16 @@ class Collisions {
                 if (!GameScreen.paused) {
                     detectCollision();
                 }
+                Utilities.delay(1);
             }
         }).start();
 
-        /*new Thread(() -> {
+        new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
                     checkObjectBoundariesX();
                 }
+                Utilities.delay(1);
             }
         }).start();
 
@@ -27,24 +29,56 @@ class Collisions {
                 if (!GameScreen.paused) {
                     checkObjectBoundariesY();
                 }
+                Utilities.delay(1);
             }
         }).start();
 
         new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
-                    checkBulletBoundaries();
+                    if (GameScreen.bullets.size() > 0) {
+                        checkBulletBoundaries();
+                    }
+                    if (GameScreen.missiles.size() > 0) {
+                        checkMissileBoundaries();
+                    }
+                    if (GameScreen.lasers.size() > 0) {
+                        checkLaserBoundaries();
+                    }
                 }
+                Utilities.delay(1000);
             }
-        }).start();*/
+        }).start();
 
-        for (int i = 0; i <= GameScreen.bullets.size(); i += 500) {
-            int temp_i = i;
+        if (GameScreen.bullets.size() > 0) {
             new Thread(() -> {
                 while (true) {
                     if (!GameScreen.paused) {
-                        bulletCollision(temp_i, temp_i + 500);
+                        bulletCollision(0, GameScreen.bullets.size());
                     }
+                    Utilities.delay(1);
+                }
+            }).start();
+        }
+
+        if (GameScreen.missiles.size() > 0) {
+            new Thread(() -> {
+                while (true) {
+                    if (!GameScreen.paused) {
+                        missileCollision(0, GameScreen.missiles.size());
+                    }
+                    Utilities.delay(5);
+                }
+            }).start();
+        }
+
+        if (GameScreen.lasers.size() > 0) {
+            new Thread(() -> {
+                while (true) {
+                    if (!GameScreen.paused) {
+                        laserCollision(0, GameScreen.lasers.size());
+                    }
+                    Utilities.delay(5);
                 }
             }).start();
         }
@@ -61,7 +95,7 @@ class Collisions {
         m1 = object1.mass;
         v1ix = object1.velocityX + object1.gravVelX;
         v1iy = object1.velocityY + object1.gravVelY;
-        if (object1 instanceof Bullet || object1 instanceof Missile) {
+        if (object1 instanceof Bullet || object1 instanceof Missile || object1 instanceof Laser) {
             v1ix /= 30;
             v1iy /= 30;
         }
@@ -69,12 +103,10 @@ class Collisions {
         m2 = object2.mass;
         v2ix = object2.velocityX + object2.gravVelX;
         v2iy = object2.velocityY + object2.gravVelY;
-        if (object2 instanceof Bullet || object2 instanceof Missile) {
+        if (object2 instanceof Bullet || object2 instanceof Missile || object2 instanceof Laser) {
             v2ix /= 30;
             v2iy /= 30;
         }
-
-        //float contactAngle = (float) Utilities.anglePoints(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY);
 
         v2fx = (v2ix * (m2 - m1) + 2 * m1 * v1ix) / (m1 + m2);
         v1fx = (v1ix * (m1 - m2) + 2 * m2 * v2ix) / (m1 + m2);
@@ -82,18 +114,10 @@ class Collisions {
         v2fy = (v2iy * (m2 - m1) + 2 * m1 * v1iy) / (m1 + m2);
         v1fy = (v1iy * (m1 - m2) + 2 * m2 * v2iy) / (m1 + m2);
 
-//        v1fx = (float) (((v1ix * Math.cos(Utilities.angleDim(v1ix, v1iy) - contactAngle) * (m1 - m2) + 2 * m2 * v2ix * Math.cos(Utilities.angleDim(v2ix, v2iy) - contactAngle)) / (m1 + m2)) * Math.cos(contactAngle) + v1ix * Math.sin(Utilities.angleDim(v1ix, v1iy) - contactAngle) * Math.cos(contactAngle + 90));
-//        v2fx = (float) (((v2ix * Math.cos(Utilities.angleDim(v2ix, v2iy) - contactAngle) * (m2 - m1) + 2 * m1 * v1ix * Math.cos(Utilities.angleDim(v1ix, v1iy) - contactAngle)) / (m2 + m1)) * Math.cos(contactAngle) + v2ix * Math.sin(Utilities.angleDim(v2ix, v2iy) - contactAngle) * Math.cos(contactAngle + 90));
-//
-//        v1fy = (float) (((v1ix * Math.cos(Utilities.angleDim(v1ix, v1iy) - contactAngle) * (m1 - m2) + 2 * m2 * v2ix * Math.cos(Utilities.angleDim(v2ix, v2iy) - contactAngle)) / (m1 + m2)) * Math.sin(contactAngle) + v1ix * Math.sin(Utilities.angleDim(v1ix, v1iy) - contactAngle) * Math.sin(contactAngle + 90));
-//        v2fy = (float) (((v2ix * Math.cos(Utilities.angleDim(v2ix, v2iy) - contactAngle) * (m2 - m1) + 2 * m1 * v1ix * Math.cos(Utilities.angleDim(v1ix, v1iy) - contactAngle)) / (m2 + m1)) * Math.sin(contactAngle) + v2ix * Math.sin(Utilities.angleDim(v2ix, v2iy) - contactAngle) * Math.sin(contactAngle + 90));
-
-        //System.out.println(contactAngle);
-        //System.out.println(v1fx + ", " + v1fy);
-        //System.out.println(v2fx + ", " + v2fy);
-
-        object1.velocityX = v1fx;
-        object1.velocityY = v1fy;
+        if (!object1.colliding) {
+            object1.velocityX = v1fx;
+            object1.velocityY = v1fy;
+        }
         if (object1 instanceof Bullet) {
             ((Bullet) object1).impact(object2);
         } else if (object1 instanceof Missile) {
@@ -108,8 +132,10 @@ class Collisions {
             ((ResourceCollector) object1).unloading = false;
         }
 
-        object2.velocityX = v2fx;
-        object2.velocityY = v2fy;
+        if (!object2.colliding) {
+            object2.velocityX = v2fx;
+            object2.velocityY = v2fy;
+        }
         if (object2 instanceof Bullet) {
             ((Bullet) object2).impact(object1);
         } else if (object2 instanceof Missile) {
@@ -124,19 +150,8 @@ class Collisions {
             ((ResourceCollector) object2).unloading = false;
         }
 
-        if (object1 instanceof Ship && object2 instanceof Ship) {
-            if(object1.destinationFinder.enemies.contains(object2)) {
-                ((Ship) object1).colls += 500;
-            }
-            if(object2.destinationFinder.enemies.contains(object1)) {
-                ((Ship) object2).colls += 500;
-            }
-        }
-
-        //To avoid objects colliding more than once
-        while (Utilities.distanceFormula(object1.centerPosX, object1.centerPosY, object2.centerPosX, object2.centerPosY) <= object1.radius + object2.radius && object1.exists && object2.exists) {
-            //System.out.println("collision detected");
-        }
+        object1.colliding = true;
+        object2.colliding = true;
     }
 
     //Checks that no object has gone outside of the map
@@ -227,13 +242,22 @@ class Collisions {
     //Runs through all objects to see if they collide
     private void detectCollision() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
+            boolean isColliding = false;
             for (int ii = 0; ii <= GameScreen.objects.size() - 1; ii++) {
                 try {
                     if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, GameScreen.objects.get(ii).centerPosX, GameScreen.objects.get(ii).centerPosY) <= GameScreen.objects.get(i).radius + GameScreen.objects.get(ii).radius && i != ii) {
+                        isColliding = true;
                         collisionEvent(GameScreen.objects.get(i), GameScreen.objects.get(ii));
                     }
                 } catch (IndexOutOfBoundsException | NullPointerException e) {
                     break;
+                }
+            }
+            if (!isColliding) {
+                try {
+                    GameScreen.objects.get(i).colliding = false;
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("Error in detectCollision");
                 }
             }
         }
@@ -257,9 +281,9 @@ class Collisions {
     }
 
     //Runs through all missiles to see if they collide with any objects
-    private void missileCollision() {
+    private void missileCollision(int start, int end) {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
-            for (int ii = 0; ii <= GameScreen.missiles.size() - 1; ii++) {
+            for (int ii = start; ii < end; ii++) {
                 try {
                     if (GameScreen.missiles.get(ii).exists && GameScreen.missiles.get(ii).team != GameScreen.objects.get(i).team) {
                         if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, GameScreen.missiles.get(ii).centerPosX, GameScreen.missiles.get(ii).centerPosY) <= GameScreen.objects.get(i).radius + GameScreen.missiles.get(ii).radius) {
@@ -273,10 +297,10 @@ class Collisions {
         }
     }
 
-    //Runs through all missiles to see if they collide with any objects
-    private void laserCollision() {
+    //Runs through all lasers to see if they collide with any objects
+    private void laserCollision(int start, int end) {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
-            for (int ii = 0; ii <= GameScreen.lasers.size() - 1; ii++) {
+            for (int ii = start; ii < end; ii++) {
                 try {
                     if (GameScreen.lasers.get(ii).exists && GameScreen.lasers.get(ii).team != GameScreen.objects.get(i).team) {
                         if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, GameScreen.lasers.get(ii).centerPosX, GameScreen.lasers.get(ii).centerPosY) <= GameScreen.objects.get(i).radius + GameScreen.lasers.get(ii).radius) {

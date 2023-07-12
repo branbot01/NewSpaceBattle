@@ -40,9 +40,11 @@ class LaserCruiser extends Ship {
         preScaleX = 1.75f;
         preScaleY = 1.75f;
         dockable = false;
-        laserPower = 150; //to be changed
+        laserPower = 400; //to be changed
         laser1 = new PointObject(0, 0);
         laser2 = new PointObject(0, 0);
+        shootTime = 2500;
+        driveTime = 1000;
     }
 
     //Updates the object's properties
