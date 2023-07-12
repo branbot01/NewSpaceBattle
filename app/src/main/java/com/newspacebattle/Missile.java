@@ -43,7 +43,7 @@ class Missile extends GameObject {
         positionY = y - midY;
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
-        timeLeft = 10000;
+        timeLeft = 7500;
         followingShip = false;
         delay.postDelayed(new Runnable() {
             @Override

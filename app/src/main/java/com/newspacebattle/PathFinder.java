@@ -113,9 +113,6 @@ class PathFinder {
 
         while (ship.attacking && ship.exists) {
             Utilities.delay(10);
-            if (ship.selected) {
-                System.out.println(ship);
-            }
 
             try {
                 if (!enemies.get(0).exists) {
