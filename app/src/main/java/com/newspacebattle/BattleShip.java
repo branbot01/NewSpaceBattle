@@ -36,7 +36,7 @@ class BattleShip extends Ship {
         preScaleX = 3.5f;
         preScaleY = 3.5f;
         dockable = false;
-        bulletPower = 50;
+        bulletPower = 150;
         missilePower = 300;
         gun1 = new PointObject(0, 0);
         gun2 = new PointObject(0, 0);

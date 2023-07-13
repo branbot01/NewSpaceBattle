@@ -31,7 +31,7 @@ class Bomber extends Ship {
         health = 3000;
         MAX_HEALTH = 3000;
         accelerate = 0.4f;
-        maxSpeed = accelerate * 75;
+        maxSpeed = accelerate * 100;
         MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;

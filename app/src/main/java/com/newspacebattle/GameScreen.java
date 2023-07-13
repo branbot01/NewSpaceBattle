@@ -78,7 +78,7 @@ public class GameScreen extends View {
     static Bitmap bitLaser, bitLaser2;
     static Bitmap[] bitExplosionLow = new Bitmap[26];
 
-    static Paint green = new Paint(), red = new Paint(), yellow = new Paint(), blue = new Paint();
+    static Paint green = new Paint(), red = new Paint(), yellow = new Paint(), blue = new Paint(), white = new Paint();
 
     //Initiates the game
     public GameScreen(Context context) {
@@ -147,8 +147,8 @@ public class GameScreen extends View {
         });
         bitLoader.start();
 
-        offsetX = 0 - Main.screenX / 2;
-        offsetY = 0 - Main.screenY / 2;
+        offsetX = -Main.screenX / 2;
+        offsetY = -Main.screenY / 2;
         //offsetX = -227;
         //offsetY = -12554;
 
@@ -194,6 +194,10 @@ public class GameScreen extends View {
         blue.setStrokeWidth(20);
         blue.setAntiAlias(true);
 
+        white.setColor(Color.WHITE);
+        white.setStrokeWidth(20);
+        white.setAntiAlias(true);
+
         /*generation = 0;
         String fitnessFile = "fitnessc.txt";
         String gen_pattern = "gen(\\d+)";
@@ -224,7 +228,7 @@ public class GameScreen extends View {
             fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fitnessFile);
         }*/
 
-        geneticSetup();
+        generateMap();
         /*List<String[]> data = new ArrayList<>();
         for (int i = 0; i <= ships.size() - 1; i++) {
             if (generation == 0) {
@@ -273,6 +277,7 @@ public class GameScreen extends View {
         for (int i = 0; i <= ships.size() - 1; i++) {
             ships.get(i).destinationFinder.autoAttack();
         }
+
         try {
             bitLoader.join();
         } catch (InterruptedException e) {
@@ -496,91 +501,6 @@ public class GameScreen extends View {
         }
     }
 
-    //Generates ships randomly around the map
-    public static void generateMap() {
-        //blackHole.add(new BlackHole(0, 0));
-
-        final int flagShipNum = 0;
-        final int resCollectorsNum = 100;
-        final int fighterNum = 100;
-        final int battleShipNum = 0;
-        final int bomberNum = 100;
-        final int scoutNum = 100;
-        final int laserCruiserNum = 0;
-        final int spaceStationNum = 200;
-        final int bulletNum = 500;
-        final int explosionNum = 500;
-        final int missileNum = 250;
-        final int laserNum = 500;
-
-        generateStars(3000);
-        generateAsteroids(80, 5);
-
-        do {
-            resourceCollectors.clear();
-            for (int i = 0; i <= resCollectorsNum - 1; i++) {
-                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
-            }
-
-            flagShips.clear();
-            for (int i = 0; i <= flagShipNum - 1; i++) {
-                flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
-            }
-
-            fighters.clear();
-            for (int i = 0; i <= fighterNum - 1; i++) {
-                fighters.add(new Fighter((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            battleShips.clear();
-            for (int i = 0; i <= battleShipNum - 1; i++) {
-                battleShips.add(new BattleShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            bombers.clear();
-            for (int i = 0; i <= bomberNum - 1; i++) {
-                bombers.add(new Bomber((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            scouts.clear();
-            for (int i = 0; i <= scoutNum - 1; i++) {
-                scouts.add(new Scout((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            laserCruisers.clear();
-            for (int i = 0; i <= laserCruiserNum - 1; i++) {
-                laserCruisers.add(new LaserCruiser((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            spaceStations.clear();
-            for (int i = 0; i <= spaceStationNum - 1; i++) {
-                spaceStations.add(new SpaceStation((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
-            }
-
-            bullets.clear();
-            for (int i = 0; i <= bulletNum - 1; i++) {
-                bullets.add(new Bullet());
-            }
-
-            missiles.clear();
-            for (int i = 0; i <= missileNum - 1; i++) {
-                missiles.add(new Missile());
-            }
-
-            lasers.clear();
-            for (int i = 0; i <= laserNum - 1; i++) {
-                lasers.add(new Laser());
-            }
-
-            explosions.clear();
-            for (int i = 0; i <= explosionNum - 1; i++) {
-                explosions.add(new Explosion());
-            }
-
-            placeShips();
-        } while (doShipsCollide());
-    }
-
     //Generates ships in a standoff way
     public static void generateFaceoff() {
         blackHole.add(new BlackHole(0, 0));
@@ -663,20 +583,21 @@ public class GameScreen extends View {
         placeShips();
     }
 
-    public static void geneticSetup() {
+    //Generates ships randomly around the map
+    public static void generateMap() {
         //blackHole.add(new BlackHole(0, 0));
         final int flagShipNum = 4;
         final int resCollectorsNum = 0;
-        final int fighterNum = 50;
-        final int battleShipNum = 4;
-        final int bomberNum = 20;
+        final int fighterNum = 100;
+        final int battleShipNum = 8;
+        final int bomberNum = 30;
         final int scoutNum = 0;
         final int laserCruiserNum = 10;
         final int spaceStationNum = 0;
-        int bulletNum = 1000;
+        int bulletNum = 500;
         int explosionNum = 500;
-        final int missileNum = 500;
-        final int laserNum = 100;
+        final int missileNum = 200;
+        final int laserNum = 50;
 
         generateStars(0);
         generateAsteroids(0, 5);
@@ -684,7 +605,7 @@ public class GameScreen extends View {
         do {
             resourceCollectors.clear();
             for (int i = 0; i <= resCollectorsNum - 1; i++) {
-                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, 1));
+                resourceCollectors.add(new ResourceCollector((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, i % 2 + 1));
             }
 
             flagShips.clear();
@@ -709,7 +630,7 @@ public class GameScreen extends View {
 
             scouts.clear();
             for (int i = 0; i <= scoutNum - 1; i++) {
-                scouts.add(new Scout((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+                scouts.add(new Scout((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, i % 2 + 1));
             }
 
             laserCruisers.clear();
@@ -719,7 +640,7 @@ public class GameScreen extends View {
 
             spaceStations.clear();
             for (int i = 0; i <= spaceStationNum - 1; i++) {
-                spaceStations.add(new SpaceStation((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, (int) (Math.random() * 2 + 1)));
+                spaceStations.add(new SpaceStation((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY - mapSizeY / 48)) - mapSizeY / 2, i % 2 + 1));
             }
 
             bullets.clear();
@@ -769,6 +690,10 @@ public class GameScreen extends View {
             canvas.drawLine(-Main.screenX / 2, -Main.screenY / 2, -Main.screenX / 2, Main.screenY / 2, red);
             canvas.drawLine(Main.screenX / 2, -Main.screenY / 2, Main.screenX / 2, Main.screenY / 2, red);
             canvas.drawLine(-Main.screenX / 2, Main.screenY / 2, Main.screenX / 2, Main.screenY / 2, red);
+
+            GameScreen.midPointX = (Main.screenX / 2 + GameScreen.offsetX) / GameScreen.scaleX;
+            GameScreen.midPointY = (Main.screenY / 2 + GameScreen.offsetY) / GameScreen.scaleY;
+            canvas.drawCircle((float) (Main.screenX * ((GameScreen.midPointX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2), (float) (Main.screenY * ((GameScreen.midPointY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2), 10, white);
 
             for (int i = 0; i <= blackHole.size() - 1; i++) {
                 canvas.drawCircle(Main.screenX * ((blackHole.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((blackHole.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 20, blue);
@@ -935,13 +860,13 @@ public class GameScreen extends View {
                     canvas.drawRect(flagShips.get(i).positionX, flagShips.get(i).positionY - flagShips.get(i).radius / 5, flagShips.get(i).positionX + flagShips.get(i).radius * 2, flagShips.get(i).positionY - flagShips.get(i).radius / 4, red);
                     canvas.drawRect(flagShips.get(i).positionX, flagShips.get(i).positionY - flagShips.get(i).radius / 5, flagShips.get(i).positionX + (flagShips.get(i).radius * 2 * health), flagShips.get(i).positionY - flagShips.get(i).radius / 4, green);
 
-                    if(flagShips.get(i).attacking && flagShips.get(i).destinationFinder.enemies.size() > 0){
+                    if (flagShips.get(i).attacking && flagShips.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.enemies.get(0).centerPosX, flagShips.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
                 }
                 if (flagShips.get(i).team == 1) {
                     canvas.drawBitmap(bitFlagShip, flagShips.get(i).appearance, null);
-                } else  {
+                } else {
                     canvas.drawBitmap(enFlagShip1, flagShips.get(i).appearance, null);
                 }
             }
@@ -989,7 +914,7 @@ public class GameScreen extends View {
                     canvas.drawRect(fighters.get(i).positionX, fighters.get(i).positionY - fighters.get(i).radius / 5.5f, fighters.get(i).positionX + fighters.get(i).radius * 2, fighters.get(i).positionY - fighters.get(i).radius / 3.5f, red);
                     canvas.drawRect(fighters.get(i).positionX, fighters.get(i).positionY - fighters.get(i).radius / 5.5f, fighters.get(i).positionX + fighters.get(i).radius * 2 * health, fighters.get(i).positionY - fighters.get(i).radius / 3.5f, green);
 
-                    if(fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0){
+                    if (fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.enemies.get(0).centerPosX, fighters.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
                 }
@@ -1014,7 +939,7 @@ public class GameScreen extends View {
                     canvas.drawRect(battleShips.get(i).positionX, battleShips.get(i).positionY - battleShips.get(i).radius / 4, battleShips.get(i).positionX + battleShips.get(i).radius * 2, battleShips.get(i).positionY - battleShips.get(i).radius / 3.75f, red);
                     canvas.drawRect(battleShips.get(i).positionX, battleShips.get(i).positionY - battleShips.get(i).radius / 4, battleShips.get(i).positionX + battleShips.get(i).radius * 2 * health, battleShips.get(i).positionY - battleShips.get(i).radius / 3.75f, green);
 
-                    if(battleShips.get(i).attacking && battleShips.get(i).destinationFinder.enemies.size() > 0){
+                    if (battleShips.get(i).attacking && battleShips.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).destinationFinder.enemies.get(0).centerPosX, battleShips.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
                 }
@@ -1039,7 +964,7 @@ public class GameScreen extends View {
                     canvas.drawRect(bombers.get(i).positionX, bombers.get(i).positionY - bombers.get(i).radius / 4, bombers.get(i).positionX + bombers.get(i).radius * 2, bombers.get(i).positionY - bombers.get(i).radius / 3, red);
                     canvas.drawRect(bombers.get(i).positionX, bombers.get(i).positionY - bombers.get(i).radius / 4, bombers.get(i).positionX + bombers.get(i).radius * 2 * health, bombers.get(i).positionY - bombers.get(i).radius / 3, green);
 
-                    if(bombers.get(i).attacking && bombers.get(i).destinationFinder.enemies.size() > 0){
+                    if (bombers.get(i).attacking && bombers.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).destinationFinder.enemies.get(0).centerPosX, bombers.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
                 }
@@ -1085,7 +1010,7 @@ public class GameScreen extends View {
                     canvas.drawRect(laserCruisers.get(i).positionX, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 4, laserCruisers.get(i).positionX + laserCruisers.get(i).radius * 2, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 3, red);
                     canvas.drawRect(laserCruisers.get(i).positionX, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 4, laserCruisers.get(i).positionX + laserCruisers.get(i).radius * 2 * health, laserCruisers.get(i).positionY - laserCruisers.get(i).radius / 3, green);
 
-                    if(laserCruisers.get(i).attacking && laserCruisers.get(i).destinationFinder.enemies.size() > 0){
+                    if (laserCruisers.get(i).attacking && laserCruisers.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).destinationFinder.enemies.get(0).centerPosX, laserCruisers.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
                 }

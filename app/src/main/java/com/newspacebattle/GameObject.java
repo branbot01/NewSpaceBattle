@@ -1,5 +1,6 @@
 package com.newspacebattle;
 
+import android.animation.ValueAnimator;
 import android.graphics.Matrix;
 
 /**
@@ -31,14 +32,12 @@ class GameObject {
 
     //Method used to update position if the object has velocity
     void move() {
-        float previousVelocityX = velocityX;
-        float previousVelocityY = velocityY;
-        velocityX += accelerationX;
-        velocityY += accelerationY;
-
-        if (Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) >= maxSpeed && Math.abs(velocityX) > Math.abs(previousVelocityX) && Math.abs(velocityY) > Math.abs(previousVelocityY)) {
-            velocityX -= accelerationX;
-            velocityY -= accelerationY;
+        if (Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) <= maxSpeed){
+            velocityX += accelerationX;
+            velocityY += accelerationY;
+        } else {
+            velocityX -= velocityX / 150;
+            velocityY -= velocityY / 150;
         }
 
         positionY -= velocityY;
