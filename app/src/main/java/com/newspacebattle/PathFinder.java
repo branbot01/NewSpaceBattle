@@ -114,7 +114,7 @@ class PathFinder {
     private void startAttacker() {
         while (ship.exists && ship.attacking) {
             try {
-                if (!enemies.get(0).exists){// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
+                if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
                     ship.attacking = false;
                     return;
                 }
@@ -188,13 +188,17 @@ class PathFinder {
             double addedDistance = 0;
 
             if (ship.attacking && obj.team != ship.team) {
+                double shootDegree = 10;
+                if (obj instanceof SpaceStation || obj instanceof BattleShip || obj instanceof FlagShip) {
+                    shootDegree = 20;
+                }
                 if (ship instanceof BattleShip || ship instanceof Bomber) {
                     if (shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
                         ship.shoot();
                         shootTime = 0;
                     }
                 } else {
-                    if (Math.abs(angle - ship.degrees) <= 10 && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                    if (Math.abs(angle - ship.degrees) <= shootDegree && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
                         ship.shoot();
                         shootTime = 0;
                     }
@@ -336,29 +340,31 @@ class PathFinder {
     //Sets the acceleration of the ship
     private void driveShip(double x, double y) {
         double requiredAngle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, x, y);
-        double newShipAngle = ship.degrees;
-        if (requiredAngle >= 355 && newShipAngle <= 5) {
-            requiredAngle -= 360;
-        } else if (newShipAngle >= 355 && requiredAngle <= 5) {
-            newShipAngle -= 360;
-        }
-        if (Math.abs(newShipAngle - requiredAngle) > 5) {
+
+        if (Math.abs(ship.degrees - requiredAngle) > 5) {
             int turnAngle = 160;
-            if (ship.attacking && !(ship instanceof FlagShip || ship instanceof BattleShip || ship instanceof LaserCruiser)){
+            if (ship.attacking && !(ship instanceof FlagShip || ship instanceof BattleShip || ship instanceof LaserCruiser)) {
                 turnAngle = 100;
             }
-            if (newShipAngle < requiredAngle) {
-                turnAngle = -turnAngle;
+
+            double requiredPointX = Utilities.circleAngleX(requiredAngle, ship.centerPosX, ship.radius);
+            double requiredPointY = Utilities.circleAngleY(requiredAngle, ship.centerPosY, ship.radius);
+            double point1X = Utilities.circleAngleX(ship.degrees + 100, ship.centerPosX, ship.radius);
+            double point1Y = Utilities.circleAngleY(ship.degrees + 100, ship.centerPosY, ship.radius);
+            double point2X = Utilities.circleAngleX(ship.degrees - 100, ship.centerPosX, ship.radius);
+            double point2Y = Utilities.circleAngleY(ship.degrees - 100, ship.centerPosY, ship.radius);
+
+            if (Utilities.distanceFormula(point1X, point1Y, requiredPointX, requiredPointY) < Utilities.distanceFormula(point2X, point2Y, requiredPointX, requiredPointY)) {
+                turnAngle *= -1;
             }
+
             float turnConstant = 1.5f;
-            if (ship.attacking){
+            if (ship.attacking) {
                 turnConstant = 1;
             }
-            ship.accelerationX = ship.accelerate / turnConstant * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(newShipAngle - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(newShipAngle - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
-            ship.accelerationY = ship.accelerate / turnConstant * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(newShipAngle - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(newShipAngle - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
-        } else {
-            ship.accelerationX = ship.accelerate * (float) Math.sin(requiredAngle * Math.PI / 180);
-            ship.accelerationY = ship.accelerate * (float) Math.cos(requiredAngle * Math.PI / 180);
+
+            ship.accelerationX = ship.accelerate / turnConstant * (float) Math.sin(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
+            ship.accelerationY = ship.accelerate / turnConstant * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, Utilities.circleAngleX(ship.degrees - turnAngle, ship.centerPosX, ship.radius), Utilities.circleAngleY(ship.degrees - turnAngle, ship.centerPosY, ship.radius)) * Math.PI / 180);
         }
     }
 }
