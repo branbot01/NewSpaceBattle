@@ -55,7 +55,6 @@ class PathFinder {
         if (this.enemies.size() == 0) {
             return;
         }
-        ship.attacking = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -94,7 +93,6 @@ class PathFinder {
                         }
                         if (closestIndex != -1) {
                             stopFinder();
-                            ship.attacking = true;
                             enemies.add(GameScreen.ships.get(closestIndex));
                             startAttacker();
                         }
@@ -112,6 +110,10 @@ class PathFinder {
     }
 
     private void startAttacker() {
+        if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
+            return;
+        }
+        ship.attacking = true;
         while (ship.exists && ship.attacking) {
             try {
                 if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
