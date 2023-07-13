@@ -1050,9 +1050,9 @@ public class GameScreen extends View {
         }
 
         for (int i = 0; i < formationsTeam1.size(); i++) {
-            for (int j = 0; j < formationsTeam1.get(i).points.size(); j++) {
-                if (formationsTeam1.get(i).points != null) {
-                    canvas.drawCircle((float) formationsTeam1.get(i).points.get(j).x, (float) formationsTeam1.get(i).points.get(j).y, 50, green);
+            for (int j = 0; j < formationsTeam1.get(i).globalCoordinates.size(); j++) {
+                if (formationsTeam1.get(i).globalCoordinates != null) {
+                    canvas.drawCircle((float) formationsTeam1.get(i).globalCoordinates.get(j).x, (float) formationsTeam1.get(i).globalCoordinates.get(j).y, 50, green);
                 }
             }
             canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);

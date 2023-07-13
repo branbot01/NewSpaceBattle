@@ -49,6 +49,9 @@ class Formation {
     //update's the formation's properties
     void update() {
         resetCenter();
+        if(direction != 0) {
+            getPositions();
+        }
         updatePositions();
     }
 
@@ -67,16 +70,16 @@ class Formation {
     //get position of ships relative to formation's centre of mass (in n-t coordinates)
     void getPositions() {
         for(int i = 0; i < formationShips.size(); i++) {
-            relativeCoordinates.get(i).x = formationShips.get(i).centerPosX - centerX;
-            relativeCoordinates.get(i).y = formationShips.get(i).centerPosY - centerY;
+            relativeCoordinates.get(i).x = (formationShips.get(i).centerPosX - centerX) * Math.cos(Math.toRadians(direction)) + (formationShips.get(i).centerPosY - centerY) * Math.sin(Math.toRadians(direction));
+            relativeCoordinates.get(i).y = -(formationShips.get(i).centerPosX - centerX) * Math.sin(Math.toRadians(direction)) + (formationShips.get(i).centerPosY - centerY) * Math.cos(Math.toRadians(direction));
         }
     }
 
     //update position of ship if formation rotates
     void updatePositions() {
         for(int i = 0; i < formationShips.size(); i++){
-            globalCoordinates.get(i).x = centerX + relativeCoordinates.get(i).x * Math.cos(direction) - relativeCoordinates.get(i).y * Math.sin(direction);
-            globalCoordinates.get(i).y = centerY + relativeCoordinates.get(i).x * Math.sin(direction) + relativeCoordinates.get(i).y * Math.cos(direction);
+            globalCoordinates.get(i).x = centerX + relativeCoordinates.get(i).x * Math.cos(Math.toRadians(direction)) - relativeCoordinates.get(i).y * Math.sin(Math.toRadians(direction));
+            globalCoordinates.get(i).y = centerY + relativeCoordinates.get(i).x * Math.sin(Math.toRadians(direction)) + relativeCoordinates.get(i).y * Math.cos(Math.toRadians(direction));
         }
     }
 
