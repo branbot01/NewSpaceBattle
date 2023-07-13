@@ -48,6 +48,9 @@ class ResourceCollector extends Ship {
 
     //Updates the object's properties
     void update() {
+        if (this.selected) {
+            System.out.println(asteroidSelected);
+        }
         exists = checkIfAlive();
         move();
         rotate();
@@ -63,20 +66,20 @@ class ResourceCollector extends Ship {
         harvesting = true;
         docking = false;
         double nearest = 99999999999999999.0;
-        if(asteroidSelected != null){
-            asteroidSelected.incomingResourceCollector = false;
+        if (asteroidSelected != null) {
+            asteroidSelected.incomingResourceCollector = null;
         }
         asteroidSelected = null;
         for (int i = 0; i <= GameScreen.asteroids.size() - 1; i++) {
             if (Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2))) < nearest && GameScreen.asteroids.get(i).resources > 0) {
-                if (!GameScreen.asteroids.get(i).incomingResourceCollector) {
+                if (GameScreen.asteroids.get(i).incomingResourceCollector == null) {
                     asteroidSelected = GameScreen.asteroids.get(i);
                     nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.asteroids.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.asteroids.get(i).centerPosY - centerPosY, 2)));
                 }
             }
         }
         if (asteroidSelected != null) {
-            asteroidSelected.incomingResourceCollector = true;
+            asteroidSelected.incomingResourceCollector = this;
             formation = null;
             setDestination(asteroidSelected.centerPosX, asteroidSelected.centerPosY, false);
         }
@@ -91,6 +94,10 @@ class ResourceCollector extends Ship {
                 while (resources < RESOURCE_CAPACITY - 4 && harvesting && asteroidSelected.resources > 0) {
                     velocityX = asteroidSelected.velocityX;
                     velocityY = asteroidSelected.velocityY;
+                    if (Utilities.distanceFormula(centerPosX, centerPosY, asteroidSelected.centerPosX, asteroidSelected.centerPosY) > (asteroidSelected.radius + radius) * 1.5) {
+                        goToAsteroid();
+                        return;
+                    }
                     if (resources < 2500) {
                         resources += 4;
                         asteroidSelected.resources -= 4;
@@ -104,13 +111,16 @@ class ResourceCollector extends Ship {
 
     //Finds nearest flagship
     private void goToCollector() {
-        asteroidSelected.incomingResourceCollector = false;
+        if (asteroidSelected != null) {
+            asteroidSelected.incomingResourceCollector = null;
+            asteroidSelected = null;
+        }
         unloading = true;
         harvesting = false;
         double nearest = 99999999999999999.0;
         flagShipSelected = null;
         for (int i = 0; i <= GameScreen.flagShips.size() - 1; i++) {
-            if(GameScreen.flagShips.get(i).team == team){
+            if (GameScreen.flagShips.get(i).team == team) {
                 if (Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2))) < nearest) {
                     flagShipSelected = GameScreen.flagShips.get(i);
                     nearest = Math.sqrt(Math.abs(Math.pow(GameScreen.flagShips.get(i).centerPosX - centerPosX, 2) + Math.pow(GameScreen.flagShips.get(i).centerPosY - centerPosY, 2)));
@@ -131,6 +141,10 @@ class ResourceCollector extends Ship {
                 while (!(resources < 0) && unloading) {
                     velocityX = flagShipSelected.velocityX;
                     velocityY = flagShipSelected.velocityY;
+                    if (Utilities.distanceFormula(centerPosX, centerPosY, flagShipSelected.centerPosX, flagShipSelected.centerPosY) > (flagShipSelected.radius + radius) * 1.5) {
+                        goToCollector();
+                        return;
+                    }
                     resources -= 4;
                     GameScreen.resources[team - 1] += 4;
                     if (resources > 0) {

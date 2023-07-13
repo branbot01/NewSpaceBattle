@@ -189,7 +189,7 @@ class PathFinder {
             double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
             double addedDistance = 0;
 
-            if (ship.attacking && obj.team != ship.team) {
+            if (ship.attacking && obj.team != ship.team && !(obj instanceof Asteroid)) {
                 double shootDegree = 10;
                 if (obj instanceof SpaceStation || obj instanceof BattleShip || obj instanceof FlagShip) {
                     shootDegree = 20;
@@ -296,10 +296,10 @@ class PathFinder {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;
             stopDistance = (ship.radius + targetObj.radius) * 2;
-            if (ship instanceof ResourceCollector && (((ResourceCollector) ship).harvesting || ((ResourceCollector) ship).unloading)) {
+            if (ship instanceof ResourceCollector && (((ResourceCollector) ship).harvesting)) {
                 stopDistance = (ship.radius + targetObj.radius) * 1.1;
             } else if (ship instanceof ResourceCollector && ((ResourceCollector) ship).unloading) {
-                stopDistance = (ship.radius + targetObj.radius) * 1.1;
+                stopDistance = (ship.radius + targetObj.radius) * 1.3;
             }
         }
         if (Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, destX, destY) <= stopDistance) {

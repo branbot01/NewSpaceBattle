@@ -125,12 +125,6 @@ class Collisions {
         } else if (object1 instanceof Laser) {
             ((Laser) object1).impact(object2);
         }
-        if (object1 instanceof ResourceCollector) {
-            if (((ResourceCollector) object1).harvesting || ((ResourceCollector) object1).unloading) {
-                ((ResourceCollector) object1).harvesting = true;
-            }
-            ((ResourceCollector) object1).unloading = false;
-        }
 
         if (!object2.colliding) {
             object2.velocityX = v2fx;
@@ -142,12 +136,6 @@ class Collisions {
             ((Missile) object2).impact(object1);
         } else if (object2 instanceof Laser) {
             ((Laser) object2).impact(object1);
-        }
-        if (object2 instanceof ResourceCollector) {
-            if (((ResourceCollector) object2).harvesting || ((ResourceCollector) object2).unloading) {
-                ((ResourceCollector) object2).harvesting = true;
-            }
-            ((ResourceCollector) object2).unloading = false;
         }
 
         object1.colliding = true;

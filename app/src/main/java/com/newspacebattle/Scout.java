@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import android.os.Looper;
+
 /**
  * Created by Dylan on 2018-07-06. Defines a scout ship.
  */
@@ -9,6 +11,8 @@ class Scout extends Ship {
     static float MAX_SPEED;
 
     static int buildTime, cost;
+
+    int runTime = 9000, runCounter = 0;
 
     //Constructor method
     Scout(float x, float y, int team) {
@@ -27,8 +31,8 @@ class Scout extends Ship {
         mass = 500;
         health = 1000;
         MAX_HEALTH = 1000;
-        accelerate = 0.35f;
-        maxSpeed = accelerate * 75;
+        accelerate = 0.6f;
+        maxSpeed = accelerate * 150;
         MAX_SPEED = maxSpeed;
         preScaleX = 1;
         preScaleY = 1;

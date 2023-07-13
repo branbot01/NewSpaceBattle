@@ -276,6 +276,9 @@ public class GameScreen extends View {
         }*/
         for (int i = 0; i <= ships.size() - 1; i++) {
             ships.get(i).destinationFinder.autoAttack();
+            if (ships.get(i) instanceof ResourceCollector) {
+                ((ResourceCollector) ships.get(i)).goToAsteroid();
+            }
         }
 
         try {
@@ -586,21 +589,21 @@ public class GameScreen extends View {
     //Generates ships randomly around the map
     public static void generateMap() {
         //blackHole.add(new BlackHole(0, 0));
-        final int flagShipNum = 4;
-        final int resCollectorsNum = 0;
-        final int fighterNum = 100;
-        final int battleShipNum = 8;
-        final int bomberNum = 30;
-        final int scoutNum = 0;
-        final int laserCruiserNum = 10;
-        final int spaceStationNum = 0;
+        final int flagShipNum = 2;
+        final int resCollectorsNum = 20;
+        final int fighterNum = 50;
+        final int battleShipNum = 4;
+        final int bomberNum = 20;
+        final int scoutNum = 10;
+        final int laserCruiserNum = 8;
+        final int spaceStationNum = 2;
         int bulletNum = 500;
         int explosionNum = 500;
         final int missileNum = 200;
         final int laserNum = 50;
 
         generateStars(0);
-        generateAsteroids(0, 5);
+        generateAsteroids(5, 5);
 
         do {
             resourceCollectors.clear();
