@@ -146,14 +146,15 @@ class Collisions {
     private void checkObjectBoundariesX() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
             try {
-                if (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
+                if (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2) {
                     GameScreen.objects.get(i).velocityX = -GameScreen.objects.get(i).velocityX;
-                    GameScreen.objects.get(i).accelerationX = 0;
-                    GameScreen.objects.get(i).accelerationY = 0;
-
-                    while (GameScreen.objects.get(i).centerPosX + GameScreen.objects.get(i).radius >= GameScreen.mapSizeX / 2 || GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
-                        //System.out.println("borderx collision detected");
-                    }
+                    GameScreen.objects.get(i).accelerationX = -GameScreen.objects.get(i).accelerationX;
+                    GameScreen.objects.get(i).positionX = GameScreen.mapSizeX / 2 - GameScreen.objects.get(i).radius * 2 - 1;
+                }
+                if (GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2){
+                    GameScreen.objects.get(i).velocityX = -GameScreen.objects.get(i).velocityX;
+                    GameScreen.objects.get(i).accelerationX = -GameScreen.objects.get(i).accelerationX;
+                    GameScreen.objects.get(i).positionX = -GameScreen.mapSizeX / 2 + 1;
                 }
             } catch (Exception e) {
                 System.out.println("Error in checkObjectBoundariesX");
@@ -164,14 +165,15 @@ class Collisions {
     private void checkObjectBoundariesY() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
             try {
-                if (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
+                if (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2) {
                     GameScreen.objects.get(i).velocityY = -GameScreen.objects.get(i).velocityY;
-                    GameScreen.objects.get(i).accelerationX = 0;
-                    GameScreen.objects.get(i).accelerationY = 0;
-
-                    while (GameScreen.objects.get(i).centerPosY + GameScreen.objects.get(i).radius >= GameScreen.mapSizeY / 2 || GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
-                        //System.out.println("bordery collision detected");
-                    }
+                    GameScreen.objects.get(i).accelerationY = -GameScreen.objects.get(i).accelerationY;
+                    GameScreen.objects.get(i).positionY = GameScreen.mapSizeY / 2 - GameScreen.objects.get(i).radius * 2 - 1;
+                }
+                if (GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2){
+                    GameScreen.objects.get(i).velocityY = -GameScreen.objects.get(i).velocityY;
+                    GameScreen.objects.get(i).accelerationY = -GameScreen.objects.get(i).accelerationY;
+                    GameScreen.objects.get(i).positionY = -GameScreen.mapSizeY / 2 + 1;
                 }
             } catch (Exception e) {
                 System.out.println("Error in checkObjectBoundariesY");

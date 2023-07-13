@@ -12,8 +12,6 @@ class Scout extends Ship {
 
     static int buildTime, cost;
 
-    int runTime = 9000, runCounter = 0;
-
     //Constructor method
     Scout(float x, float y, int team) {
         type = "Scout";

@@ -19,7 +19,7 @@ class GameObject {
     float radius, maxSpeed, degrees;
     float gravVelX, gravVelY;
     float accelerate;
-    boolean exists, destination, colliding;;
+    boolean exists, destination, colliding;
     PathFinder destinationFinder;
     String type;
     Matrix appearance = new Matrix();
