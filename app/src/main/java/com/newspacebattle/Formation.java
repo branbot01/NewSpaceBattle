@@ -64,7 +64,6 @@ class Formation {
         }
         updatePositions();
         moveFormation();
-        rotateFormation();
     }
 
     //Finds the center of the selected ships
@@ -140,7 +139,7 @@ class Formation {
     }
 
     void moveFormation() {
-        if (Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) <= formationMaxSpeed){
+        if (Math.sqrt(Math.pow(velocityX, 2) + Math.pow(velocityY, 2)) <= formationMaxSpeed) {
             velocityX += accelerationX;
             velocityY += accelerationY;
         } else {
@@ -160,34 +159,35 @@ class Formation {
     void setDestination(float x, float y) {
         destX = x;
         destY = y;
+        if (velocityX == 0 && velocityY == 0) {
+            accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees + 180, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees + 180, centerY, Fighter.constRadius)) * Math.PI / 180);
+            accelerationY = accelerate * (float) Math.cos(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees + 180, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees + 180, centerY, Fighter.constRadius)) * Math.PI / 180);
+            Utilities.delay(500);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int time = 0;
-                while (true) {
-                    if (time == 500) {
-                        time = 0;
-                        driveFormation(destX, destY);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int time = 0;
+                    while (true) {
+                        rotateFormation();
+                        if (time == 500) {
+                            time = 0;
+                            driveFormation(destX, destY);
+                        }
+                        //System.out.println(degrees);
+                        if (checkDestination()) {
+                            stopMovement();
+                            break;
+                        }
+                        Utilities.delay(1);
+                        time++;
                     }
-                    //System.out.println(degrees);
-                    if (checkDestination()){
-                        stopMovement();
-                        break;
-                    }
-                    Utilities.delay(1);
-                    time++;
                 }
-            }
-        }).start();
+            }).start();
+        }
     }
 
     void driveFormation(double x, double y) {
-        if (velocityX == 0 && velocityY == 0){
-            accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees, centerY, Fighter.constRadius)) * Math.PI / 180);
-            accelerationY = accelerate * (float) Math.cos(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees, centerY, Fighter.constRadius)) * Math.PI / 180);
-            return;
-        }
         double requiredAngle = Utilities.anglePoints(centerX, centerY, x, y);
 
         if (Math.abs(degrees - requiredAngle) > 5) {
@@ -214,11 +214,11 @@ class Formation {
         }
     }
 
-    boolean checkDestination(){
+    boolean checkDestination() {
         return Utilities.distanceFormula(centerX, centerY, destX, destY) < Fighter.constRadius;
     }
 
-    void stopMovement(){
+    void stopMovement() {
         accelerationX = 0;
         accelerationY = 0;
         velocityX = 0;
@@ -231,7 +231,7 @@ class Formation {
         }
     }
 
-        //Creates a rectangle formation
+    //Creates a rectangle formation
     void rectangleFormation() {
         int shipCounter = 0;
         float offsetX = 0, offsetY = 0;
