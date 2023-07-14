@@ -49,6 +49,9 @@ class PathFinder {
 
     //Attack this group of enemies
     void runAttack(ArrayList<Ship> enemies) {
+        if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
+            return;
+        }
         stopFinder();
         this.enemies.addAll(enemies);
         this.enemies.removeIf(enemy -> enemy.team == ship.team);
@@ -64,6 +67,9 @@ class PathFinder {
     }
 
     void autoAttack() {
+        if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
+            return;
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -110,10 +116,8 @@ class PathFinder {
     }
 
     private void startAttacker() {
-        if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
-            return;
-        }
         ship.attacking = true;
+        ship.formation = null;
         while (ship.exists && ship.attacking) {
             try {
                 if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
