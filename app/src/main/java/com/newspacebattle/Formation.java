@@ -86,7 +86,7 @@ class Formation {
             //newRelativeCoordinates.get(i).y = -(formationShips.get(i).centerPosX - centerX) * Math.sin(Math.toRadians(degrees)) + (formationShips.get(i).centerPosY - centerY) * Math.cos(Math.toRadians(degrees));
 
             newRelativeCoordinates.add(new PointObject(initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), -initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
-            System.out.println("newRelativeCoordinates.get(" + i + ").x: " + newRelativeCoordinates.get(i).x + " newRelativeCoordinates.get(" + i + ").y: " + newRelativeCoordinates.get(i).y);
+            //System.out.println("newRelativeCoordinates.get(" + i + ").x: " + newRelativeCoordinates.get(i).x + " newRelativeCoordinates.get(" + i + ").y: " + newRelativeCoordinates.get(i).y);
         }
     }
 
@@ -112,7 +112,7 @@ class Formation {
 
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i).formation != this || !ships.get(i).exists) {
-                System.out.println(ships.get(i));
+                //System.out.println(ships.get(i));
                 formationShips.remove(ships.get(i));
                 if (ships.get(i) instanceof BattleShip) {
                     ships.get(i).maxSpeed = BattleShip.MAX_SPEED;
@@ -149,6 +149,8 @@ class Formation {
         centerY -= velocityY;
         centerX += velocityX;
 
+
+
         //positionY += gravVelY;
         //positionX += gravVelX;
 
@@ -178,9 +180,12 @@ class Formation {
                 int time = 0;
                 while (true) {
                     rotateFormation();
-                    if (time == 250) {
+                    if (time == 500) {
                         time = 0;
                         driveFormation(destX, destY);
+                        /*for(int i = 0; i < formationShips.size(); i++){
+                            formationShips.get(i).setDestination((float) globalCoordinates.get(i).x, (float) globalCoordinates.get(i).y, false);
+                        }*/
                     }
                     //System.out.println(degrees);
                     if (checkDestination()) {
