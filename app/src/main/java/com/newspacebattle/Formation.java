@@ -13,7 +13,7 @@ class Formation {
     float degrees, formationMaxSpeed;
     float velocityX, velocityY, accelerationX, accelerationY, accelerate;
 
-    boolean destination;
+    boolean hasMoved = false;
     float destX, destY;
 
     //visualize ship locations
@@ -160,38 +160,45 @@ class Formation {
         destX = x;
         destY = y;
         if (velocityX == 0 && velocityY == 0) {
-            accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees + 180, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees + 180, centerY, Fighter.constRadius)) * Math.PI / 180);
-            accelerationY = accelerate * (float) Math.cos(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degrees + 180, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees + 180, centerY, Fighter.constRadius)) * Math.PI / 180);
+            float degreeOffset = degrees;
+            if (!hasMoved){
+                degreeOffset = degrees + 180;
+                hasMoved = true;
+            }
+            accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degreeOffset, centerX, Fighter.constRadius), Utilities.circleAngleY(degreeOffset, centerY, Fighter.constRadius)) * Math.PI / 180);
+            accelerationY = accelerate * (float) Math.cos(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degreeOffset, centerX, Fighter.constRadius), Utilities.circleAngleY(degreeOffset, centerY, Fighter.constRadius)) * Math.PI / 180);
             Utilities.delay(500);
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    int time = 0;
-                    while (true) {
-                        rotateFormation();
-                        if (time == 500) {
-                            time = 0;
-                            driveFormation(destX, destY);
-                        }
-                        //System.out.println(degrees);
-                        if (checkDestination()) {
-                            stopMovement();
-                            break;
-                        }
-                        Utilities.delay(1);
-                        time++;
-                    }
-                }
-            }).start();
+        } else {
+            return;
         }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int time = 0;
+                while (true) {
+                    rotateFormation();
+                    if (time == 250) {
+                        time = 0;
+                        driveFormation(destX, destY);
+                    }
+                    //System.out.println(degrees);
+                    if (checkDestination()) {
+                        stopMovement();
+                        break;
+                    }
+                    Utilities.delay(1);
+                    time++;
+                }
+            }
+        }).start();
     }
 
     void driveFormation(double x, double y) {
         double requiredAngle = Utilities.anglePoints(centerX, centerY, x, y);
 
         if (Math.abs(degrees - requiredAngle) > 5) {
-            int turnAngle = 100;
+            int turnAngle = 80;
 
             double requiredPointX = Utilities.circleAngleX(requiredAngle, centerX, Fighter.constRadius);
             double requiredPointY = Utilities.circleAngleY(requiredAngle, centerY, Fighter.constRadius);
