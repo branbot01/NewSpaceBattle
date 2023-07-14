@@ -60,6 +60,7 @@ class Formation {
         }
         updatePositions();
         moveFormation();
+        rotateFormation();
     }
 
     //Finds the center of the selected ships
@@ -172,7 +173,13 @@ class Formation {
         }
     }
 
-    //Creates a rectangle formation
+    void rotateFormation() {
+        if (accelerationX != 0 && accelerationY != 0) {
+            direction = (float) Utilities.angleDim(velocityX, velocityY);
+        }
+    }
+
+        //Creates a rectangle formation
     void rectangleFormation() {
         int shipCounter = 0;
         float offsetX = 0, offsetY = 0;
