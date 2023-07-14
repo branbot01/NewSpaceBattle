@@ -501,9 +501,31 @@ public class Main extends AppCompatActivity {
                         movedX = x + GameScreen.offsetX;
                         movedY = y + GameScreen.offsetY;
 
-                        for (int i = 0; i <= selectShips.size() - 1; i++) {
-                            if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
-                                selectShips.get(i).setDestination(trueX, trueY, false);
+                        boolean formationIsSelected = true;
+                        Formation formation = null;
+                        if(selectShips.size() > 0){
+                            int counter = 0;
+                            formation = selectShips.get(0).formation;
+                            for(int i = 0; i <= selectShips.size() - 1; i++) {
+                                if(selectShips.get(i).formation != formation){
+                                    formationIsSelected = false;
+                                    break;
+                                }
+                                counter++;
+                            }
+                            if(counter != formation.ships.size()){
+                                formationIsSelected = false;
+                            }
+                        }
+                        if(!formationIsSelected){
+                            for (int i = 0; i <= selectShips.size() - 1; i++) {
+                                if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
+                                    selectShips.get(i).setDestination(trueX, trueY, false);
+                                }
+                            }
+                        }else{
+                            if(formation != null){
+                                formation.driveFormation(trueX, trueY);
                             }
                         }
 

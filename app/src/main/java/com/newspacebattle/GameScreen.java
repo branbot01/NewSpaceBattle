@@ -275,7 +275,7 @@ public class GameScreen extends View {
             }
         }*/
         for (int i = 0; i <= ships.size() - 1; i++) {
-            ships.get(i).destinationFinder.autoAttack();
+            //ships.get(i).destinationFinder.autoAttack();
             if (ships.get(i) instanceof ResourceCollector) {
                 ((ResourceCollector) ships.get(i)).goToAsteroid();
             }
