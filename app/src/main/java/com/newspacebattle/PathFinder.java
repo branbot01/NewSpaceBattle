@@ -346,7 +346,7 @@ class PathFinder {
         if (Math.abs(ship.degrees - requiredAngle) > 5) {
             int turnAngle = 160;
             if (ship.attacking && !(ship instanceof FlagShip || ship instanceof BattleShip || ship instanceof LaserCruiser)) {
-                turnAngle = 100;
+                turnAngle = 110;
             }
 
             double requiredPointX = Utilities.circleAngleX(requiredAngle, ship.centerPosX, ship.radius);
