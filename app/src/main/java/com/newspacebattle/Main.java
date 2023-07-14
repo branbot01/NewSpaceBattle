@@ -501,22 +501,26 @@ public class Main extends AppCompatActivity {
                         movedX = x + GameScreen.offsetX;
                         movedY = y + GameScreen.offsetY;
 
-                        boolean formationIsSelected = true;
+                        boolean formationIsSelected = false;
                         Formation formation = null;
                         if(selectShips.size() > 0){
+                            formationIsSelected = true;
                             int counter = 0;
                             formation = selectShips.get(0).formation;
                             for(int i = 0; i <= selectShips.size() - 1; i++) {
-                                if(selectShips.get(i).formation != formation){
+                                if(selectShips.get(i).formation != formation || !selectShips.get(i).movable){
                                     formationIsSelected = false;
                                     break;
                                 }
                                 counter++;
                             }
-                            if(counter != formation.ships.size()){
-                                formationIsSelected = false;
+                            if (formation != null) {
+                                if (counter != formation.ships.size()) {
+                                    formationIsSelected = false;
+                                }
                             }
                         }
+
                         if(!formationIsSelected){
                             for (int i = 0; i <= selectShips.size() - 1; i++) {
                                 if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
@@ -525,7 +529,7 @@ public class Main extends AppCompatActivity {
                             }
                         }else{
                             if(formation != null){
-                                formation.driveFormation(trueX, trueY);
+                                formation.setDestination(trueX, trueY);
                             }
                         }
 
