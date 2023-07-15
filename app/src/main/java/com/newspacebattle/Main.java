@@ -503,13 +503,23 @@ public class Main extends AppCompatActivity {
 
                         boolean formationIsSelected = false;
                         Formation formation = null;
-                        if(selectShips.size() > 0){
+                        if (selectShips.size() > 0) {
                             formationIsSelected = true;
                             int counter = 0;
-                            formation = selectShips.get(0).formation;
-                            for(int i = 0; i <= selectShips.size() - 1; i++) {
-                                if(selectShips.get(i).formation != formation || !selectShips.get(i).movable){
+                            for (int i = 0; i <= selectShips.size() - 1; i++) {
+                                if (!selectShips.get(i).movable){
                                     formationIsSelected = false;
+                                    formation = null;
+                                    break;
+                                }
+                                if (selectShips.get(i).formation != null) {
+                                    formation = selectShips.get(i).formation;
+                                    counter++;
+                                    continue;
+                                }
+                                if (selectShips.get(i).formation != formation) {
+                                    formationIsSelected = false;
+                                    formation = null;
                                     break;
                                 }
                                 counter++;
@@ -517,20 +527,20 @@ public class Main extends AppCompatActivity {
                             if (formation != null) {
                                 if (counter != formation.ships.size()) {
                                     formationIsSelected = false;
+                                    formation = null;
                                 }
                             }
                         }
 
-                        if(!formationIsSelected){
+                        System.out.println("Formation is selected: " + formationIsSelected + " " + formation);
+                        if (!formationIsSelected || formation == null) {
                             for (int i = 0; i <= selectShips.size() - 1; i++) {
                                 if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
                                     selectShips.get(i).setDestination(trueX, trueY, false);
                                 }
                             }
-                        }else{
-                            if(formation != null){
-                                formation.setDestination(trueX, trueY);
-                            }
+                        } else {
+                            formation.setDestination(trueX, trueY);
                         }
 
                         clearSelectionReferences();

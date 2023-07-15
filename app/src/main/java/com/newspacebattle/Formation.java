@@ -169,7 +169,6 @@ class Formation {
             }
             accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degreeOffset, centerX, Fighter.constRadius), Utilities.circleAngleY(degreeOffset, centerY, Fighter.constRadius)) * Math.PI / 180);
             accelerationY = accelerate * (float) Math.cos(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degreeOffset, centerX, Fighter.constRadius), Utilities.circleAngleY(degreeOffset, centerY, Fighter.constRadius)) * Math.PI / 180);
-            Utilities.delay(500);
         } else {
             return;
         }
@@ -178,6 +177,7 @@ class Formation {
             @Override
             public void run() {
                 int time = 0;
+                Utilities.delay(500);
                 while (true) {
                     rotateFormation();
                     if (time == 500) {

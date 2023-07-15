@@ -157,24 +157,20 @@ class PathFinder {
                 tempY = (float) direction.y;
                 ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
                 driveShip(direction.x, direction.y);
+                checkDestination();
                 Utilities.delay(500);
+                int time = 0;
                 while (ship.exists && ship.destination) {
-                    direction = pathFind();
-                    tempX = (float) direction.x;
-                    tempY = (float) direction.y;
-                    driveShip(direction.x, direction.y);
-                    Utilities.delay(500);
-                }
-            }
-        }).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                while (ship.exists && ship.destination) {
+                    if (time >= 500) {
+                        time = 0;
+                        direction = pathFind();
+                        tempX = (float) direction.x;
+                        tempY = (float) direction.y;
+                        driveShip(direction.x, direction.y);
+                    }
                     checkDestination();
                     Utilities.delay(1);
+                    time++;
                 }
             }
         }).start();

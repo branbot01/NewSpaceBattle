@@ -277,7 +277,7 @@ public class GameScreen extends View {
         for (int i = 0; i <= ships.size() - 1; i++) {
             //ships.get(i).destinationFinder.autoAttack();
             if (ships.get(i) instanceof ResourceCollector) {
-                ((ResourceCollector) ships.get(i)).goToAsteroid();
+                //((ResourceCollector) ships.get(i)).goToAsteroid();
             }
         }
 
@@ -1056,6 +1056,7 @@ public class GameScreen extends View {
                 }
             }
             canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);
+            canvas.drawCircle((float) formationsTeam1.get(i).destX, (float) formationsTeam1.get(i).destY, 50, white);
         }
 
         if (Main.startSelection) {
