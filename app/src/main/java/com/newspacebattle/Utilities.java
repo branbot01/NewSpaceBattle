@@ -209,4 +209,13 @@ class Utilities {
         }
         return parent;
     }
+
+    //return the cross product of 2 3-dimensional vectors
+    static double[] crossProduct(double[] a, double[] b){
+        double[] crossProduct = new double[3];
+        crossProduct[0] = a[1] * b[2] - a[2] * b[1];
+        crossProduct[1] = a[2] * b[0] - a[0] * b[2];
+        crossProduct[2] = a[0] * b[1] - a[1] * b[0];
+        return crossProduct;
+    }
 }
