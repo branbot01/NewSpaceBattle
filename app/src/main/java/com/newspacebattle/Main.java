@@ -65,19 +65,6 @@ public class Main extends AppCompatActivity {
 
     boolean zooming = false;
 
-    //Stops selected ships from moving, stops completely
-    public static void stopMovement() {
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            selectShips.get(i).destination = false;
-            selectShips.get(i).movable = false;
-            if (selectShips.get(i) instanceof ResourceCollector) {
-                ((ResourceCollector) selectShips.get(i)).harvesting = false;
-                ((ResourceCollector) selectShips.get(i)).unloading = false;
-            }
-            selectShips.get(i).stop();
-        }
-    }
-
     //Gets behaviour from selected ships
     public static boolean getBehaviour() {
         int[] behaviourTally = new int[2];
@@ -501,45 +488,25 @@ public class Main extends AppCompatActivity {
                         movedX = x + GameScreen.offsetX;
                         movedY = y + GameScreen.offsetY;
 
-                        boolean formationIsSelected = false;
-                        Formation formation = null;
-                        if (selectShips.size() > 0) {
-                            formationIsSelected = true;
-                            int counter = 0;
-                            for (int i = 0; i <= selectShips.size() - 1; i++) {
-                                if (!selectShips.get(i).movable){
-                                    formationIsSelected = false;
-                                    formation = null;
-                                    break;
-                                }
-                                if (selectShips.get(i).formation != null) {
-                                    formation = selectShips.get(i).formation;
-                                    counter++;
-                                    continue;
-                                }
-                                if (selectShips.get(i).formation != formation) {
-                                    formationIsSelected = false;
-                                    formation = null;
-                                    break;
-                                }
-                                counter++;
-                            }
-                            if (formation != null) {
-                                if (counter != formation.ships.size()) {
-                                    formationIsSelected = false;
-                                    formation = null;
-                                }
+                        Formation formation = isFormationSelected();
+
+                        boolean allMovable = true;
+                        for (int i = 0; i <= selectShips.size() - 1; i++) {
+                            if (!selectShips.get(i).movable) {
+                                allMovable = false;
                             }
                         }
 
-                        System.out.println("Formation is selected: " + formationIsSelected + " " + formation);
-                        if (!formationIsSelected || formation == null) {
+                        if (formation == null) {
                             for (int i = 0; i <= selectShips.size() - 1; i++) {
                                 if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
                                     selectShips.get(i).setDestination(trueX, trueY, false);
                                 }
                             }
-                        } else {
+                        } else if (allMovable) {
+                            for (int i = 0; i < selectShips.size(); i++) {
+                                selectShips.get(i).movable = false;
+                            }
                             formation.setDestination(trueX, trueY);
                         }
 
@@ -744,7 +711,21 @@ public class Main extends AppCompatActivity {
     //Stops all currently selected ships
     public void stopShip(View view) {
         following = false;
-        stopMovement();
+        Formation formation = isFormationSelected();
+        System.out.println(formation);
+        if (formation != null) {
+            System.out.println("stopping");
+            formation.stopMovement();
+        }
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            selectShips.get(i).destination = false;
+            selectShips.get(i).movable = false;
+            if (selectShips.get(i) instanceof ResourceCollector) {
+                ((ResourceCollector) selectShips.get(i)).harvesting = false;
+                ((ResourceCollector) selectShips.get(i)).unloading = false;
+            }
+            selectShips.get(i).stop();
+        }
         shipBar(false);
         clearSelectionReferences();
     }
@@ -1161,6 +1142,30 @@ public class Main extends AppCompatActivity {
             return flagShip;
         }
         return null;
+    }
+
+    public static Formation isFormationSelected() {
+        Formation formation = null;
+        if (selectShips.size() > 0) {
+            int counter = 0;
+            for (int i = 0; i <= selectShips.size() - 1; i++) {
+                if (selectShips.get(i).formation != null) {
+                    formation = selectShips.get(i).formation;
+                    counter++;
+                    continue;
+                }
+                if (selectShips.get(i).formation != formation) {
+                    return null;
+                }
+                counter++;
+            }
+            if (formation != null) {
+                if (counter != formation.ships.size()) {
+                    formation = null;
+                }
+            }
+        }
+        return formation;
     }
 
     //Sets all buttons background colours to white

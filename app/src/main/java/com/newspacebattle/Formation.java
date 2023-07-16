@@ -13,7 +13,7 @@ class Formation {
     float degrees, formationMaxSpeed;
     float velocityX, velocityY, accelerationX, accelerationY, accelerate;
 
-    boolean hasMoved = false;
+    boolean hasMoved = false, destination = false;
     float destX, destY;
 
     //visualize ship locations
@@ -185,8 +185,10 @@ class Formation {
     }
 
     void setDestination(float x, float y) {
+        destination = true;
         destX = x;
         destY = y;
+        //System.out.println(degrees);
         if (velocityX == 0 && velocityY == 0) {
             float degreeOffset = degrees;
             if (!hasMoved){
@@ -204,7 +206,7 @@ class Formation {
             public void run() {
                 int time = 0;
                 Utilities.delay(500);
-                while (true) {
+                while (destination) {
                     rotateFormation();
                     if (time == 500) {
                         time = 0;
@@ -261,12 +263,12 @@ class Formation {
         accelerationY = 0;
         velocityX = 0;
         velocityY = 0;
+        destination = false;
     }
 
     void rotateFormation() {
         if (accelerationX != 0 && accelerationY != 0 && velocityX != 0 && velocityY != 0) {
             degrees = (float) Utilities.angleDim(velocityX, velocityY);
-            System.out.println(degrees);
         }
     }
 

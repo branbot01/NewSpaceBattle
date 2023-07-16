@@ -52,6 +52,7 @@ class PathFinder {
         if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
             return;
         }
+        ship.formation = null;
         stopFinder();
         this.enemies.addAll(enemies);
         this.enemies.removeIf(enemy -> enemy.team == ship.team);
@@ -330,7 +331,6 @@ class PathFinder {
                 }
             }
             ship.stop();
-            ship.destination = false;
             return;
         }
         if (Math.abs(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY) - ship.degrees) <= 5) {
