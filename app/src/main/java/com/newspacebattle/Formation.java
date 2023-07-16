@@ -22,6 +22,11 @@ class Formation {
     ArrayList<PointObject> globalCoordinatesCopy = new ArrayList<>();
     ArrayList<PointObject> initialRelativeCoordinates = new ArrayList<>();
     ArrayList<PointObject> newRelativeCoordinates = new ArrayList<>();
+
+    ArrayList<Double[]> velocityVector = new ArrayList<>();
+    ArrayList<Double[]> normalAccelerationVector = new ArrayList<>();
+    ArrayList<Double[]> tangentAccelerationVector = new ArrayList<>();
+
     double centerX, centerY;
     int type;
 
@@ -41,6 +46,13 @@ class Formation {
         angularVelocity = 0;
         angularVelocityCopy = 0;
         angularAcceleration = 0;
+        for(int i = 0; i < this.ships.size(); i++) {
+            for(int j = 0; j < 3; j++) {
+                velocityVector.add(new Double[]{0.0, 0.0, 0.0});
+                normalAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
+                tangentAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
+            }
+        }
         formationMaxSpeed = Float.MAX_VALUE;
         Ship slowShip = null;
         for (int i = 0; i < this.ships.size(); i++) {
@@ -89,9 +101,6 @@ class Formation {
     void getPositions() {
         newRelativeCoordinates.clear();
         for (int i = 0; i < formationShips.size(); i++) {
-            //newRelativeCoordinates.get(i).x = (formationShips.get(i).centerPosX - centerX) * Math.cos(Math.toRadians(degrees)) + (formationShips.get(i).centerPosY - centerY) * Math.sin(Math.toRadians(degrees));
-            //newRelativeCoordinates.get(i).y = -(formationShips.get(i).centerPosX - centerX) * Math.sin(Math.toRadians(degrees)) + (formationShips.get(i).centerPosY - centerY) * Math.cos(Math.toRadians(degrees));
-
             newRelativeCoordinates.add(new PointObject(initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), -initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
             //System.out.println("newRelativeCoordinates.get(" + i + ").x: " + newRelativeCoordinates.get(i).x + " newRelativeCoordinates.get(" + i + ").y: " + newRelativeCoordinates.get(i).y);
         }
@@ -279,8 +288,9 @@ class Formation {
             degrees = (float) Utilities.angleDim(velocityX, velocityY);
             angularVelocity = degrees - degreesCopy;
             angularAcceleration = angularVelocity - angularVelocityCopy;
-            //System.out.println("degreesCopy = " + degreesCopy + " angularVelocityCopy = " + angularVelocityCopy);
-            //System.out.println("degrees = " + degrees + "angularVelocity = " + angularVelocity + " angularAcceleration = " + angularAcceleration);
+
+            System.out.println("degreesCopy = " + degreesCopy + " angularVelocityCopy = " + angularVelocityCopy);
+            System.out.println("degrees = " + degrees + "angularVelocity = " + angularVelocity + " angularAcceleration = " + angularAcceleration);
         }
     }
 
