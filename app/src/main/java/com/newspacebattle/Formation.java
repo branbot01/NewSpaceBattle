@@ -10,7 +10,8 @@ class Formation {
     ArrayList<Ship> ships;
     ArrayList<Ship> formationShips = new ArrayList<>();
     float initialSize;
-    float degrees, formationMaxSpeed;
+
+    float degrees, degreesCopy, angularVelocity, angularVelocityCopy, angularAcceleration, formationMaxSpeed;
     float velocityX, velocityY, accelerationX, accelerationY, accelerate;
 
     boolean hasMoved = false, destination = false;
@@ -36,6 +37,10 @@ class Formation {
         }
         initialSize = this.ships.size();
         degrees = 0;
+        degreesCopy = 0;
+        angularVelocity = 0;
+        angularVelocityCopy = 0;
+        angularAcceleration = 0;
         formationMaxSpeed = Float.MAX_VALUE;
         Ship slowShip = null;
         for (int i = 0; i < this.ships.size(); i++) {
@@ -65,6 +70,7 @@ class Formation {
         }
         updatePositions();
         moveFormation();
+        rotateFormation();
     }
 
     //Finds the center of the selected ships
@@ -207,7 +213,7 @@ class Formation {
                 int time = 0;
                 Utilities.delay(500);
                 while (destination) {
-                    rotateFormation();
+                    //rotateFormation();
                     if (time == 500) {
                         time = 0;
                         driveFormation(destX, destY);
@@ -267,8 +273,14 @@ class Formation {
     }
 
     void rotateFormation() {
+        degreesCopy = degrees;
+        angularVelocityCopy = angularVelocity;
         if (accelerationX != 0 && accelerationY != 0 && velocityX != 0 && velocityY != 0) {
             degrees = (float) Utilities.angleDim(velocityX, velocityY);
+            angularVelocity = degrees - degreesCopy;
+            angularAcceleration = angularVelocity - angularVelocityCopy;
+            //System.out.println("degreesCopy = " + degreesCopy + " angularVelocityCopy = " + angularVelocityCopy);
+            //System.out.println("degrees = " + degrees + "angularVelocity = " + angularVelocity + " angularAcceleration = " + angularAcceleration);
         }
     }
 
