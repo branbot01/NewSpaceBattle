@@ -1054,9 +1054,13 @@ public class GameScreen extends View {
                 if (formationsTeam1.get(i).globalCoordinates != null) {
                     canvas.drawCircle((float) formationsTeam1.get(i).globalCoordinates.get(j).x, (float) formationsTeam1.get(i).globalCoordinates.get(j).y, 50, green);
                 }
+                if (formationsTeam1.get(i).newRelativeCoordinates != null) {
+                    canvas.drawCircle((float) formationsTeam1.get(i).newRelativeCoordinates.get(j).x, (float) formationsTeam1.get(i).newRelativeCoordinates.get(j).y, 50, yellow);
+                }
             }
             canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);
             canvas.drawCircle((float) formationsTeam1.get(i).destX, (float) formationsTeam1.get(i).destY, 50, white);
+            canvas.drawCircle((float) Utilities.circleAngleX(formationsTeam1.get(i).degrees, formationsTeam1.get(i).centerX, Fighter.constRadius), (float) Utilities.circleAngleY(formationsTeam1.get(i).degrees, formationsTeam1.get(i).centerY, Fighter.constRadius), 50, blue);
         }
 
         if (Main.startSelection) {
