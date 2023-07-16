@@ -48,9 +48,6 @@ class ResourceCollector extends Ship {
 
     //Updates the object's properties
     void update() {
-        if (this.selected) {
-            System.out.println(asteroidSelected);
-        }
         exists = checkIfAlive();
         move();
         rotate();

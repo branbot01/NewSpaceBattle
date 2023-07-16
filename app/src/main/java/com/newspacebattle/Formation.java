@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import android.os.Looper;
+
 import java.util.ArrayList;
 
 /**
@@ -46,8 +48,8 @@ class Formation {
         angularVelocity = 0;
         angularVelocityCopy = 0;
         angularAcceleration = 0;
-        for(int i = 0; i < this.ships.size(); i++) {
-            for(int j = 0; j < 3; j++) {
+        for (int i = 0; i < this.ships.size(); i++) {
+            for (int j = 0; j < 3; j++) {
                 velocityVector.add(new Double[]{0.0, 0.0, 0.0});
                 normalAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
                 tangentAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
@@ -109,7 +111,7 @@ class Formation {
     //update position of ship if formation rotates
     void updatePositions() {
         globalCoordinatesCopy.clear();
-        if(globalCoordinates.size() > 0){
+        if (globalCoordinates.size() > 0) {
             for (int i = 0; i < formationShips.size(); i++) {
                 globalCoordinatesCopy.add(new PointObject(globalCoordinates.get(i).x, globalCoordinates.get(i).y));
             }
@@ -118,27 +120,22 @@ class Formation {
         for (int i = 0; i < formationShips.size(); i++) {
             globalCoordinates.add(new PointObject(centerX + initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) - initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), centerY + initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
         }
-        if(formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
-            boolean inPosition = true;
-            for(int i = 0; i < formationShips.size(); i++) {
-                if (Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius || formationShips.get(i).destination) {
-                        inPosition = false;
-                        break;
-                    }
-                }
-            //System.out.println(inPosition);
-            if(inPosition){
-                for (int i = 0; i < formationShips.size(); i++) {
+        if (formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
+            boolean[] inPosition = new boolean[formationShips.size()];
+            for (int i = 0; i < formationShips.size(); i++) {
+                inPosition[i] = !(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination;
+            }
+            for (int i = 0; i < formationShips.size(); i++) {
+                if (inPosition[i] && destination) {
                     formationShips.get(i).velocityX = (float) (globalCoordinates.get(i).x - globalCoordinatesCopy.get(i).x);
                     formationShips.get(i).velocityY = -(float) (globalCoordinates.get(i).y - globalCoordinatesCopy.get(i).y);
-                    if(formationShips.get(i).velocityX != 0 && formationShips.get(i).velocityY != 0){
+                    if (formationShips.get(i).velocityX != 0 && formationShips.get(i).velocityY != 0) {
                         formationShips.get(i).accelerationX = (float) (0.0001 * Math.cos(Math.toRadians(formationShips.get(i).degrees - 90)));
                         formationShips.get(i).accelerationY = (float) (-0.0001 * Math.sin(Math.toRadians(formationShips.get(i).degrees - 90)));
                         //System.out.println("accelerationX: " + formationShips.get(i).accelerationX + " accelerationY: " + formationShips.get(i).accelerationY);
                     }
                 }
             }
-
         }
     }
 
@@ -150,7 +147,6 @@ class Formation {
 
     //renamed from remakeFormation
     void resetCenter() {
-
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i).formation != this || !ships.get(i).exists) {
                 //System.out.println(ships.get(i));
@@ -174,7 +170,6 @@ class Formation {
                 }
                 ships.remove(ships.get(i));
                 setCenter();
-                getPositions();
             }
         }
     }
@@ -189,25 +184,18 @@ class Formation {
         }
         centerY -= velocityY;
         centerX += velocityX;
-
-
-
-        //positionY += gravVelY;
-        //positionX += gravVelX;
-
-        //centerPosX = positionX + midX;
-        //centerPosY = positionY + midY;
     }
 
     void setDestination(float x, float y) {
         destination = true;
         destX = x;
         destY = y;
-        //System.out.println(degrees);
         if (velocityX == 0 && velocityY == 0) {
             float degreeOffset = degrees;
-            if (!hasMoved){
-                degreeOffset = degrees + 180;
+            if (!hasMoved) {
+                if (degreeOffset != 180) {
+                    degreeOffset = 180;
+                }
                 hasMoved = true;
             }
             accelerationX = accelerate * (float) Math.sin(Utilities.anglePoints(centerX, centerY, Utilities.circleAngleX(degreeOffset, centerX, Fighter.constRadius), Utilities.circleAngleY(degreeOffset, centerY, Fighter.constRadius)) * Math.PI / 180);
@@ -220,17 +208,13 @@ class Formation {
             @Override
             public void run() {
                 int time = 0;
+                Looper.prepare();
                 Utilities.delay(500);
                 while (destination) {
-                    //rotateFormation();
                     if (time == 500) {
                         time = 0;
                         driveFormation(destX, destY);
-                        /*for(int i = 0; i < formationShips.size(); i++){
-                            formationShips.get(i).setDestination((float) globalCoordinates.get(i).x, (float) globalCoordinates.get(i).y, false);
-                        }*/
                     }
-                    //System.out.println(degrees);
                     if (checkDestination()) {
                         stopMovement();
                         break;
@@ -279,6 +263,12 @@ class Formation {
         velocityX = 0;
         velocityY = 0;
         destination = false;
+
+        for (int i = 0; i < formationShips.size(); i++) {
+            if (!(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination) {
+                ships.get(i).stop();
+            }
+        }
     }
 
     void rotateFormation() {

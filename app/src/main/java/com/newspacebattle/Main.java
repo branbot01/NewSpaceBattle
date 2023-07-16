@@ -712,9 +712,7 @@ public class Main extends AppCompatActivity {
     public void stopShip(View view) {
         following = false;
         Formation formation = isFormationSelected();
-        System.out.println(formation);
         if (formation != null) {
-            System.out.println("stopping");
             formation.stopMovement();
         }
         for (int i = 0; i <= selectShips.size() - 1; i++) {
