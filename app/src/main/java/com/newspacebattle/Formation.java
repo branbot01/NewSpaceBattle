@@ -106,12 +106,12 @@ class Formation {
         if(formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
             boolean inPosition = true;
             for(int i = 0; i < formationShips.size(); i++) {
-                if (Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius / 1.5 || formationShips.get(i).destination) {
+                if (Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius || formationShips.get(i).destination) {
                         inPosition = false;
                         break;
                     }
                 }
-            System.out.println(inPosition);
+            //System.out.println(inPosition);
             if(inPosition){
                 for (int i = 0; i < formationShips.size(); i++) {
                     formationShips.get(i).velocityX = (float) (globalCoordinates.get(i).x - globalCoordinatesCopy.get(i).x);
@@ -119,7 +119,7 @@ class Formation {
                     if(formationShips.get(i).velocityX != 0 && formationShips.get(i).velocityY != 0){
                         formationShips.get(i).accelerationX = (float) (0.0001 * Math.cos(Math.toRadians(formationShips.get(i).degrees - 90)));
                         formationShips.get(i).accelerationY = (float) (-0.0001 * Math.sin(Math.toRadians(formationShips.get(i).degrees - 90)));
-                        System.out.println("accelerationX: " + formationShips.get(i).accelerationX + " accelerationY: " + formationShips.get(i).accelerationY);
+                        //System.out.println("accelerationX: " + formationShips.get(i).accelerationX + " accelerationY: " + formationShips.get(i).accelerationY);
                     }
                 }
             }
