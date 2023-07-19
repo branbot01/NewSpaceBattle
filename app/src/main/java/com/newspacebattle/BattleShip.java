@@ -44,6 +44,7 @@ class BattleShip extends Ship {
         missile2 = new PointObject(0, 0);
         shootTime = 2000;
         driveTime = 1000;
+        sensorRadius = radius * 12;
     }
 
     //Updates the object's properties

@@ -4,30 +4,18 @@ import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.view.View;
 
 import com.example.newspacebattle.R;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Dylan on 2018-06-18. Handles the graphics of the game.
  */
 public class GameScreen extends View {
 
-    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, generation;
+    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize;
     static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
@@ -36,15 +24,17 @@ public class GameScreen extends View {
     static float[] starXPos, starYPos;
     static boolean paused;
 
+    static Blackboard[] blackboards = new Blackboard[4];
+
     static ArrayList<Formation> formationsTeam1 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam2 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
 
-    static int time;
+    //static int time;
     //static ArrayList<Ship> deadShips = new ArrayList<>();
-    static ArrayList<Ship> population = new ArrayList<>();
-    static File fitness;
+    //static ArrayList<Ship> population = new ArrayList<>();
+    //static File fitness;
 
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
@@ -78,7 +68,7 @@ public class GameScreen extends View {
     static Bitmap bitLaser, bitLaser2;
     static Bitmap[] bitExplosionLow = new Bitmap[26];
 
-    static Paint green = new Paint(), red = new Paint(), yellow = new Paint(), blue = new Paint(), white = new Paint();
+    static Paint green = new Paint(), red = new Paint(), yellow = new Paint(), blue = new Paint(), white = new Paint(), sensorPaint = new Paint(), lastSeenPaint = new Paint();
 
     //Initiates the game
     public GameScreen(Context context) {
@@ -149,15 +139,13 @@ public class GameScreen extends View {
 
         offsetX = -Main.screenX / 2;
         offsetY = -Main.screenY / 2;
-        //offsetX = -227;
-        //offsetY = -12554;
 
         scaleX = 0.05f;
         scaleY = 0.05f;
 
         mapSizeX = (int) (Main.screenX / scaleX * 8);
         mapSizeY = (int) (Main.screenY / scaleY * 8);
-        clusterSize = (int) (Main.screenX / 0.2);
+        clusterSize = (int) (Main.screenX / 0.1);
 
         BattleShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 3.5);
         Bomber.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 1.25);
@@ -198,88 +186,16 @@ public class GameScreen extends View {
         white.setStrokeWidth(20);
         white.setAntiAlias(true);
 
-        /*generation = 0;
-        String fitnessFile = "fitnessc.txt";
-        String gen_pattern = "gen(\\d+)";
-        String ship_pattern = "ship(\\d+)";
-        Pattern gen_regex = Pattern.compile(gen_pattern);
-        Pattern ship_regex = Pattern.compile(ship_pattern);
+        sensorPaint.setColor(Color.WHITE);
+        sensorPaint.setStrokeWidth(20);
+        sensorPaint.setAntiAlias(true);
+        sensorPaint.setStyle(Paint.Style.STROKE);
 
-        File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (Objects.equals(file.getName(), fitnessFile)){
-                    fitness = file;
-                }
-                Matcher matcher = gen_regex.matcher(file.getName());
-                if (matcher.find()) {
-                    String genNumber = matcher.group(1);
-                    if (genNumber == null) {
-                        throw new IllegalArgumentException("Gen Number was null.");
-                    }
-                    if (Integer.parseInt(genNumber) > generation) {
-                        generation = Integer.parseInt(genNumber);
-                    }
-                }
-            }
-        }
-        if (fitness == null){
-            System.out.println("Fitness file not found, creating new one.");
-            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fitnessFile);
-        }*/
+        lastSeenPaint.setColor(Color.MAGENTA);
+        lastSeenPaint.setStrokeWidth(20);
+        lastSeenPaint.setAntiAlias(true);
 
-        generateMap();
-        /*List<String[]> data = new ArrayList<>();
-        for (int i = 0; i <= ships.size() - 1; i++) {
-            if (generation == 0) {
-                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 2, 1);
-            } else {
-                for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
-                    Matcher matcher = gen_regex.matcher(file.getName());
-                    if (matcher.find()) {
-                        String genNumber = matcher.group(1);
-                        if (genNumber == null) {
-                            throw new IllegalArgumentException("Gen Number was null.");
-                        }
-                        if (Integer.parseInt(genNumber) == generation) {
-                            matcher = ship_regex.matcher(file.getName());
-                            if (matcher.find()) {
-                                String shipNumber = matcher.group(1);
-                                if (shipNumber == null) {
-                                    throw new IllegalArgumentException("Ship Number was null.");
-                                }
-                                if (Integer.parseInt(shipNumber) == i) {
-                                    System.out.println("Loading ship " + i);
-                                    data.clear();
-                                    BufferedReader reader;
-                                    try {
-                                        reader = new BufferedReader(new FileReader(file));
-                                        String line;
-                                        while ((line = reader.readLine()) != null) {
-                                            data.add(line.split(","));
-                                        }
-
-                                        ships.get(i).destinationFinder.attacker = new NeuralNetwork(data);
-
-                                        reader.close();
-                                    } catch (FileNotFoundException e) {
-                                        throw new IllegalArgumentException("File not found.");
-                                    } catch (IOException e) {
-                                        throw new IllegalArgumentException("IO Exception.");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-        for (int i = 0; i <= ships.size() - 1; i++) {
-            //ships.get(i).destinationFinder.autoAttack();
-            if (ships.get(i) instanceof ResourceCollector) {
-                //((ResourceCollector) ships.get(i)).goToAsteroid();
-            }
-        }
+        generateGame();
 
         try {
             bitLoader.join();
@@ -378,8 +294,6 @@ public class GameScreen extends View {
         for (int i = 0; i <= clusters - 1; i++) {
             asteroidClusters.add(new AsteroidCluster(clusterPosX[i], clusterPosY[i], asteroidNum));
         }
-
-        asteroidClusters = null;
     }
 
     //Generates stars randomly around the map
@@ -412,7 +326,7 @@ public class GameScreen extends View {
 
         Main.selectShips.clear();
         for (int i = 0; i <= ships.size() - 1; i++) {
-            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2) {
+            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2/* && ships.get(i).team == 1*/) {
                 oneWasSelected = true;
                 Main.selectShips.add(ships.get(i));
                 ships.get(i).selected = true;
@@ -456,7 +370,7 @@ public class GameScreen extends View {
         ArrayList<Ship> victims = new ArrayList<>();
 
         for (int i = 0; i <= ships.size() - 1; i++) {
-            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2) {
+            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2 && ships.get(i).team != 1) {
                 if (!ships.get(i).selected) {
                     ships.get(i).attSelected = true;
                     victims.add(ships.get(i));
@@ -506,6 +420,9 @@ public class GameScreen extends View {
 
     //Generates ships in a standoff way
     public static void generateFaceoff() {
+        offsetX = -227;
+        offsetY = -12554;
+
         blackHole.add(new BlackHole(0, 0));
         generateStars(3000);
         generateAsteroids(0, 5);
@@ -668,6 +585,85 @@ public class GameScreen extends View {
 
             placeShips();
         } while (doShipsCollide());
+
+        for (int i = 0; i < blackboards.length; i++) {
+            blackboards[i] = new Blackboard(i + 1);
+        }
+    }
+
+    //Generates ships randomly around the map
+    public static void generateGame() {
+        blackHole.add(new BlackHole(0, 0));
+        int bulletNum = 500;
+        int explosionNum = 500;
+        final int missileNum = 200;
+        final int laserNum = 50;
+
+        generateStars(0);
+        do {
+            asteroidClusters.clear();
+            asteroids.clear();
+            generateAsteroids(10, 5);
+
+            resourceCollectors.clear();
+            flagShips.clear();
+            fighters.clear();
+            battleShips.clear();
+            bombers.clear();
+            scouts.clear();
+            laserCruisers.clear();
+            spaceStations.clear();
+
+            flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY / 4 - mapSizeY / 48)) + mapSizeY / 4, 1));
+            flagShips.add(new FlagShip((((float) Math.random() * (mapSizeX - mapSizeX / 48)) - mapSizeX / 2), ((float) Math.random() * (mapSizeY / 4 - mapSizeY / 48)) - mapSizeY / 2, 2));
+
+            resourceCollectors.add(new ResourceCollector(flagShips.get(0).centerPosX + mapSizeX / 48, flagShips.get(0).centerPosY,1));
+            resourceCollectors.add(new ResourceCollector(flagShips.get(0).centerPosX - mapSizeX / 48, flagShips.get(0).centerPosY,1));
+
+            scouts.add(new Scout(flagShips.get(0).centerPosX, flagShips.get(0).centerPosY - mapSizeY / 48,1));
+
+            resourceCollectors.add(new ResourceCollector(flagShips.get(1).centerPosX + mapSizeX / 48, flagShips.get(1).centerPosY,2));
+            resourceCollectors.add(new ResourceCollector(flagShips.get(1).centerPosX - mapSizeX / 48, flagShips.get(1).centerPosY,2));
+
+            scouts.add(new Scout(flagShips.get(1).centerPosX, flagShips.get(1).centerPosY + mapSizeY / 48,2));
+
+            bullets.clear();
+            for (int i = 0; i <= bulletNum - 1; i++) {
+                bullets.add(new Bullet());
+            }
+
+            missiles.clear();
+            for (int i = 0; i <= missileNum - 1; i++) {
+                missiles.add(new Missile());
+            }
+
+            lasers.clear();
+            for (int i = 0; i <= laserNum - 1; i++) {
+                lasers.add(new Laser());
+            }
+
+            explosions.clear();
+            for (int i = 0; i <= explosionNum - 1; i++) {
+                explosions.add(new Explosion());
+            }
+
+            placeShips();
+        } while (doShipsCollide());
+
+        for (int i = 0; i < blackboards.length; i++) {
+            blackboards[i] = new Blackboard(i + 1);
+        }
+
+        Main.selectShips.add(flagShips.get(0));
+        Main.following = true;
+
+        for (int i = 0; i <= ships.size() - 1; i++) {
+            if (ships.get(i) instanceof ResourceCollector) {
+                ((ResourceCollector) ships.get(i)).goToAsteroid();
+            } else if (ships.get(i) instanceof Scout) {
+                ((Scout) ships.get(i)).scout();
+            }
+        }
     }
 
     void makeExplosion(GameObject object) {
@@ -706,76 +702,50 @@ public class GameScreen extends View {
                 canvas.drawCircle(Main.screenX * ((asteroids.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((asteroids.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, yellow);
             }
 
-            for (int i = 0; i <= flagShips.size() - 1; i++) {
-                if (flagShips.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
+            color = green;
+            float radius = 0;
+            for (int i = 0; i <= ships.size() - 1; i++) {
+                if (ships.get(i).team != 1){
+                    continue;
                 }
-                canvas.drawCircle(Main.screenX * ((flagShips.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((flagShips.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
+                if (ships.get(i) instanceof FlagShip || ships.get(i) instanceof BattleShip || ships.get(i) instanceof SpaceStation) {
+                    radius = 10;
+                } else if (ships.get(i) instanceof ResourceCollector || ships.get(i) instanceof Scout) {
+                    radius = 1;
+                } else if (ships.get(i) instanceof Fighter || ships.get(i) instanceof Bomber) {
+                    radius = 4;
+                } else if (ships.get(i) instanceof LaserCruiser) {
+                    radius = 7;
+                }
+                canvas.drawCircle(Main.screenX * ((ships.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((ships.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, radius, color);
             }
 
-            for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
-                if (resourceCollectors.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
+            color = red;
+            for (int i = 0; i < blackboards[0].visibleEnemyShips.size(); i++) {
+                if (blackboards[0].visibleEnemyShips.get(i) instanceof FlagShip || blackboards[0].visibleEnemyShips.get(i) instanceof BattleShip || blackboards[0].visibleEnemyShips.get(i) instanceof SpaceStation) {
+                    radius = 10;
+                } else if (blackboards[0].visibleEnemyShips.get(i) instanceof ResourceCollector || blackboards[0].visibleEnemyShips.get(i) instanceof Scout) {
+                    radius = 1;
+                } else if (blackboards[0].visibleEnemyShips.get(i) instanceof Fighter || blackboards[0].visibleEnemyShips.get(i) instanceof Bomber) {
+                    radius = 4;
+                } else if (blackboards[0].visibleEnemyShips.get(i) instanceof LaserCruiser) {
+                    radius = 7;
                 }
-                canvas.drawCircle(Main.screenX * ((resourceCollectors.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((resourceCollectors.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, color);
+                canvas.drawCircle(Main.screenX * ((blackboards[0].visibleEnemyShips.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((blackboards[0].visibleEnemyShips.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, radius, color);
             }
 
-            for (int i = 0; i <= fighters.size() - 1; i++) {
-                if (fighters.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
+            color = lastSeenPaint;
+            for (int i = 0; i < blackboards[0].possibleEnemyShips.size(); i++) {
+                if (blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof FlagShip || blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof BattleShip || blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof SpaceStation) {
+                    radius = 10;
+                } else if (blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof ResourceCollector || blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof Scout) {
+                    radius = 1;
+                } else if (blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof Fighter || blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof Bomber) {
+                    radius = 4;
+                } else if (blackboards[0].possibleEnemyShips.get(i).getFirst() instanceof LaserCruiser) {
+                    radius = 7;
                 }
-                canvas.drawCircle(Main.screenX * ((fighters.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((fighters.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 4, color);
-            }
-
-            for (int i = 0; i <= battleShips.size() - 1; i++) {
-                if (battleShips.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
-                }
-                canvas.drawCircle(Main.screenX * ((battleShips.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((battleShips.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
-            }
-
-            for (int i = 0; i <= bombers.size() - 1; i++) {
-                if (bombers.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
-                }
-                canvas.drawCircle(Main.screenX * ((bombers.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((bombers.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 4, color);
-            }
-
-            for (int i = 0; i <= scouts.size() - 1; i++) {
-                if (scouts.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
-                }
-                canvas.drawCircle(Main.screenX * ((scouts.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((scouts.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 1, color);
-            }
-
-            for (int i = 0; i <= laserCruisers.size() - 1; i++) {
-                if (laserCruisers.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
-                }
-                canvas.drawCircle(Main.screenX * ((laserCruisers.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((laserCruisers.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 7, color);
-            }
-
-            for (int i = 0; i <= spaceStations.size() - 1; i++) {
-                if (spaceStations.get(i).team == 1) {
-                    color = green;
-                } else {
-                    color = red;
-                }
-                canvas.drawCircle(Main.screenX * ((spaceStations.get(i).centerPosX + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((spaceStations.get(i).centerPosY + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, 10, color);
+                canvas.drawCircle(Main.screenX * ((blackboards[0].possibleEnemyShips.get(i).getSecond() + (float) mapSizeX / 2) / mapSizeX) - Main.screenX / 2, Main.screenY * ((blackboards[0].possibleEnemyShips.get(i).getThird() + (float) mapSizeY / 2) / mapSizeY) - Main.screenY / 2, radius, color);
             }
             return;
         }
@@ -851,10 +821,20 @@ public class GameScreen extends View {
         for (int i = 0; i <= asteroids.size() - 1; i++) {
             if (asteroids.get(i).centerPosX + asteroids.get(i).radius >= offsetX / scaleX && asteroids.get(i).centerPosX - asteroids.get(i).radius <= offsetX / scaleX + extraOffsetX && asteroids.get(i).centerPosY + asteroids.get(i).radius >= offsetY / scaleY && asteroids.get(i).centerPosY - asteroids.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 canvas.drawBitmap(bitAsteroid, asteroids.get(i).appearance, null);
+                /*if (asteroids.get(i).incomingResourceCollector != null) {
+                    canvas.drawCircle(asteroids.get(i).centerPosX, asteroids.get(i).centerPosY, asteroids.get(i).incomingResourceCollector.radius, red);
+                }*/
             }
         }
 
+        /*for (int i = 0; i < asteroidClusters.size(); i++) {
+            canvas.drawCircle(asteroidClusters.get(i).positionX, asteroidClusters.get(i).positionY, asteroidClusters.get(i).radius, sensorPaint);
+        }*/
+
         for (int i = 0; i <= flagShips.size() - 1; i++) {
+            if (!flagShips.get(i).visible){
+                continue;
+            }
             if (flagShips.get(i).centerPosX + flagShips.get(i).radius + flagShips.get(i).radius * 0.2f >= offsetX / scaleX && flagShips.get(i).centerPosX - flagShips.get(i).radius + flagShips.get(i).radius * 0.2f <= offsetX / scaleX + extraOffsetX && flagShips.get(i).centerPosY + flagShips.get(i).radius + flagShips.get(i).radius * 0.2f >= offsetY / scaleY && flagShips.get(i).centerPosY - flagShips.get(i).radius + flagShips.get(i).radius * 0.2f <= offsetY / scaleY + extraOffsetY) {
                 if (flagShips.get(i).selected || flagShips.get(i).attSelected) {
                     canvas.drawCircle(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).radius * 1.1f, flagShips.get(i).selector);
@@ -866,20 +846,24 @@ public class GameScreen extends View {
                     if (flagShips.get(i).attacking && flagShips.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.enemies.get(0).centerPosX, flagShips.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
+                    canvas.drawCircle(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).sensorRadius, sensorPaint);
                 }
                 if (flagShips.get(i).team == 1) {
                     canvas.drawBitmap(bitFlagShip, flagShips.get(i).appearance, null);
+                    if (flagShips.get(i).destination) {
+                        canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.destX, flagShips.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, flagShips.get(i).arrow, null);
+                    }
                 } else {
                     canvas.drawBitmap(enFlagShip1, flagShips.get(i).appearance, null);
                 }
             }
-            if (flagShips.get(i).destination) {
-                canvas.drawLine(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(i).destinationFinder.destX, flagShips.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, flagShips.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
+            if (!resourceCollectors.get(i).visible){
+                continue;
+            }
             if (resourceCollectors.get(i).centerPosX + resourceCollectors.get(i).radius >= offsetX / scaleX && resourceCollectors.get(i).centerPosX - resourceCollectors.get(i).radius <= offsetX / scaleX + extraOffsetX && resourceCollectors.get(i).centerPosY + resourceCollectors.get(i).radius >= offsetY / scaleY && resourceCollectors.get(i).centerPosY - resourceCollectors.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (resourceCollectors.get(i).selected || resourceCollectors.get(i).attSelected) {
                     canvas.drawCircle(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).radius, resourceCollectors.get(i).selector);
@@ -890,25 +874,30 @@ public class GameScreen extends View {
 
                     float resources = (float) (resourceCollectors.get(i).resources / resourceCollectors.get(i).RESOURCE_CAPACITY);
                     canvas.drawRect(resourceCollectors.get(i).positionX, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 2.5f, resourceCollectors.get(i).positionX + resourceCollectors.get(i).radius * 2 * resources, resourceCollectors.get(i).positionY - resourceCollectors.get(i).radius / 2f, yellow);
+
+                    canvas.drawCircle(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).sensorRadius, sensorPaint);
                 }
                 if (resourceCollectors.get(i).team == 1) {
                     canvas.drawBitmap(bitResCollector, resourceCollectors.get(i).appearance, null);
+                    if (resourceCollectors.get(i).destination) {
+                        if (resourceCollectors.get(i).harvesting && !resourceCollectors.get(i).docking) {
+                            canvas.drawLine(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).destinationFinder.destX, resourceCollectors.get(i).destinationFinder.destY, yellow);
+                            canvas.drawBitmap(bitHarvestArrow, resourceCollectors.get(i).arrow, null);
+                        } else {
+                            canvas.drawLine(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).destinationFinder.destX, resourceCollectors.get(i).destinationFinder.destY, green);
+                            canvas.drawBitmap(bitArrow, resourceCollectors.get(i).arrow, null);
+                        }
+                    }
                 } else if (resourceCollectors.get(i).team == 2) {
                     canvas.drawBitmap(enResCollector1, resourceCollectors.get(i).appearance, null);
-                }
-            }
-            if (resourceCollectors.get(i).destination) {
-                if (resourceCollectors.get(i).harvesting && !resourceCollectors.get(i).docking) {
-                    canvas.drawLine(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).destinationFinder.destX, resourceCollectors.get(i).destinationFinder.destY, yellow);
-                    canvas.drawBitmap(bitHarvestArrow, resourceCollectors.get(i).arrow, null);
-                } else {
-                    canvas.drawLine(resourceCollectors.get(i).centerPosX, resourceCollectors.get(i).centerPosY, resourceCollectors.get(i).destinationFinder.destX, resourceCollectors.get(i).destinationFinder.destY, green);
-                    canvas.drawBitmap(bitArrow, resourceCollectors.get(i).arrow, null);
                 }
             }
         }
 
         for (int i = 0; i <= fighters.size() - 1; i++) {
+            if (!fighters.get(i).visible){
+                continue;
+            }
             if (fighters.get(i).centerPosX + fighters.get(i).radius >= offsetX / scaleX && fighters.get(i).centerPosX - fighters.get(i).radius <= offsetX / scaleX + extraOffsetX && fighters.get(i).centerPosY + fighters.get(i).radius >= offsetY / scaleY && fighters.get(i).centerPosY - fighters.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (fighters.get(i).selected || fighters.get(i).attSelected) {
                     canvas.drawCircle(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).radius, fighters.get(i).selector);
@@ -920,20 +909,24 @@ public class GameScreen extends View {
                     if (fighters.get(i).attacking && fighters.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.enemies.get(0).centerPosX, fighters.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
+                    canvas.drawCircle(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).sensorRadius, sensorPaint);
                 }
                 if (fighters.get(i).team == 1) {
                     canvas.drawBitmap(bitFighter, fighters.get(i).appearance, null);
+                    if (fighters.get(i).destination) {
+                        canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.destX, fighters.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, fighters.get(i).arrow, null);
+                    }
                 } else {
                     canvas.drawBitmap(enFighter1, fighters.get(i).appearance, null);
                 }
             }
-            if (fighters.get(i).destination) {
-                canvas.drawLine(fighters.get(i).centerPosX, fighters.get(i).centerPosY, fighters.get(i).destinationFinder.destX, fighters.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, fighters.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= battleShips.size() - 1; i++) {
+            if (!battleShips.get(i).visible){
+                continue;
+            }
             if (battleShips.get(i).centerPosX + battleShips.get(i).radius >= offsetX / scaleX && battleShips.get(i).centerPosX - battleShips.get(i).radius <= offsetX / scaleX + extraOffsetX && battleShips.get(i).centerPosY + battleShips.get(i).radius >= offsetY / scaleY && battleShips.get(i).centerPosY - battleShips.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (battleShips.get(i).selected || battleShips.get(i).attSelected) {
                     canvas.drawCircle(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).radius, battleShips.get(i).selector);
@@ -945,20 +938,24 @@ public class GameScreen extends View {
                     if (battleShips.get(i).attacking && battleShips.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).destinationFinder.enemies.get(0).centerPosX, battleShips.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
+                    canvas.drawCircle(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).sensorRadius, sensorPaint);
                 }
                 if (battleShips.get(i).team == 1) {
                     canvas.drawBitmap(bitBattleShip, battleShips.get(i).appearance, null);
+                    if (battleShips.get(i).destination) {
+                        canvas.drawLine(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).destinationFinder.destX, battleShips.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, battleShips.get(i).arrow, null);
+                    }
                 } else if (battleShips.get(i).team == 2) {
                     canvas.drawBitmap(enBattleShip1, battleShips.get(i).appearance, null);
                 }
             }
-            if (battleShips.get(i).destination) {
-                canvas.drawLine(battleShips.get(i).centerPosX, battleShips.get(i).centerPosY, battleShips.get(i).destinationFinder.destX, battleShips.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, battleShips.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= bombers.size() - 1; i++) {
+            if (!bombers.get(i).visible){
+                continue;
+            }
             if (bombers.get(i).centerPosX + bombers.get(i).radius >= offsetX / scaleX && bombers.get(i).centerPosX - bombers.get(i).radius <= offsetX / scaleX + extraOffsetX && bombers.get(i).centerPosY + bombers.get(i).radius >= offsetY / scaleY && bombers.get(i).centerPosY - bombers.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (bombers.get(i).selected || bombers.get(i).attSelected) {
                     canvas.drawCircle(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).radius, bombers.get(i).selector);
@@ -970,20 +967,24 @@ public class GameScreen extends View {
                     if (bombers.get(i).attacking && bombers.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).destinationFinder.enemies.get(0).centerPosX, bombers.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
+                    canvas.drawCircle(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).sensorRadius, sensorPaint);
                 }
                 if (bombers.get(i).team == 1) {
                     canvas.drawBitmap(bitBomber, bombers.get(i).appearance, null);
+                    if (bombers.get(i).destination) {
+                        canvas.drawLine(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).destinationFinder.destX, bombers.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, bombers.get(i).arrow, null);
+                    }
                 } else if (bombers.get(i).team == 2) {
                     canvas.drawBitmap(enBomber1, bombers.get(i).appearance, null);
                 }
             }
-            if (bombers.get(i).destination) {
-                canvas.drawLine(bombers.get(i).centerPosX, bombers.get(i).centerPosY, bombers.get(i).destinationFinder.destX, bombers.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, bombers.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= scouts.size() - 1; i++) {
+            if (!scouts.get(i).visible){
+                continue;
+            }
             if (scouts.get(i).centerPosX + scouts.get(i).radius >= offsetX / scaleX && scouts.get(i).centerPosX - scouts.get(i).radius <= offsetX / scaleX + extraOffsetX && scouts.get(i).centerPosY + scouts.get(i).radius >= offsetY / scaleY && scouts.get(i).centerPosY - scouts.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (scouts.get(i).selected || scouts.get(i).attSelected) {
                     canvas.drawCircle(scouts.get(i).centerPosX, scouts.get(i).centerPosY, scouts.get(i).radius, scouts.get(i).selector);
@@ -991,20 +992,25 @@ public class GameScreen extends View {
                     float health = scouts.get(i).health / scouts.get(i).MAX_HEALTH;
                     canvas.drawRect(scouts.get(i).positionX, scouts.get(i).positionY - scouts.get(i).radius / 4.5f, scouts.get(i).positionX + scouts.get(i).radius * 2, scouts.get(i).positionY - scouts.get(i).radius / 3, red);
                     canvas.drawRect(scouts.get(i).positionX, scouts.get(i).positionY - scouts.get(i).radius / 4.5f, scouts.get(i).positionX + scouts.get(i).radius * 2 * health, scouts.get(i).positionY - scouts.get(i).radius / 3, green);
+
+                    canvas.drawCircle(scouts.get(i).centerPosX, scouts.get(i).centerPosY, scouts.get(i).sensorRadius, sensorPaint);
                 }
                 if (scouts.get(i).team == 1) {
                     canvas.drawBitmap(bitScout, scouts.get(i).appearance, null);
+                    if (scouts.get(i).destination) {
+                        canvas.drawLine(scouts.get(i).centerPosX, scouts.get(i).centerPosY, scouts.get(i).destinationFinder.destX, scouts.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, scouts.get(i).arrow, null);
+                    }
                 } else if (scouts.get(i).team == 2) {
                     canvas.drawBitmap(enScout1, scouts.get(i).appearance, null);
                 }
             }
-            if (scouts.get(i).destination) {
-                canvas.drawLine(scouts.get(i).centerPosX, scouts.get(i).centerPosY, scouts.get(i).destinationFinder.destX, scouts.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, scouts.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= laserCruisers.size() - 1; i++) {
+            if (!laserCruisers.get(i).visible){
+                continue;
+            }
             if (laserCruisers.get(i).centerPosX + laserCruisers.get(i).radius >= offsetX / scaleX && laserCruisers.get(i).centerPosX - laserCruisers.get(i).radius <= offsetX / scaleX + extraOffsetX && laserCruisers.get(i).centerPosY + laserCruisers.get(i).radius >= offsetY / scaleY && laserCruisers.get(i).centerPosY - laserCruisers.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (laserCruisers.get(i).selected || laserCruisers.get(i).attSelected) {
                     canvas.drawCircle(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).radius, laserCruisers.get(i).selector);
@@ -1016,20 +1022,24 @@ public class GameScreen extends View {
                     if (laserCruisers.get(i).attacking && laserCruisers.get(i).destinationFinder.enemies.size() > 0) {
                         canvas.drawLine(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).destinationFinder.enemies.get(0).centerPosX, laserCruisers.get(i).destinationFinder.enemies.get(0).centerPosY, red);
                     }
+                    canvas.drawCircle(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).sensorRadius, sensorPaint);
                 }
                 if (laserCruisers.get(i).team == 1) {
                     canvas.drawBitmap(bitLaserCruiser, laserCruisers.get(i).appearance, null);
+                    if (laserCruisers.get(i).destination) {
+                        canvas.drawLine(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).destinationFinder.destX, laserCruisers.get(i).destinationFinder.destY, green);
+                        canvas.drawBitmap(bitArrow, laserCruisers.get(i).arrow, null);
+                    }
                 } else if (laserCruisers.get(i).team == 2) {
                     canvas.drawBitmap(enLaserCruiser1, laserCruisers.get(i).appearance, null);
                 }
             }
-            if (laserCruisers.get(i).destination) {
-                canvas.drawLine(laserCruisers.get(i).centerPosX, laserCruisers.get(i).centerPosY, laserCruisers.get(i).destinationFinder.destX, laserCruisers.get(i).destinationFinder.destY, green);
-                canvas.drawBitmap(bitArrow, laserCruisers.get(i).arrow, null);
-            }
         }
 
         for (int i = 0; i <= spaceStations.size() - 1; i++) {
+            if (!spaceStations.get(i).visible){
+                continue;
+            }
             if (spaceStations.get(i).centerPosX + spaceStations.get(i).radius >= offsetX / scaleX && spaceStations.get(i).centerPosX - spaceStations.get(i).radius <= offsetX / scaleX + extraOffsetX && spaceStations.get(i).centerPosY + spaceStations.get(i).radius >= offsetY / scaleY && spaceStations.get(i).centerPosY - spaceStations.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                 if (spaceStations.get(i).selected || spaceStations.get(i).attSelected) {
                     canvas.drawCircle(spaceStations.get(i).centerPosX, spaceStations.get(i).centerPosY, spaceStations.get(i).radius, spaceStations.get(i).selector);
@@ -1037,6 +1047,8 @@ public class GameScreen extends View {
                     float health = spaceStations.get(i).health / spaceStations.get(i).MAX_HEALTH;
                     canvas.drawRect(spaceStations.get(i).positionX, spaceStations.get(i).positionY - spaceStations.get(i).radius / 9, spaceStations.get(i).positionX + spaceStations.get(i).radius * 2, spaceStations.get(i).positionY - spaceStations.get(i).radius / 8, red);
                     canvas.drawRect(spaceStations.get(i).positionX, spaceStations.get(i).positionY - spaceStations.get(i).radius / 9, spaceStations.get(i).positionX + spaceStations.get(i).radius * 2 * health, spaceStations.get(i).positionY - spaceStations.get(i).radius / 8, green);
+
+                    canvas.drawCircle(spaceStations.get(i).centerPosX, spaceStations.get(i).centerPosY, spaceStations.get(i).sensorRadius, sensorPaint);
                 }
                 if (spaceStations.get(i).team == 1) {
                     canvas.drawBitmap(bitStation, spaceStations.get(i).appearance, null);
@@ -1078,146 +1090,227 @@ public class GameScreen extends View {
 
     //Main game loop, 60 fps!
     public void gameLoop() {
-        Main.refresh.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!paused) {
-                    invalidate();
-                    for (int i = 0; i <= blackHole.size() - 1; i++) {
-                        blackHole.get(i).update();
+        Main.refresh.postDelayed(() -> {
+            if (!paused) {
+                invalidate();
+                for (int i = 0; i <= blackHole.size() - 1; i++) {
+                    blackHole.get(i).update();
+                }
+                for (int i = 0; i <= asteroids.size() - 1; i++) {
+                    if (asteroids.get(i).hasResLeft) {
+                        asteroids.get(i).update();
+                    } else {
+                        makeExplosion(asteroids.get(i));
+                        objects.remove(asteroids.get(i));
+                        asteroids.remove(i);
                     }
-                    for (int i = 0; i <= asteroids.size() - 1; i++) {
-                        if (asteroids.get(i).hasResLeft) {
-                            asteroids.get(i).update();
-                        } else {
-                            makeExplosion(asteroids.get(i));
-                            objects.remove(asteroids.get(i));
-                            asteroids.remove(i);
+                }
+                int bulletCount = 0;
+                for (int i = 0; i <= bullets.size() - 1; i++) {
+                    if (bullets.get(i).exists) {
+                        bullets.get(i).update();
+                        bulletCount++;
+                    }
+                }
+                int missileCount = 0;
+                for (int i = 0; i <= missiles.size() - 1; i++) {
+                    if (missiles.get(i).exists) {
+                        missiles.get(i).update();
+                        missileCount++;
+                    }
+                }
+                int laserCount = 0;
+                for (int i = 0; i <= lasers.size() - 1; i++) {
+                    if (lasers.get(i).exists) {
+                        lasers.get(i).update();
+                        laserCount++;
+                    }
+                }
+                int explosionCount = 0;
+                for (int i = 0; i <= explosions.size() - 1; i++) {
+                    if (explosions.get(i).active) {
+                        explosions.get(i).update();
+                        explosionCount++;
+                    }
+                }
+                for (int i = 0; i <= flagShips.size() - 1; i++) {
+                    if (flagShips.get(i).exists) {
+                        flagShips.get(i).update();
+                    } else {
+                        makeExplosion(flagShips.get(i));
+                        objects.remove(flagShips.get(i));
+                        ships.remove(flagShips.get(i));
+                        flagShips.remove(i);
+                    }
+                }
+                for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
+                    if (resourceCollectors.get(i).exists) {
+                        resourceCollectors.get(i).update();
+                    } else {
+                        makeExplosion(resourceCollectors.get(i));
+                        objects.remove(resourceCollectors.get(i));
+                        ships.remove(resourceCollectors.get(i));
+                        resourceCollectors.remove(i);
+                    }
+                }
+                for (int i = 0; i <= fighters.size() - 1; i++) {
+                    if (fighters.get(i).exists) {
+                        fighters.get(i).update();
+                    } else {
+                        makeExplosion(fighters.get(i));
+                        objects.remove(fighters.get(i));
+                        ships.remove(fighters.get(i));
+                        fighters.remove(i);
+                    }
+                }
+                for (int i = 0; i <= battleShips.size() - 1; i++) {
+                    if (battleShips.get(i).exists) {
+                        battleShips.get(i).update();
+                    } else {
+                        makeExplosion(battleShips.get(i));
+                        objects.remove(battleShips.get(i));
+                        ships.remove(battleShips.get(i));
+                        battleShips.remove(i);
+                    }
+                }
+                for (int i = 0; i <= bombers.size() - 1; i++) {
+                    if (bombers.get(i).exists) {
+                        bombers.get(i).update();
+                    } else {
+                        makeExplosion(bombers.get(i));
+                        objects.remove(bombers.get(i));
+                        ships.remove(bombers.get(i));
+                        bombers.remove(i);
+                    }
+                }
+                for (int i = 0; i <= scouts.size() - 1; i++) {
+                    if (scouts.get(i).exists) {
+                        scouts.get(i).update();
+                    } else {
+                        makeExplosion(scouts.get(i));
+                        objects.remove(scouts.get(i));
+                        ships.remove(scouts.get(i));
+                        scouts.remove(i);
+                    }
+                }
+                for (int i = 0; i <= laserCruisers.size() - 1; i++) {
+                    if (laserCruisers.get(i).exists) {
+                        laserCruisers.get(i).update();
+                    } else {
+                        makeExplosion(laserCruisers.get(i));
+                        objects.remove(laserCruisers.get(i));
+                        ships.remove(laserCruisers.get(i));
+                        laserCruisers.remove(i);
+                    }
+                }
+                for (int i = 0; i <= spaceStations.size() - 1; i++) {
+                    if (spaceStations.get(i).exists) {
+                        spaceStations.get(i).update();
+                    } else {
+                        makeExplosion(spaceStations.get(i));
+                        objects.remove(spaceStations.get(i));
+                        ships.remove(spaceStations.get(i));
+                        spaceStations.remove(i);
+                    }
+                }
+                for (int i = 0; i <= Main.selectShips.size() - 1; i++) {
+                    if (!Main.selectShips.get(i).exists) {
+                        Main.selectShips.remove(Main.selectShips.get(i));
+                    }
+                }
+                for (int i = 0; i <= formationsTeam1.size() - 1; i++) {
+                    if (formationsTeam1.get(i).ships.size() == 0) {
+                        formationsTeam1.remove(formationsTeam1.get(i));
+                    } else {
+                        formationsTeam1.get(i).update();
+                    }
+                }
+                //System.out.println("Bullets: " + bulletCount + " Missiles: " + missileCount + " Lasers: " + laserCount + " Explosions: " + explosionCount);
+                followShips();
+            }
+            gameLoop();
+        }, 16);
+    }
+}
+
+/*generation = 0;
+        String fitnessFile = "fitnessc.txt";
+        String gen_pattern = "gen(\\d+)";
+        String ship_pattern = "ship(\\d+)";
+        Pattern gen_regex = Pattern.compile(gen_pattern);
+        Pattern ship_regex = Pattern.compile(ship_pattern);
+
+        File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (Objects.equals(file.getName(), fitnessFile)){
+                    fitness = file;
+                }
+                Matcher matcher = gen_regex.matcher(file.getName());
+                if (matcher.find()) {
+                    String genNumber = matcher.group(1);
+                    if (genNumber == null) {
+                        throw new IllegalArgumentException("Gen Number was null.");
+                    }
+                    if (Integer.parseInt(genNumber) > generation) {
+                        generation = Integer.parseInt(genNumber);
+                    }
+                }
+            }
+        }
+        if (fitness == null){
+            System.out.println("Fitness file not found, creating new one.");
+            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fitnessFile);
+        }*/
+
+    /*generateGame();
+        List<String[]> data = new ArrayList<>();
+        for (int i = 0; i <= ships.size() - 1; i++) {
+            if (generation == 0) {
+                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 2, 1);
+            } else {
+                for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
+                    Matcher matcher = gen_regex.matcher(file.getName());
+                    if (matcher.find()) {
+                        String genNumber = matcher.group(1);
+                        if (genNumber == null) {
+                            throw new IllegalArgumentException("Gen Number was null.");
+                        }
+                        if (Integer.parseInt(genNumber) == generation) {
+                            matcher = ship_regex.matcher(file.getName());
+                            if (matcher.find()) {
+                                String shipNumber = matcher.group(1);
+                                if (shipNumber == null) {
+                                    throw new IllegalArgumentException("Ship Number was null.");
+                                }
+                                if (Integer.parseInt(shipNumber) == i) {
+                                    System.out.println("Loading ship " + i);
+                                    data.clear();
+                                    BufferedReader reader;
+                                    try {
+                                        reader = new BufferedReader(new FileReader(file));
+                                        String line;
+                                        while ((line = reader.readLine()) != null) {
+                                            data.add(line.split(","));
+                                        }
+
+                                        ships.get(i).destinationFinder.attacker = new NeuralNetwork(data);
+
+                                        reader.close();
+                                    } catch (FileNotFoundException e) {
+                                        throw new IllegalArgumentException("File not found.");
+                                    } catch (IOException e) {
+                                        throw new IllegalArgumentException("IO Exception.");
+                                    }
+                                }
+                            }
                         }
                     }
-                    int bulletCount = 0;
-                    for (int i = 0; i <= bullets.size() - 1; i++) {
-                        if (bullets.get(i).exists) {
-                            bullets.get(i).update();
-                            bulletCount++;
-                        }
-                    }
-                    int missileCount = 0;
-                    for (int i = 0; i <= missiles.size() - 1; i++) {
-                        if (missiles.get(i).exists) {
-                            missiles.get(i).update();
-                            missileCount++;
-                        }
-                    }
-                    int laserCount = 0;
-                    for (int i = 0; i <= lasers.size() - 1; i++) {
-                        if (lasers.get(i).exists) {
-                            lasers.get(i).update();
-                            laserCount++;
-                        }
-                    }
-                    int explosionCount = 0;
-                    for (int i = 0; i <= explosions.size() - 1; i++) {
-                        if (explosions.get(i).active) {
-                            explosions.get(i).update();
-                            explosionCount++;
-                        }
-                    }
-                    for (int i = 0; i <= flagShips.size() - 1; i++) {
-                        if (flagShips.get(i).exists) {
-                            flagShips.get(i).update();
-                        } else {
-                            makeExplosion(flagShips.get(i));
-                            objects.remove(flagShips.get(i));
-                            ships.remove(flagShips.get(i));
-                            flagShips.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= resourceCollectors.size() - 1; i++) {
-                        if (resourceCollectors.get(i).exists) {
-                            resourceCollectors.get(i).update();
-                        } else {
-                            makeExplosion(resourceCollectors.get(i));
-                            objects.remove(resourceCollectors.get(i));
-                            ships.remove(resourceCollectors.get(i));
-                            resourceCollectors.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= fighters.size() - 1; i++) {
-                        if (fighters.get(i).exists) {
-                            fighters.get(i).update();
-                        } else {
-                            makeExplosion(fighters.get(i));
-                            objects.remove(fighters.get(i));
-                            ships.remove(fighters.get(i));
-                            fighters.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= battleShips.size() - 1; i++) {
-                        if (battleShips.get(i).exists) {
-                            battleShips.get(i).update();
-                        } else {
-                            makeExplosion(battleShips.get(i));
-                            objects.remove(battleShips.get(i));
-                            ships.remove(battleShips.get(i));
-                            battleShips.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= bombers.size() - 1; i++) {
-                        if (bombers.get(i).exists) {
-                            bombers.get(i).update();
-                        } else {
-                            makeExplosion(bombers.get(i));
-                            objects.remove(bombers.get(i));
-                            ships.remove(bombers.get(i));
-                            bombers.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= scouts.size() - 1; i++) {
-                        if (scouts.get(i).exists) {
-                            scouts.get(i).update();
-                        } else {
-                            makeExplosion(scouts.get(i));
-                            objects.remove(scouts.get(i));
-                            ships.remove(scouts.get(i));
-                            scouts.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= laserCruisers.size() - 1; i++) {
-                        if (laserCruisers.get(i).exists) {
-                            laserCruisers.get(i).update();
-                        } else {
-                            makeExplosion(laserCruisers.get(i));
-                            objects.remove(laserCruisers.get(i));
-                            ships.remove(laserCruisers.get(i));
-                            laserCruisers.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= spaceStations.size() - 1; i++) {
-                        if (spaceStations.get(i).exists) {
-                            spaceStations.get(i).update();
-                        } else {
-                            makeExplosion(spaceStations.get(i));
-                            objects.remove(spaceStations.get(i));
-                            ships.remove(spaceStations.get(i));
-                            spaceStations.remove(i);
-                        }
-                    }
-                    for (int i = 0; i <= Main.selectShips.size() - 1; i++) {
-                        if (!Main.selectShips.get(i).exists) {
-                            Main.selectShips.remove(Main.selectShips.get(i));
-                        }
-                    }
-                    for (int i = 0; i <= formationsTeam1.size() - 1; i++) {
-                        if (formationsTeam1.get(i).ships.size() == 0) {
-                            formationsTeam1.remove(formationsTeam1.get(i));
-                        } else {
-                            formationsTeam1.get(i).update();
-                        }
-                    }
-                    //System.out.println("Bullets: " + bulletCount + " Missiles: " + missileCount + " Lasers: " + laserCount + " Explosions: " + explosionCount);
-                    followShips();
-                    /*time += 16;
+                }
+            }
+        }*/
+
+/*time += 16;
                     if (time >= 100000) {
                         paused = true;
 
@@ -1295,9 +1388,3 @@ public class GameScreen extends View {
                         }
                         Main.restart = true;
                     }*/
-                }
-                gameLoop();
-            }
-        }, 16);
-    }
-}

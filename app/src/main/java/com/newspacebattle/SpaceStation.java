@@ -49,6 +49,7 @@ class SpaceStation extends Ship {
         ring1Degrees = 90;
         ring2Degrees = 180;
         ring3Degrees = 270;
+        sensorRadius = radius * 12;
     }
 
     //Updates the object's properties

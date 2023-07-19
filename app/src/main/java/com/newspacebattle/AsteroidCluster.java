@@ -1,11 +1,14 @@
 package com.newspacebattle;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dylan on 2018-06-30. Generates asteroids within its radius.
  */
 class AsteroidCluster {
 
     float positionX, positionY, radius;
+    ArrayList<Asteroid> asteroids = new ArrayList<>();
 
     //Constructor Method
     AsteroidCluster(float x, float y, int asteroidNum) {
@@ -13,6 +16,15 @@ class AsteroidCluster {
         positionY = y;
         radius = GameScreen.clusterSize;
         generateField(asteroidNum);
+    }
+
+    boolean stillAsteroids() {
+        for (int i = 0; i <= asteroids.size() - 1; i++) {
+            if (asteroids.get(i).exists) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Generates a certain number of asteroids within its radius
@@ -46,7 +58,9 @@ class AsteroidCluster {
         } while (!distanceIsGood);
 
         for (int i = 0; i <= asteroidNum - 1; i++) {
-            GameScreen.asteroids.add(new Asteroid(positionX + xPos[i], positionY + yPos[i], sizes[i]));
+            Asteroid asteroid = new Asteroid(positionX + xPos[i], positionY + yPos[i], sizes[i]);
+            GameScreen.asteroids.add(asteroid);
+            asteroids.add(asteroid);
         }
     }
 }

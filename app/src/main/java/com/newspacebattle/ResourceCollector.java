@@ -44,6 +44,7 @@ class ResourceCollector extends Ship {
         harvesting = false;
         unloading = false;
         dockable = true;
+        sensorRadius = radius * 12;
     }
 
     //Updates the object's properties
@@ -55,7 +56,7 @@ class ResourceCollector extends Ship {
 
     //Finds closest asteroid with resources
     void goToAsteroid() {
-        if (resources * 0.8 >= 2000) {
+        if (resources >= 2000 || GameScreen.asteroids.size() == 0) {
             goToCollector();
             return;
         }
@@ -84,25 +85,16 @@ class ResourceCollector extends Ship {
 
     //Mines the asteroid
     void mineAsteroid() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                while (resources < RESOURCE_CAPACITY - 4 && harvesting && asteroidSelected.resources > 0) {
-                    velocityX = asteroidSelected.velocityX;
-                    velocityY = asteroidSelected.velocityY;
-                    if (Utilities.distanceFormula(centerPosX, centerPosY, asteroidSelected.centerPosX, asteroidSelected.centerPosY) > (asteroidSelected.radius + radius) * 1.5) {
-                        goToAsteroid();
-                        return;
-                    }
-                    if (resources < 2500) {
-                        resources += 4;
-                        asteroidSelected.resources -= 4;
-                    }
-                    Utilities.delay(16);
-                }
-                goToCollector();
+        new Thread(() -> {
+            Looper.prepare();
+            while (resources < RESOURCE_CAPACITY - 4 && harvesting && asteroidSelected.resources > 0) {
+                velocityX = asteroidSelected.velocityX;
+                velocityY = asteroidSelected.velocityY;
+                resources += 4;
+                asteroidSelected.resources -= 4;
+                Utilities.delay(16);
             }
+            goToCollector();
         }).start();
     }
 
@@ -131,25 +123,18 @@ class ResourceCollector extends Ship {
 
     //Transfers resources to flagship
     void transferRes() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                while (!(resources < 0) && unloading) {
-                    velocityX = flagShipSelected.velocityX;
-                    velocityY = flagShipSelected.velocityY;
-                    if (Utilities.distanceFormula(centerPosX, centerPosY, flagShipSelected.centerPosX, flagShipSelected.centerPosY) > (flagShipSelected.radius + radius) * 1.5) {
-                        goToCollector();
-                        return;
-                    }
-                    resources -= 4;
-                    GameScreen.resources[team - 1] += 4;
-                    if (resources > 0) {
-                        Utilities.delay(16);
-                    }
+        new Thread(() -> {
+            Looper.prepare();
+            while (!(resources < 0) && unloading) {
+                velocityX = flagShipSelected.velocityX;
+                velocityY = flagShipSelected.velocityY;
+                resources -= 4;
+                GameScreen.resources[team - 1] += 4;
+                if (resources > 0) {
+                    Utilities.delay(16);
                 }
-                goToAsteroid();
             }
+            goToAsteroid();
         }).start();
     }
 }

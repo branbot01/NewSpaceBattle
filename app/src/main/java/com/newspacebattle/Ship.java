@@ -15,9 +15,9 @@ class Ship extends GameObject {
     float health, MAX_HEALTH;
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
-    float avoidanceRadius;
+    float avoidanceRadius, sensorRadius;
     int fitness, dmgDone, missedShots, kills, angleAway;
-    boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking;
+    boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking, visible;
     Formation formation;
     Matrix arrow = new Matrix();
     Paint selector = new Paint();

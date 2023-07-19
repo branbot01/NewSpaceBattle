@@ -18,6 +18,16 @@ class Collisions {
         new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
+                    checkVisibility();
+                    //setAllShipsVisible();
+                }
+                Utilities.delay(1);
+            }
+        }).start();
+
+        new Thread(() -> {
+            while (true) {
+                if (!GameScreen.paused) {
                     checkObjectBoundariesX();
                 }
                 Utilities.delay(1);
@@ -142,6 +152,38 @@ class Collisions {
         object2.colliding = true;
     }
 
+    private void checkVisibility() {
+        for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
+            try {
+                boolean inRange = false;
+                if (GameScreen.ships.get(i).team != 1) {
+                    for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
+                        if (GameScreen.ships.get(ii).team == 1) {
+                            if (Utilities.distanceFormula(GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.ships.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius){
+                                inRange = true;
+                                GameScreen.ships.get(i).visible = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!inRange) {
+                        GameScreen.ships.get(i).visible = false;
+                    }
+                } else {
+                    GameScreen.ships.get(i).visible = true;
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                break;
+            }
+        }
+    }
+
+    private void setAllShipsVisible(){
+        for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
+            GameScreen.ships.get(i).visible = true;
+        }
+    }
+
     //Checks that no object has gone outside of the map
     private void checkObjectBoundariesX() {
         for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
@@ -151,7 +193,7 @@ class Collisions {
                     GameScreen.objects.get(i).accelerationX = -GameScreen.objects.get(i).accelerationX;
                     GameScreen.objects.get(i).positionX = GameScreen.mapSizeX / 2 - GameScreen.objects.get(i).radius * 2 - 1;
                 }
-                if (GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2){
+                if (GameScreen.objects.get(i).centerPosX - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeX / 2) {
                     GameScreen.objects.get(i).velocityX = -GameScreen.objects.get(i).velocityX;
                     GameScreen.objects.get(i).accelerationX = -GameScreen.objects.get(i).accelerationX;
                     GameScreen.objects.get(i).positionX = -GameScreen.mapSizeX / 2 + 1;
@@ -170,7 +212,7 @@ class Collisions {
                     GameScreen.objects.get(i).accelerationY = -GameScreen.objects.get(i).accelerationY;
                     GameScreen.objects.get(i).positionY = GameScreen.mapSizeY / 2 - GameScreen.objects.get(i).radius * 2 - 1;
                 }
-                if (GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2){
+                if (GameScreen.objects.get(i).centerPosY - GameScreen.objects.get(i).radius <= -GameScreen.mapSizeY / 2) {
                     GameScreen.objects.get(i).velocityY = -GameScreen.objects.get(i).velocityY;
                     GameScreen.objects.get(i).accelerationY = -GameScreen.objects.get(i).accelerationY;
                     GameScreen.objects.get(i).positionY = -GameScreen.mapSizeY / 2 + 1;

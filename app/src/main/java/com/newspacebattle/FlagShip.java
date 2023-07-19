@@ -9,6 +9,7 @@ class FlagShip extends Ship {
 
     private PointObject gun1, gun2, gun3, gun4;
     boolean buildingSpaceStation, buildingBattleShip, buildingLaserCruiser, buildingBomber, buildingFighter, buildingScout, buildingResourceCollector;
+    int countSpaceStation, countBattleShip, countLaserCruiser, countBomber, countFighter, countScout, countResourceCollector;
     static float constRadius;
     static float MAX_SPEED;
     int[] costCounter = new int[7];
@@ -44,6 +45,7 @@ class FlagShip extends Ship {
         gun4 = new PointObject(0, 0);
         shootTime = 1000;
         driveTime = 1000;
+        sensorRadius = radius * 12;
     }
 
     //Updates the object's properties
@@ -137,20 +139,49 @@ class FlagShip extends Ship {
         if(costCounter[counter] >= shipCost){
             if (buildShip(type)) {
                 costCounter[counter] = 0;
-                if (type.equals("SpaceStation")) {
-                    buildingSpaceStation = false;
-                } else if (type.equals("BattleShip")) {
-                    buildingBattleShip = false;
-                } else if (type.equals("LaserCruiser")) {
-                    buildingLaserCruiser = false;
-                } else if (type.equals("Bomber")) {
-                    buildingBomber = false;
-                } else if (type.equals("Fighter")) {
-                    buildingFighter = false;
-                } else if (type.equals("Scout")) {
-                    buildingScout = false;
-                } else if (type.equals("ResourceCollector")) {
-                    buildingResourceCollector = false;
+                switch (type) {
+                    case "SpaceStation":
+                        countSpaceStation--;
+                        if (countSpaceStation == 0) {
+                            buildingSpaceStation = false;
+                        }
+                        break;
+                    case "BattleShip":
+                        countBattleShip--;
+                        if (countBattleShip == 0) {
+                            buildingBattleShip = false;
+                        }
+                        break;
+                    case "LaserCruiser":
+                        countLaserCruiser--;
+                        if (countLaserCruiser == 0) {
+                            buildingLaserCruiser = false;
+                        }
+                        break;
+                    case "Bomber":
+                        countBomber--;
+                        if (countBomber == 0) {
+                            buildingBomber = false;
+                        }
+                        break;
+                    case "Fighter":
+                        countFighter--;
+                        if (countFighter == 0) {
+                            buildingFighter = false;
+                        }
+                        break;
+                    case "Scout":
+                        countScout--;
+                        if (countScout == 0) {
+                            buildingScout = false;
+                        }
+                        break;
+                    case "ResourceCollector":
+                        countResourceCollector--;
+                        if (countResourceCollector == 0) {
+                            buildingResourceCollector = false;
+                        }
+                        break;
                 }
             }
         }

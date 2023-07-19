@@ -35,6 +35,9 @@ class PathFinder {
 
     //Follow this object
     void run(GameObject target) {
+        if (target == null) {
+            System.out.println("Error: Target is null");
+        }
         ship.attacking = false;
         if (ship.formation != null) {
             run(target.centerPosX, target.centerPosY);
@@ -50,6 +53,7 @@ class PathFinder {
     //Attack this group of enemies
     void runAttack(ArrayList<Ship> enemies) {
         if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
+            ship.attacking = false;
             return;
         }
         ship.formation = null;
@@ -69,43 +73,41 @@ class PathFinder {
 
     void autoAttack() {
         if (ship instanceof SpaceStation || ship instanceof ResourceCollector || ship instanceof Scout) {
+            ship.attacking = false;
             return;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                while (ship.exists && !ship.destination) {
-                    if (!ship.attacking) {
-                        double closestDistance = 1000000000;
-                        int closestIndex = -1;
-                        boolean isShip = false;
-                        for (int i = 0; i < GameScreen.ships.size(); i++) {
-                            try {
-                                if (GameScreen.ships.get(i).team != ship.team && GameScreen.ships.get(i) != ship && GameScreen.ships.get(i).exists) {
-                                    isShip = true;
-                                    double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
-                                    if (distance < closestDistance) {
-                                        closestDistance = distance;
-                                        closestIndex = i;
-                                    }
+        new Thread(() -> {
+            Looper.prepare();
+            while (ship.exists && !ship.destination) {
+                if (!ship.attacking) {
+                    double closestDistance = 1000000000;
+                    int closestIndex = -1;
+                    boolean isShip = false;
+                    for (int i = 0; i < GameScreen.ships.size(); i++) {
+                        try {
+                            if (GameScreen.ships.get(i).team != ship.team && GameScreen.ships.get(i) != ship && GameScreen.ships.get(i).exists) {
+                                isShip = true;
+                                double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
+                                if (distance < closestDistance) {
+                                    closestDistance = distance;
+                                    closestIndex = i;
                                 }
-                            } catch (Exception e) {
-                                System.out.println("Error: " + e);
                             }
-                        }
-                        if (!isShip) {
-                            ship.stop();
-                            break;
-                        }
-                        if (closestIndex != -1) {
-                            stopFinder();
-                            enemies.add(GameScreen.ships.get(closestIndex));
-                            startAttacker();
+                        } catch (Exception e) {
+                            System.out.println("Error: " + e);
                         }
                     }
-                    Utilities.delay(1000);
+                    if (!isShip) {
+                        ship.stop();
+                        break;
+                    }
+                    if (closestIndex != -1) {
+                        stopFinder();
+                        enemies.add(GameScreen.ships.get(closestIndex));
+                        startAttacker();
+                    }
                 }
+                Utilities.delay(1000);
             }
         }).start();
     }
@@ -149,30 +151,27 @@ class PathFinder {
 
     //Starts the pathfinding process
     private void startFinder() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                PointObject direction = pathFind();
-                tempX = (float) direction.x;
-                tempY = (float) direction.y;
-                ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
-                driveShip(direction.x, direction.y);
-                checkDestination();
-                Utilities.delay(500);
-                int time = 0;
-                while (ship.exists && ship.destination) {
-                    if (time >= 500) {
-                        time = 0;
-                        direction = pathFind();
-                        tempX = (float) direction.x;
-                        tempY = (float) direction.y;
-                        driveShip(direction.x, direction.y);
-                    }
-                    checkDestination();
-                    Utilities.delay(1);
-                    time++;
+        new Thread(() -> {
+            Looper.prepare();
+            PointObject direction = pathFind();
+            tempX = (float) direction.x;
+            tempY = (float) direction.y;
+            ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
+            driveShip(direction.x, direction.y);
+            checkDestination();
+            Utilities.delay(500);
+            int time = 0;
+            while (ship.exists && ship.destination) {
+                if (time >= 500) {
+                    time = 0;
+                    direction = pathFind();
+                    tempX = (float) direction.x;
+                    tempY = (float) direction.y;
+                    driveShip(direction.x, direction.y);
                 }
+                checkDestination();
+                Utilities.delay(1);
+                time++;
             }
         }).start();
     }
@@ -292,7 +291,7 @@ class PathFinder {
 
     //Checks how close ship is to the destination
     private void checkDestination() {
-        double stopDistance = ship.radius / 4;
+        double stopDistance = ship.radius / 2;
         if (pointOrObj) {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;

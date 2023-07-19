@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
+    android:scrollbarStyle="outsideOverlay">
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,6 +21,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_stop" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/logbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="showBlackboard"
+        app:backgroundTint="#3FD200"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pauseButton"
+        app:srcCompat="@android:drawable/stat_notify_chat" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/minimapButton"
@@ -307,6 +320,22 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/scoutModeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="56dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="scoutMode"
+        android:visibility="invisible"
+        app:backgroundTint="#FFFFFF"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/shipModeButton"
+        app:srcCompat="@drawable/ic_scout" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buildButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -454,12 +483,14 @@
         android:id="@+id/resourcesText"
         android:layout_width="167dp"
         android:layout_height="21dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="#000099CC"
+        android:fontFamily="monospace"
         android:text="Resources: 0"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="#000000"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:typeface="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -795,5 +826,174 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/makeSpaceStation" />
+
+    <ScrollView
+        android:id="@+id/scroller"
+        android:layout_width="278dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.699"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resourcesText">
+
+        <TextView
+            android:id="@+id/blackboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="monospace"
+            android:gravity="bottom"
+            android:onClick="blackBoardClick"
+            android:scrollbars="vertical"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:typeface="monospace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/resourcesText" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/cancelSpaceStation"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelSpaceStation"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressSpaceStation" />
+
+    <Button
+        android:id="@+id/cancelBattleShip"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelBattleShip"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelSpaceStation"
+        app:layout_constraintTop_toBottomOf="@+id/progressBattleShip" />
+
+    <Button
+        android:id="@+id/cancelLaserCruiser"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelLaserCruiser"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelBattleShip"
+        app:layout_constraintTop_toBottomOf="@+id/progressLaserCruiser" />
+
+    <Button
+        android:id="@+id/cancelBomber"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelBomber"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelLaserCruiser"
+        app:layout_constraintTop_toBottomOf="@+id/progressBomber" />
+
+    <Button
+        android:id="@+id/cancelFighter"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelFighter"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelBomber"
+        app:layout_constraintTop_toBottomOf="@+id/progressFighter" />
+
+    <Button
+        android:id="@+id/cancelScout"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelScout"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelFighter"
+        app:layout_constraintTop_toBottomOf="@+id/progressScout" />
+
+    <Button
+        android:id="@+id/cancelResourceCollector"
+        android:layout_width="30dp"
+        android:layout_height="14dp"
+        android:layout_marginEnd="26dp"
+        android:background="@color/colorAccent"
+        android:backgroundTint="@color/colorAccent"
+        android:capitalize="none"
+        android:fontFamily="monospace"
+        android:onClick="cancelResourceCollector"
+        android:text="x0"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:typeface="monospace"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/cancelScout"
+        app:layout_constraintTop_toBottomOf="@+id/progressResourceCollector" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
