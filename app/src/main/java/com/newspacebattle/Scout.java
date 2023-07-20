@@ -43,7 +43,7 @@ class Scout extends Ship {
         preScaleX = 1;
         preScaleY = 1;
         dockable = true;
-        sensorRadius = radius * 72;
+        sensorRadius = radius * 84;
         setAllAsteroidsUnvisited();
     }
 

@@ -41,7 +41,7 @@ class Bomber extends Ship {
         missile2 = new PointObject(0, 0);
         shootTime = 5000;
         driveTime = 500;
-        sensorRadius = radius * 12;
+        sensorRadius = radius * 48;
     }
 
     //Updates the object's properties

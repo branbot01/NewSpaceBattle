@@ -45,7 +45,7 @@ class LaserCruiser extends Ship {
         laser2 = new PointObject(0, 0);
         shootTime = 2500;
         driveTime = 1000;
-        sensorRadius = radius * 12;
+        sensorRadius = radius * 20;
     }
 
     //Updates the object's properties

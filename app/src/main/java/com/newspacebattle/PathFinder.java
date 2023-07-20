@@ -243,7 +243,7 @@ class PathFinder {
             distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
             for (int ii = 0; ii < nearbyObjects.size(); ii++) {
                 GameObject obj = nearbyObjects.get(ii);
-                if (obj instanceof BlackHole){
+                if (obj instanceof BlackHole) {
                     newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius * 3);
                     newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius * 3);
                     distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
@@ -299,12 +299,8 @@ class PathFinder {
     private void checkDestination() {
         double stopDistance = ship.radius / 2;
         if (pointOrObj) {
-            if (targetObj != null) {
-                destX = targetObj.centerPosX;
-                destY = targetObj.centerPosY;
-            } else {
-                System.out.println("Error: targetObj is null");
-            }
+            destX = targetObj.centerPosX;
+            destY = targetObj.centerPosY;
             stopDistance = (ship.radius + targetObj.radius) * 2;
             if (ship instanceof ResourceCollector && (((ResourceCollector) ship).harvesting)) {
                 stopDistance = (ship.radius + targetObj.radius) * 1.1;

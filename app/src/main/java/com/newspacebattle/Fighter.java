@@ -41,7 +41,7 @@ class Fighter extends Ship {
         gun2 = new PointObject(0, 0);
         shootTime = 650;
         driveTime = 500;
-        sensorRadius = radius * 12;
+        sensorRadius = radius * 48;
     }
 
     //Updates the object's properties

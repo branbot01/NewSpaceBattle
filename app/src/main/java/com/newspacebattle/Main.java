@@ -491,6 +491,8 @@ public class Main extends AppCompatActivity {
 
             GameScreen.offsetX += scaleDiff * GameScreen.midPointX;
             GameScreen.offsetY += scaleDiff * GameScreen.midPointY;
+
+            checkBorders();
             return true;
         }
 
@@ -593,21 +595,9 @@ public class Main extends AppCompatActivity {
                         }
                         following = false;
                         clearSelectionReferences();
-                        if (movedX - x < -16 * screenX) {
-                            GameScreen.offsetX = -16 * screenX;
-                        } else if (movedX - x > 15 * screenX) {
-                            GameScreen.offsetX = 15 * screenX;
-                        } else {
-                            GameScreen.offsetX = movedX - x;
-                        }
-
-                        if (movedY - y < -16 * screenY) {
-                            GameScreen.offsetY = -16 * screenY;
-                        } else if (movedY - y > 15 * screenY) {
-                            GameScreen.offsetY = 15 * screenY;
-                        } else {
-                            GameScreen.offsetY = movedY - y;
-                        }
+                        GameScreen.offsetX = movedX - x;
+                        GameScreen.offsetY = movedY - y;
+                        checkBorders();
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -618,6 +608,20 @@ public class Main extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    public static void checkBorders(){
+        if (GameScreen.offsetX / GameScreen.scaleX < -GameScreen.mapSizeX / 2){
+            GameScreen.offsetX = (int) (-GameScreen.mapSizeX / 2 * GameScreen.scaleX);
+        } else if ((Main.screenX + GameScreen.offsetX) / GameScreen.scaleX > GameScreen.mapSizeX / 2){
+            GameScreen.offsetX = (int) (GameScreen.mapSizeX / 2 * GameScreen.scaleX - Main.screenX);
+        }
+
+        if (GameScreen.offsetY / GameScreen.scaleY < -GameScreen.mapSizeY / 2){
+            GameScreen.offsetY = (int) (-GameScreen.mapSizeY / 2 * GameScreen.scaleY);
+        } else if ((Main.screenY + GameScreen.offsetY) / GameScreen.scaleY > GameScreen.mapSizeY / 2){
+            GameScreen.offsetY = (int) (GameScreen.mapSizeY / 2 * GameScreen.scaleY - Main.screenY);
+        }
     }
 
     //Get references for all of the buttons and ui elements

@@ -52,10 +52,16 @@ class ResourceCollector extends Ship {
         exists = checkIfAlive();
         move();
         rotate();
+        if (selected){
+            System.out.println(resources);
+        }
     }
 
     //Finds closest asteroid with resources
     void goToAsteroid() {
+        if (resources < 0) {
+            resources = 0;
+        }
         if (resources >= 2000 || GameScreen.asteroids.size() == 0) {
             goToCollector();
             return;

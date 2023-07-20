@@ -85,16 +85,7 @@ class Ship extends GameObject {
 
     //Tells ship to move to this position
     void setDestination(float posX, float posY, boolean attacking) {
-        if (posX + radius >= GameScreen.mapSizeX / 2) {
-            return;
-        }
-        if (posX - radius <= -GameScreen.mapSizeX / 2) {
-            return;
-        }
-        if (posY + radius >= GameScreen.mapSizeY / 2) {
-            return;
-        }
-        if (posY - radius <= -GameScreen.mapSizeY / 2) {
+        if (posX + radius >= GameScreen.mapSizeX / 2 || posX - radius <= -GameScreen.mapSizeX / 2 || posY + radius >= GameScreen.mapSizeY / 2 || posY - radius <= -GameScreen.mapSizeY / 2) {
             return;
         }
         if (Utilities.distanceFormula(centerPosX, centerPosY, posX, posY) >= radius) {
