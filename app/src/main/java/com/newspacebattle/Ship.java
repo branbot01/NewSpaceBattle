@@ -17,7 +17,7 @@ class Ship extends GameObject {
     float preScaleX, preScaleY;
     float avoidanceRadius, sensorRadius;
     int fitness, dmgDone, missedShots, kills, angleAway;
-    boolean movable, behaviour, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking, visible;
+    boolean movable, autoAttack, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking, visible;
     Formation formation;
     Matrix arrow = new Matrix();
     Paint selector = new Paint();
@@ -124,36 +124,42 @@ class Ship extends GameObject {
 
     //Tells the ship to run their own shoot method
     void shoot() {
-        if (type.equals("BattleShip")) {
-            for (int i = 0; i <= GameScreen.battleShips.size() - 1; i++) {
-                if (GameScreen.battleShips.get(i) == this) {
-                    GameScreen.battleShips.get(i).shoot();
+        switch (type) {
+            case "BattleShip":
+                for (int i = 0; i <= GameScreen.battleShips.size() - 1; i++) {
+                    if (GameScreen.battleShips.get(i) == this) {
+                        GameScreen.battleShips.get(i).shoot();
+                    }
                 }
-            }
-        } else if (type.equals("Bomber")) {
-            for (int i = 0; i <= GameScreen.bombers.size() - 1; i++) {
-                if (GameScreen.bombers.get(i) == this) {
-                    GameScreen.bombers.get(i).shoot();
+                break;
+            case "Bomber":
+                for (int i = 0; i <= GameScreen.bombers.size() - 1; i++) {
+                    if (GameScreen.bombers.get(i) == this) {
+                        GameScreen.bombers.get(i).shoot();
+                    }
                 }
-            }
-        } else if (type.equals("Fighter")) {
-            for (int i = 0; i <= GameScreen.fighters.size() - 1; i++) {
-                if (GameScreen.fighters.get(i) == this) {
-                    GameScreen.fighters.get(i).shoot();
+                break;
+            case "Fighter":
+                for (int i = 0; i <= GameScreen.fighters.size() - 1; i++) {
+                    if (GameScreen.fighters.get(i) == this) {
+                        GameScreen.fighters.get(i).shoot();
+                    }
                 }
-            }
-        } else if (type.equals("FlagShip")) {
-            for (int i = 0; i <= GameScreen.flagShips.size() - 1; i++) {
-                if (GameScreen.flagShips.get(i) == this) {
-                    GameScreen.flagShips.get(i).shoot();
+                break;
+            case "FlagShip":
+                for (int i = 0; i <= GameScreen.flagShips.size() - 1; i++) {
+                    if (GameScreen.flagShips.get(i) == this) {
+                        GameScreen.flagShips.get(i).shoot();
+                    }
                 }
-            }
-        } else if (type.equals("LaserCruiser")) {
-            for (int i = 0; i <= GameScreen.laserCruisers.size() - 1; i++) {
-                if (GameScreen.laserCruisers.get(i) == this) {
-                    GameScreen.laserCruisers.get(i).shoot();
+                break;
+            case "LaserCruiser":
+                for (int i = 0; i <= GameScreen.laserCruisers.size() - 1; i++) {
+                    if (GameScreen.laserCruisers.get(i) == this) {
+                        GameScreen.laserCruisers.get(i).shoot();
+                    }
                 }
-            }
+                break;
         }
     }
 

@@ -67,27 +67,6 @@ public class Main extends AppCompatActivity {
 
     boolean zooming = false;
 
-    //Gets behaviour from selected ships
-    public static boolean getBehaviour() {
-        int[] behaviourTally = new int[2];
-
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            if (!selectShips.get(i).behaviour) {
-                behaviourTally[0]++;
-            } else {
-                behaviourTally[1]++;
-            }
-        }
-
-        if (behaviourTally[0] > behaviourTally[1]) {
-            shipBehave = false;
-            return false;
-        } else {
-            shipBehave = true;
-            return true;
-        }
-    }
-
     //Clears any ships that are selected
     public static void clearSelectionReferences() {
         for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
@@ -698,10 +677,10 @@ public class Main extends AppCompatActivity {
 
     //Either hides or shows the ship options bar depending if any ships are selected
     public void shipBar(boolean hiddenOrNot) {
-        if (!getBehaviour()) {
-            shipMode.setImageResource(R.drawable.ic_aggressive);
-        } else {
+        if (!anyAutoAttack()) {
             shipMode.setImageResource(R.drawable.ic_evasive);
+        } else {
+            shipMode.setImageResource(R.drawable.ic_aggressive);
         }
 
         if (!following) {
@@ -857,18 +836,33 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    public boolean anyAutoAttack(){
+        boolean anyAutoAttack = false;
+        for (int i = 0; i <= selectShips.size() - 1; i++) {
+            if (selectShips.get(i).autoAttack) {
+                anyAutoAttack = true;
+                break;
+            }
+        }
+        return anyAutoAttack;
+    }
+
     //Changes ship behaviour
-    public void shipMode(View view) {
+    public void shipAutoAttack(View view) {
         clearButtonsToWhite();
 
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            selectShips.get(i).behaviour = !shipBehave;
-        }
-
-        if (getBehaviour()) {
-            shipMode.setImageResource(R.drawable.ic_evasive);
-        } else {
+        if (!anyAutoAttack()){
             shipMode.setImageResource(R.drawable.ic_aggressive);
+            for (int i = 0; i <= selectShips.size() - 1; i++) {
+                if (selectShips.get(i).canAttack) {
+                    selectShips.get(i).autoAttack = true;
+                }
+            }
+        } else {
+            shipMode.setImageResource(R.drawable.ic_evasive);
+            for (int i = 0; i <= selectShips.size() - 1; i++) {
+                selectShips.get(i).autoAttack = false;
+            }
         }
     }
 

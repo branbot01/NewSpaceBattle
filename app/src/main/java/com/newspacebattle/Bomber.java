@@ -47,6 +47,9 @@ class Bomber extends Ship {
     //Updates the object's properties
     public void update() {
         exists = checkIfAlive();
+        if (autoAttack){
+            destinationFinder.autoAttack();
+        }
         move();
         rotate();
     }

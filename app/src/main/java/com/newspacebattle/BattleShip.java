@@ -50,6 +50,9 @@ class BattleShip extends Ship {
     //Updates the object's properties
     void update() {
         exists = checkIfAlive();
+        if (autoAttack){
+            destinationFinder.autoAttack();
+        }
         move();
         rotate();
     }

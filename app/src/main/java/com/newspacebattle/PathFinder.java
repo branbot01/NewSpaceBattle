@@ -73,6 +73,9 @@ class PathFinder {
             ship.attacking = false;
             return;
         }
+        if (ship.attacking || ship.formation != null) {
+            return;
+        }
         new Thread(() -> {
             Looper.prepare();
             while (ship.exists && !ship.destination) {
