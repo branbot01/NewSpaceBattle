@@ -78,7 +78,7 @@ class PathFinder {
         }
         new Thread(() -> {
             Looper.prepare();
-            while (ship.exists && !ship.destination) {
+            while (ship.exists && !ship.destination && ship.autoAttack) {
                 if (!ship.attacking) {
                     double closestDistance = 1000000000;
                     int closestIndex = -1;
