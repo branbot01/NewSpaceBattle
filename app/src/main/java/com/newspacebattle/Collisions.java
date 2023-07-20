@@ -96,6 +96,9 @@ class Collisions {
 
     //When two objects collide, determine new velocities of both objects
     private void collisionEvent(GameObject object1, GameObject object2) {
+        if (object1 instanceof BlackHole || object2 instanceof BlackHole) {
+            return;
+        }
         long m1, m2;
         float v1ix, v1iy;
         float v2ix, v2iy;

@@ -33,11 +33,9 @@ class BlackHole extends GameObject {
 
     //Determines the black hole's angle
     private void setRotation() {
-        if (!GameScreen.paused) {
-            degrees += 4;
-            if (degrees == 360) {
-                degrees = 0;
-            }
+        degrees += 4;
+        if (degrees == 360) {
+            degrees = 0;
         }
     }
 

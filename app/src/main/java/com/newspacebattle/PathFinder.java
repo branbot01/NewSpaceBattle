@@ -35,9 +35,6 @@ class PathFinder {
 
     //Follow this object
     void run(GameObject target) {
-        if (target == null) {
-            System.out.println("Error: Target is null");
-        }
         ship.attacking = false;
         if (ship.formation != null) {
             run(target.centerPosX, target.centerPosY);
@@ -209,7 +206,9 @@ class PathFinder {
 
 
             if (obj instanceof SpaceStation) {
-                addedDistance = obj.radius * 1.5f;
+                addedDistance = obj.radius * 1.5;
+            } else if (obj instanceof BlackHole) {
+                addedDistance = obj.radius * 4;
             }
             if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
                 nearbyObjects.add(obj);
@@ -244,10 +243,17 @@ class PathFinder {
             distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
             for (int ii = 0; ii < nearbyObjects.size(); ii++) {
                 GameObject obj = nearbyObjects.get(ii);
+                if (obj instanceof BlackHole){
+                    newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius * 3);
+                    newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius * 3);
+                    distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
+                }
                 double distance = Utilities.distanceFormula(newX, newY, obj.centerPosX, obj.centerPosY);
                 double addedDistance = 0;
                 if (obj instanceof SpaceStation) {
                     addedDistance = obj.radius / 2;
+                } else if (obj instanceof BlackHole) {
+                    addedDistance = obj.radius * 2;
                 }
                 if (distance <= ship.avoidanceRadius + addedDistance) {
                     possiblePoints[i] = false;
@@ -293,8 +299,12 @@ class PathFinder {
     private void checkDestination() {
         double stopDistance = ship.radius / 2;
         if (pointOrObj) {
-            destX = targetObj.centerPosX;
-            destY = targetObj.centerPosY;
+            if (targetObj != null) {
+                destX = targetObj.centerPosX;
+                destY = targetObj.centerPosY;
+            } else {
+                System.out.println("Error: targetObj is null");
+            }
             stopDistance = (ship.radius + targetObj.radius) * 2;
             if (ship instanceof ResourceCollector && (((ResourceCollector) ship).harvesting)) {
                 stopDistance = (ship.radius + targetObj.radius) * 1.1;
