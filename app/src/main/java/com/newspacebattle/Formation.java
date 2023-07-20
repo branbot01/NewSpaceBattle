@@ -79,7 +79,7 @@ class Formation {
     //update's the formation's properties
     void update() {
         resetCenter();
-        getPositions();
+        //getPositions();    ***IS REDUNDANT***
         updatePositions();
         moveFormation();
         rotateFormation();
@@ -97,14 +97,14 @@ class Formation {
         centerY = sumY / sumMass;
     }
 
-    //get position of ships relative to formation's centre of mass (in n-t coordinates)
-    void getPositions() {
+    //get position of ships relative to formation's centre of mass (in n-t coordinates)  ***IS REDUNDANT***
+    /*void getPositions() {
         newRelativeCoordinates.clear();
         for (int i = 0; i < formationShips.size(); i++) {
             newRelativeCoordinates.add(new PointObject(initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), -initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
             //System.out.println("newRelativeCoordinates.get(" + i + ").x: " + newRelativeCoordinates.get(i).x + " newRelativeCoordinates.get(" + i + ").y: " + newRelativeCoordinates.get(i).y);
         }
-    }
+    }*/
 
     //update position of ship if formation rotates
     void updatePositions() {
@@ -218,6 +218,7 @@ class Formation {
 
         if (Math.abs(degrees - requiredAngle) > 5) {
             int turnAngle = 80;
+            System.out.println("degrees = " + degrees + " turnAngle = " + turnAngle);
 
             double requiredPointX = Utilities.circleAngleX(requiredAngle, centerX, Fighter.constRadius);
             double requiredPointY = Utilities.circleAngleY(requiredAngle, centerY, Fighter.constRadius);
@@ -263,7 +264,7 @@ class Formation {
     void rotateFormation() {
         degreesCopy = degrees;
         angularVelocityCopy = angularVelocity;
-        if (accelerationX != 0 && accelerationY != 0 && velocityX != 0 && velocityY != 0) {
+        if (accelerationX != 0 && accelerationY != 0 /* && velocityX != 0 && velocityY != 0 */) {
             degrees = (float) Utilities.angleDim(velocityX, velocityY);
             angularVelocity = degrees - degreesCopy;
             angularAcceleration = angularVelocity - angularVelocityCopy;

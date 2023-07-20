@@ -1,10 +1,6 @@
 package com.newspacebattle;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Created by Dylan on 2018-07-12. Some math functions that come in very handy.
@@ -211,11 +207,11 @@ class Utilities {
     }
 
     //return the cross product of 2 3-dimensional vectors
-    static double[] crossProduct(double[] a, double[] b){
+    static double[] crossProduct(double v1, double v2, double v3, double w1, double w2, double w3) {
         double[] crossProduct = new double[3];
-        crossProduct[0] = a[1] * b[2] - a[2] * b[1];
-        crossProduct[1] = a[2] * b[0] - a[0] * b[2];
-        crossProduct[2] = a[0] * b[1] - a[1] * b[0];
+        crossProduct[0] = v2 * w3 - v3 * w2;
+        crossProduct[1] = v3 * w1 - v1 * w3;
+        crossProduct[2] = v1 * w2 - v2 * w1;
         return crossProduct;
     }
 }
