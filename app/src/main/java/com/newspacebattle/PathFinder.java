@@ -13,7 +13,7 @@ class PathFinder {
     int driveTime, shootTime;
     float destX, destY, tempX, tempY;
     private boolean pointOrObj;
-    private Ship ship;
+    private final Ship ship;
     private GameObject targetObj;
     ArrayList<Ship> enemies;
 
@@ -60,12 +60,7 @@ class PathFinder {
         if (this.enemies.size() == 0) {
             return;
         }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                startAttacker();
-            }
-        }).start();
+        new Thread(this::startAttacker).start();
     }
 
     void autoAttack() {

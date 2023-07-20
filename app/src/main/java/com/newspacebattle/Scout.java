@@ -18,7 +18,7 @@ class Scout extends Ship {
     ArrayList<Pair<AsteroidCluster, Boolean>> asteroidsVisited = new ArrayList<>();
     AsteroidCluster currentAsteroidCluster;
 
-    static int buildTime, cost;
+    static int cost;
 
     //Constructor method
     Scout(float x, float y, int team) {
@@ -98,7 +98,6 @@ class Scout extends Ship {
                                 }
                                 double distance = Utilities.distanceFormula(centerPosX, centerPosY, possibleEnemyShips.get(i).getSecond(), possibleEnemyShips.get(i).getThird());
                                 if (distance <= sensorRadius) {
-                                    possibleEnemyShips.remove(i);
                                     continue;
                                 }
                                 if (distance < closestDistance) {
@@ -109,7 +108,7 @@ class Scout extends Ship {
                             if (!destination && closestIndex != -1) {
                                 float closerRadius = sensorRadius / 1.2f;
                                 double angle = Utilities.anglePoints(possibleEnemyShips.get(closestIndex).getSecond(), possibleEnemyShips.get(closestIndex).getThird(), centerPosX, centerPosY);
-                                setDestination((float) Utilities.circleAngleX(angle, possibleEnemyShips.get(closestIndex).getSecond(), closerRadius), (float) Utilities.circleAngleY(angle, possibleEnemyShips.get(closestIndex).getThird(), closerRadius), false);
+                                setDestination((float) Utilities.circleAngleX(angle, possibleEnemyShips.get(closestIndex).getSecond(), closerRadius), (float) Utilities.circleAngleY(angle, possibleEnemyShips.get(closestIndex).getThird(), closerRadius));
                             }
                         }
                     } else {
@@ -129,7 +128,7 @@ class Scout extends Ship {
                                 if (!asteroidsVisited.get(randomIndex).second) {
                                     float clusterRadius = asteroidsVisited.get(randomIndex).first.radius / 1.5f;
                                     double angle = Utilities.anglePoints(asteroidsVisited.get(randomIndex).first.positionX, asteroidsVisited.get(randomIndex).first.positionY, centerPosX, centerPosY);
-                                    setDestination((float) Utilities.circleAngleX(angle, asteroidsVisited.get(randomIndex).first.positionX, clusterRadius), (float) Utilities.circleAngleY(angle, asteroidsVisited.get(randomIndex).first.positionY, clusterRadius), false);
+                                    setDestination((float) Utilities.circleAngleX(angle, asteroidsVisited.get(randomIndex).first.positionX, clusterRadius), (float) Utilities.circleAngleY(angle, asteroidsVisited.get(randomIndex).first.positionY, clusterRadius));
                                     currentAsteroidCluster = asteroidsVisited.get(randomIndex).first;
                                     break;
                                 }

@@ -286,14 +286,14 @@ class Formation {
             if (ships.get(i) instanceof BattleShip || ships.get(i) instanceof FlagShip) {
                 offsetX += ships.get(i).avoidanceRadius * 1.5;
                 if (shipCounter == 0) {
-                    ships.get(i).setDestination((float) centerX, (float) centerY, false);
+                    ships.get(i).setDestination((float) centerX, (float) centerY);
                     initialRelativeCoordinates.add(new PointObject((float) 0, (float) 0));
                     formationShips.add(ships.get(i));
                 } else {
                     if (shipCounter % 4 == 1 || shipCounter % 4 == 2) {
                         offsetX -= ships.get(i).avoidanceRadius * 1.5;
                     }
-                    ships.get(i).setDestination((float) (centerX + (offsetX * Math.pow(-1, shipCounter))), (float) centerY, false);
+                    ships.get(i).setDestination((float) (centerX + (offsetX * Math.pow(-1, shipCounter))), (float) centerY);
                     initialRelativeCoordinates.add(new PointObject((float) (offsetX * Math.pow(-1, shipCounter)), (float) 0));
                     formationShips.add(ships.get(i));
                 }
@@ -305,14 +305,14 @@ class Formation {
             if (ships.get(i) instanceof LaserCruiser) {
                 offsetX += ships.get(i).avoidanceRadius * 1.5;
                 if (shipCounter == 0) {
-                    ships.get(i).setDestination((float) centerX, (float) centerY, false);
+                    ships.get(i).setDestination((float) centerX, (float) centerY);
                     initialRelativeCoordinates.add(new PointObject((float) 0, (float) 0));
                     formationShips.add(ships.get(i));
                 } else {
                     if (shipCounter % 4 == 1 || shipCounter % 4 == 2) {
                         offsetX -= ships.get(i).avoidanceRadius * 1.5;
                     }
-                    ships.get(i).setDestination((float) (centerX + (offsetX * Math.pow(-1, shipCounter))), (float) centerY, false);
+                    ships.get(i).setDestination((float) (centerX + (offsetX * Math.pow(-1, shipCounter))), (float) centerY);
                     initialRelativeCoordinates.add(new PointObject((float) (offsetX * Math.pow(-1, shipCounter)), (float) 0));
                     formationShips.add(ships.get(i));
                 }
@@ -324,30 +324,30 @@ class Formation {
             if (ships.get(i) instanceof Fighter || ships.get(i) instanceof Bomber || ships.get(i) instanceof Scout || ships.get(i) instanceof ResourceCollector) {
                 offsetX += ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4);
                 if (shipCounter == 0) {
-                    ships.get(i).setDestination((float) centerX, (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)), false);
+                    ships.get(i).setDestination((float) centerX, (float) (centerY + ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)));
                     initialRelativeCoordinates.add(new PointObject((float) 0, (float) ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4)));
                     formationShips.add(ships.get(i));
                 } else {
                     if (shipCounter % 4 == 0) {
                         offsetX -= ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4);
                         offsetY = 1;
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY), false);
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY));
                         initialRelativeCoordinates.add(new PointObject((float) ((offsetX * Math.pow(-1, shipCounter))), (float) (Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY)));
                         formationShips.add(ships.get(i));
                     } else if (shipCounter % 4 == 1) {
                         offsetY = -1;
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY), false);
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY));
                         initialRelativeCoordinates.add(new PointObject((float) ((offsetX * Math.pow(-1, shipCounter))), (float) (Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY)));
                         formationShips.add(ships.get(i));
                     } else if (shipCounter % 4 == 2) {
                         offsetX -= ((Fighter.constRadius * 5 * Math.sqrt(3)) / 4);
                         offsetY = -1;
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY), false);
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY));
                         initialRelativeCoordinates.add(new PointObject((float) ((offsetX * Math.pow(-1, shipCounter))), (float) (Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY)));
                         formationShips.add(ships.get(i));
                     } else if (shipCounter % 4 == 3) {
                         offsetY = 1;
-                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY), false);
+                        ships.get(i).setDestination((float) ((centerX + (offsetX * Math.pow(-1, shipCounter)))), (float) (centerY + Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY));
                         initialRelativeCoordinates.add(new PointObject((float) ((offsetX * Math.pow(-1, shipCounter))), (float) (Fighter.constRadius * 5 * Math.sqrt(3) / 4 * offsetY)));
                         formationShips.add(ships.get(i));
                     }

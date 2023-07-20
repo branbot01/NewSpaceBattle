@@ -438,7 +438,7 @@ public class Main extends AppCompatActivity {
                                 ((ResourceCollector) selectShips.get(i)).harvesting = false;
                                 ((ResourceCollector) selectShips.get(i)).unloading = false;
                             }
-                            selectShips.get(i).setDestination(trueX, trueY, false);
+                            selectShips.get(i).setDestination(trueX, trueY);
                         }
                     }
                 } else {
@@ -552,7 +552,7 @@ public class Main extends AppCompatActivity {
                                         ((ResourceCollector) selectShips.get(i)).harvesting = false;
                                         ((ResourceCollector) selectShips.get(i)).unloading = false;
                                     }
-                                    selectShips.get(i).setDestination(trueX, trueY, false);
+                                    selectShips.get(i).setDestination(trueX, trueY);
                                 }
                             }
                         } else if (isAllMovable()) {

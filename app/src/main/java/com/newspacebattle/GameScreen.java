@@ -415,6 +415,8 @@ public class GameScreen extends View {
             midPointY = (biggestY + smallestY) / 2;
             offsetX = (int) (midPointX * scaleX - Main.screenX / 2);
             offsetY = (int) (midPointY * scaleY - Main.screenY / 2);
+
+            Main.checkBorders();
         }
     }
 
@@ -649,13 +651,16 @@ public class GameScreen extends View {
 
             placeShips();
         } while (doShipsCollide());
+        objects.addAll(blackHole);
 
         for (int i = 0; i < blackboards.length; i++) {
             blackboards[i] = new Blackboard(i + 1);
         }
 
-        Main.selectShips.add(flagShips.get(0));
-        Main.following = true;
+        if (flagShips.size() > 0) {
+            Main.selectShips.add(flagShips.get(0));
+            Main.following = true;
+        }
 
         for (int i = 0; i <= ships.size() - 1; i++) {
             if (ships.get(i) instanceof ResourceCollector) {
@@ -1065,9 +1070,6 @@ public class GameScreen extends View {
             for (int j = 0; j < formationsTeam1.get(i).globalCoordinates.size(); j++) {
                 if (formationsTeam1.get(i).globalCoordinates != null) {
                     canvas.drawCircle((float) formationsTeam1.get(i).globalCoordinates.get(j).x, (float) formationsTeam1.get(i).globalCoordinates.get(j).y, 50, green);
-                }
-                if (formationsTeam1.get(i).newRelativeCoordinates != null) {
-                    canvas.drawCircle((float) formationsTeam1.get(i).newRelativeCoordinates.get(j).x, (float) formationsTeam1.get(i).newRelativeCoordinates.get(j).y, 50, yellow);
                 }
             }
             canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);

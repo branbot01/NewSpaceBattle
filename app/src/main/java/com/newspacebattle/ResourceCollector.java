@@ -52,9 +52,6 @@ class ResourceCollector extends Ship {
         exists = checkIfAlive();
         move();
         rotate();
-        if (selected){
-            System.out.println(resources);
-        }
     }
 
     //Finds closest asteroid with resources
@@ -85,7 +82,7 @@ class ResourceCollector extends Ship {
         if (asteroidSelected != null) {
             asteroidSelected.incomingResourceCollector = this;
             formation = null;
-            setDestination(asteroidSelected.centerPosX, asteroidSelected.centerPosY, false);
+            setDestination(asteroidSelected.centerPosX, asteroidSelected.centerPosY);
         }
     }
 
@@ -123,7 +120,7 @@ class ResourceCollector extends Ship {
             }
         }
         if (flagShipSelected != null) {
-            setDestination(flagShipSelected.centerPosX, flagShipSelected.centerPosY, false);
+            setDestination(flagShipSelected.centerPosX, flagShipSelected.centerPosY);
         }
     }
 

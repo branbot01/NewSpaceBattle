@@ -21,7 +21,7 @@ class Ship extends GameObject {
     Formation formation;
     Matrix arrow = new Matrix();
     Paint selector = new Paint();
-    private ValueAnimator stopperX, stopperY;
+    private final ValueAnimator stopperX, stopperY;
 
     //Constructor method
     Ship() {
@@ -62,12 +62,8 @@ class Ship extends GameObject {
     //Checks if ship still has health left
     boolean checkIfAlive() {
         setSelectColor();
-        if (health > 0) {
-            return true;
-        } else {
-            //GameScreen.deadShips.add(this);
-            return false;
-        }
+        //GameScreen.deadShips.add(this);
+        return health > 0;
     }
 
     //Stops the ship
@@ -84,17 +80,13 @@ class Ship extends GameObject {
     }
 
     //Tells ship to move to this position
-    void setDestination(float posX, float posY, boolean attacking) {
-        if (posX + radius >= GameScreen.mapSizeX / 2 || posX - radius <= -GameScreen.mapSizeX / 2 || posY + radius >= GameScreen.mapSizeY / 2 || posY - radius <= -GameScreen.mapSizeY / 2) {
+    void setDestination(float posX, float posY) {
+        if (posX + radius >= GameScreen.mapSizeX / 2f || posX - radius <= -GameScreen.mapSizeX / 2f || posY + radius >= GameScreen.mapSizeY / 2f || posY - radius <= -GameScreen.mapSizeY / 2f) {
             return;
         }
         if (Utilities.distanceFormula(centerPosX, centerPosY, posX, posY) >= radius) {
             movable = false;
-            if (attacking) {
-                this.attacking = true;
-            } else {
-                destination = true;
-            }
+            destination = true;
 
             for (int i = 0; i <= GameScreen.objects.size() - 1; i++) {
                 if (Utilities.distanceFormula(GameScreen.objects.get(i).centerPosX, GameScreen.objects.get(i).centerPosY, posX, posY) <= GameScreen.objects.get(i).radius) {
@@ -117,8 +109,8 @@ class Ship extends GameObject {
         appearance.preScale(preScaleX, preScaleY);
 
         if (destination) {
-            arrow.setRotate((float) Utilities.anglePoints(centerPosX, centerPosY, destinationFinder.destX, destinationFinder.destY), Main.screenX / 6 / 2, Main.screenY / 9 / 2);
-            arrow.postTranslate(destinationFinder.destX - Main.screenX / 6 / 2, destinationFinder.destY - Main.screenY / 9 / 2);
+            arrow.setRotate((float) Utilities.anglePoints(centerPosX, centerPosY, destinationFinder.destX, destinationFinder.destY), Main.screenX / 6f / 2, Main.screenY / 9f / 2);
+            arrow.postTranslate(destinationFinder.destX - Main.screenX / 6f / 2, destinationFinder.destY - Main.screenY / 9f / 2);
         }
     }
 
@@ -181,10 +173,6 @@ class Ship extends GameObject {
             return;
         }
         docking = true;
-        setDestination(closestSS.centerPosX, closestSS.centerPosY, false);
-    }
-
-    void calculateFitness() {
-        fitness = dmgDone * 200 - angleAway;
+        setDestination(closestSS.centerPosX, closestSS.centerPosY);
     }
 }
