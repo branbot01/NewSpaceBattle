@@ -121,8 +121,11 @@ class PathFinder {
         while (ship.exists && ship.attacking) {
             try {
                 if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
-                    ship.attacking = false;
-                    return;
+                    enemies.remove(0);
+                    if (enemies.size() == 0) {
+                        ship.attacking = false;
+                        return;
+                    }
                 }
                 destX = enemies.get(0).centerPosX;
                 destY = enemies.get(0).centerPosY;
