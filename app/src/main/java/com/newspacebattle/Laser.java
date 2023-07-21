@@ -6,7 +6,7 @@ package com.newspacebattle;
  */
 class Laser extends GameObject {
 
-    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2, MAX_SPEED = 700; //may change later
+    final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f, MAX_SPEED = 700; //may change later
     private float scale, damage;
 
     private int timeLeft;
@@ -15,8 +15,8 @@ class Laser extends GameObject {
     //Constructor method
     Laser() {
         type = "Laser";
-        width = Main.screenX / 6f;
-        height = Main.screenY / GameScreen.circleRatio / 6f;
+        width = Main.screenX / 2f;
+        height = Main.screenY / GameScreen.circleRatio / 2f;
         midX = width / 2;
         midY = height / 2;
         radius = midY;

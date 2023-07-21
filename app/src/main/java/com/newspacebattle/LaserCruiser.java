@@ -40,7 +40,7 @@ class LaserCruiser extends Ship {
         preScaleX = 1.75f;
         preScaleY = 1.75f;
         dockable = false;
-        laserPower = 400; //to be changed
+        laserPower = 400 * 2; //to be changed
         laser1 = new PointObject(0, 0);
         laser2 = new PointObject(0, 0);
         shootTime = 2500;
@@ -60,11 +60,11 @@ class LaserCruiser extends Ship {
 
     //Shoots two lasers forward
     void shoot() {
-        laser1.x = Utilities.circleAngleX(degrees - 12, centerPosX, (radius + Laser.SIZE) * 1.2 * 3);
-        laser1.y = Utilities.circleAngleY(degrees - 12, centerPosY, (radius + Laser.SIZE) * 1.2 * 3);
+        laser1.x = Utilities.circleAngleX(degrees - 10, centerPosX, (radius + Laser.SIZE) * 1.5);
+        laser1.y = Utilities.circleAngleY(degrees - 10, centerPosY, (radius + Laser.SIZE) * 1.5);
 
-        laser2.x = Utilities.circleAngleX(degrees + 5, centerPosX, (radius + Laser.SIZE) * 0.95 * 3.7);
-        laser2.y = Utilities.circleAngleY(degrees + 5, centerPosY, (radius + Laser.SIZE) * 0.95 * 3.7);
+        laser2.x = Utilities.circleAngleX(degrees + 10, centerPosX, (radius + Laser.SIZE) * 1.5);
+        laser2.y = Utilities.circleAngleY(degrees + 10, centerPosY, (radius + Laser.SIZE) * 1.5);
 
         for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
             if (!GameScreen.lasers.get(i).exists) {
