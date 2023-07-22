@@ -263,7 +263,7 @@ class PathFinder {
         }
 
         int index;
-        if (!ship.attacking) {
+        if (!ship.attacking && nearbyObjects.stream().noneMatch(BlackHole.class::isInstance)) {
             double min = Double.MAX_VALUE;
             index = -1;
             for (int i = 0; i < distances.length; i++) {

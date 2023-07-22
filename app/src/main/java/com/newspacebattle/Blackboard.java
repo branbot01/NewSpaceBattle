@@ -1,6 +1,7 @@
 package com.newspacebattle;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import kotlin.Triple;
 
@@ -12,6 +13,8 @@ class Blackboard {
     ArrayList<Ship> visibleEnemyShips = new ArrayList<>();
     ArrayList<Triple<Ship, Float, Float>> possibleEnemyShips = new ArrayList<>();
 
+    float[][] grid = new float[GameScreen.grid_size][GameScreen.grid_size];
+
     Blackboard(int team) {
         this.team = team;
         if (teamSize() == 0) {
@@ -20,7 +23,7 @@ class Blackboard {
         addToLog("Welcome to SpaceBattle!");
 
         new Thread(() -> {
-            while (true) {
+            while (teamSize() > 0) {
                 if (!GameScreen.paused) {
                     update();
                 }
@@ -40,6 +43,7 @@ class Blackboard {
 
     void update() {
         scan();
+        populateGrid();
     }
 
     private void scan() {
@@ -116,5 +120,44 @@ class Blackboard {
         }
         sb.append(log.get(log.size() - 1));
         return sb.toString();
+    }
+
+    private void populateGrid() {
+        Arrays.stream(grid).forEach(a -> Arrays.fill(a, 0));
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                for (int ship = 0; ship < GameScreen.ships.size(); ship++) {
+                    if (GameScreen.ships.get(ship).team == this.team) {
+                        if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                            grid[j][i]++;
+                        }
+                    }
+                    if (visibleEnemyShips.contains(GameScreen.ships.get(ship))){
+                        if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                            grid[j][i]++;
+                        }
+                    }
+                }
+
+                for (int possibleShip = 0; possibleShip < possibleEnemyShips.size(); possibleShip++) {
+                    if (visibleEnemyShips.contains(possibleEnemyShips.get(possibleShip).getFirst())) {
+                        continue;
+                    }
+                    if (possibleEnemyShips.get(possibleShip).getSecond() >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getSecond() <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                        grid[j][i]++;
+                    }
+                }
+            }
+        }
+    }
+
+    void printGrid() {
+        for (float[] floats : grid) {
+            System.out.print("[");
+            for (int j = 0; j < grid[0].length; j++) {
+                System.out.print(floats[j] + ", ");
+            }
+            System.out.println("]");
+        }
     }
 }

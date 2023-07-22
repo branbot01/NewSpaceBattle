@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class GameScreen extends View {
 
-    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize;
+    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, grid_size;
     static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
@@ -143,9 +143,13 @@ public class GameScreen extends View {
         scaleX = 0.05f;
         scaleY = 0.05f;
 
-        mapSizeX = (int) (Main.screenX / scaleX * 8);
-        mapSizeY = (int) (Main.screenY / scaleY * 8);
+        final int MAP_SIZE = 8;
+
+        mapSizeX = (int) (Main.screenX / scaleX * MAP_SIZE);
+        mapSizeY = (int) (Main.screenY / scaleY * MAP_SIZE);
         clusterSize = (int) (Main.screenX / 0.1);
+
+        grid_size = MAP_SIZE;
 
         BattleShip.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 3.5);
         Bomber.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 1.25);
@@ -195,7 +199,7 @@ public class GameScreen extends View {
         lastSeenPaint.setStrokeWidth(20);
         lastSeenPaint.setAntiAlias(true);
 
-        generateGame();
+        generateMap();
 
         try {
             bitLoader.join();
@@ -370,7 +374,7 @@ public class GameScreen extends View {
         ArrayList<Ship> victims = new ArrayList<>();
 
         for (int i = 0; i <= ships.size() - 1; i++) {
-            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2 && ships.get(i).team != 1) {
+            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2) {
                 if (!ships.get(i).selected) {
                     ships.get(i).attSelected = true;
                     victims.add(ships.get(i));
@@ -522,7 +526,7 @@ public class GameScreen extends View {
         final int laserNum = 50;
 
         generateStars(0);
-        generateAsteroids(5, 5);
+        generateAsteroids(0, 5);
 
         do {
             resourceCollectors.clear();
@@ -657,6 +661,8 @@ public class GameScreen extends View {
             blackboards[i] = new Blackboard(i + 1);
         }
 
+        new EnemyAI(2, blackboards[1]);
+
         if (flagShips.size() > 0) {
             Main.selectShips.add(flagShips.get(0));
             Main.following = true;
@@ -760,6 +766,11 @@ public class GameScreen extends View {
         double extraOffsetX = mapSizeX;
         double extraOffsetY = mapSizeY;
 
+        if (grid_size == 32){
+            extraOffsetX = mapSizeX / 6f;
+            extraOffsetY = mapSizeY / 6f;
+        }
+
         for (int i = 0; i <= starXPos.length - 1; i++) {
             if (starXPos[i] >= offsetX / scaleX && starXPos[i] <= offsetX / scaleX + extraOffsetX && starYPos[i] >= offsetY / scaleY && starYPos[i] <= offsetY / scaleY + extraOffsetY) {
                 canvas.drawBitmap(bitStar, starXPos[i], starYPos[i], null);
@@ -770,6 +781,11 @@ public class GameScreen extends View {
         canvas.drawLine(-mapSizeX / 2, mapSizeY / 2, mapSizeX / 2, mapSizeY / 2, red);
         canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2, -mapSizeX / 2, mapSizeY / 2, red);
         canvas.drawLine(mapSizeX / 2, -mapSizeY / 2, mapSizeX / 2, mapSizeY / 2, red);
+
+        for (int i = 1; i < grid_size; i++) {
+            canvas.drawLine(-mapSizeX / 2 + i * mapSizeX / grid_size, -mapSizeY / 2, -mapSizeX / 2 + i * mapSizeX / grid_size, mapSizeY / 2, green);
+            canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, green);
+        }
 
         for (int i = 0; i <= blackHole.size() - 1; i++) {
             if (blackHole.get(i).centerPosX + blackHole.get(i).radius >= offsetX / scaleX && blackHole.get(i).centerPosX - blackHole.get(i).radius <= offsetX / scaleX + extraOffsetX && blackHole.get(i).centerPosY + blackHole.get(i).radius >= offsetY / scaleY && blackHole.get(i).centerPosY - blackHole.get(i).radius <= offsetY / scaleY + extraOffsetY) {
