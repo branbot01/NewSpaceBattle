@@ -36,7 +36,7 @@ class Bomber extends Ship {
         preScaleX = 1;
         preScaleY = 1;
         dockable = true;
-        missilePower = 150;
+        missilePower = 150 * 1.5f;
         missile1 = new PointObject(0, 0);
         missile2 = new PointObject(0, 0);
         shootTime = 5000;

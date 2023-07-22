@@ -38,7 +38,7 @@ class FlagShip extends Ship {
         preScaleX = 4;
         preScaleY = 4;
         dockable = false;
-        bulletPower = 100;
+        bulletPower = 150;
         gun1 = new PointObject(0, 0);
         gun2 = new PointObject(0, 0);
         gun3 = new PointObject(0, 0);
