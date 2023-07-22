@@ -13,7 +13,7 @@ class Formation {
     ArrayList<Ship> formationShips = new ArrayList<>();
     float initialSize;
 
-    float degrees, degreesCopy, angularVelocity, angularVelocityCopy, angularAcceleration, formationMaxSpeed;
+    float degrees, formationMaxSpeed;
     float velocityX, velocityY, accelerationX, accelerationY, accelerate;
 
     boolean destination = false;
@@ -44,17 +44,7 @@ class Formation {
         }
         initialSize = this.ships.size();
         degrees = 0;
-        degreesCopy = 0;
-        angularVelocity = 0;
-        angularVelocityCopy = 0;
-        angularAcceleration = 0;
-        for (int i = 0; i < this.ships.size(); i++) {
-            for (int j = 0; j < 3; j++) {
-                velocityVector.add(new Double[]{0.0, 0.0, 0.0});
-                normalAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
-                tangentAccelerationVector.add(new Double[]{0.0, 0.0, 0.0});
-            }
-        }
+
         formationMaxSpeed = Float.MAX_VALUE;
         Ship slowShip = null;
         for (int i = 0; i < this.ships.size(); i++) {
@@ -79,10 +69,8 @@ class Formation {
     //update's the formation's properties
     void update() {
         resetCenter();
-        //getPositions();    ***IS REDUNDANT***
         updatePositions();
         moveFormation();
-        rotateFormation();
     }
 
     //Finds the center of the selected ships
@@ -98,13 +86,13 @@ class Formation {
     }
 
     //get position of ships relative to formation's centre of mass (in n-t coordinates)  ***IS REDUNDANT***
-    /*void getPositions() {
+    void getPositions() {
         newRelativeCoordinates.clear();
         for (int i = 0; i < formationShips.size(); i++) {
             newRelativeCoordinates.add(new PointObject(initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), -initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
             //System.out.println("newRelativeCoordinates.get(" + i + ").x: " + newRelativeCoordinates.get(i).x + " newRelativeCoordinates.get(" + i + ").y: " + newRelativeCoordinates.get(i).y);
         }
-    }*/
+    }
 
     //update position of ship if formation rotates
     void updatePositions() {
@@ -186,29 +174,48 @@ class Formation {
         destination = true;
         destX = x;
         destY = y;
-        if (velocityX == 0 && velocityY == 0) {
-            driveFormation(Utilities.circleAngleX(degrees, centerX, Fighter.constRadius), Utilities.circleAngleY(degrees, centerY, Fighter.constRadius));
-        } else {
+        if (velocityX != 0 || velocityY != 0) {
             return;
         }
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int time = 0;
-                Looper.prepare();
-                while (destination) {
-                    if (time == 500) {
-                        time = 0;
-                        driveFormation(destX, destY);
-                    }
-                    if (checkDestination()) {
-                        stopMovement();
-                        break;
-                    }
-                    Utilities.delay(1);
-                    time++;
+        new Thread(() -> {
+            int time = 0;
+            Looper.prepare();
+            if (velocityX == 0 && velocityY == 0) {
+                double requiredAngle = Utilities.anglePoints(centerX, centerY, x, y);
+                double requiredPointX = Utilities.circleAngleX(requiredAngle, centerX, Fighter.constRadius);
+                double requiredPointY = Utilities.circleAngleY(requiredAngle, centerY, Fighter.constRadius);
+                double point1X = Utilities.circleAngleX(degrees + 100, centerX, Fighter.constRadius);
+                double point1Y = Utilities.circleAngleY(degrees + 100, centerY, Fighter.constRadius);
+                double point2X = Utilities.circleAngleX(degrees - 100, centerX, Fighter.constRadius);
+                double point2Y = Utilities.circleAngleY(degrees - 100, centerY, Fighter.constRadius);
+
+                double increment = 0.0005;
+                if (Utilities.distanceFormula(point1X, point1Y, requiredPointX, requiredPointY) < Utilities.distanceFormula(point2X, point2Y, requiredPointX, requiredPointY)) {
+                    increment *= -1;
                 }
+                while (Math.abs(degrees - requiredAngle) > 5) {
+                    degrees -= increment;
+                    if (degrees > 360) {
+                        degrees -= 360;
+                    } else if (degrees < 0) {
+                        degrees += 360;
+                    }
+                    System.out.println("degrees = " + degrees + " requiredAngle = " + requiredAngle);
+                }
+            }
+            while (destination) {
+                if (time == 500) {
+                    time = 0;
+                    driveFormation(destX, destY);
+                }
+                if (checkDestination()) {
+                    stopMovement();
+                    break;
+                }
+                rotateFormation();
+                Utilities.delay(1);
+                time++;
             }
         }).start();
     }
@@ -262,15 +269,8 @@ class Formation {
     }
 
     void rotateFormation() {
-        degreesCopy = degrees;
-        angularVelocityCopy = angularVelocity;
-        if (accelerationX != 0 && accelerationY != 0 /* && velocityX != 0 && velocityY != 0 */) {
+        if (accelerationX != 0 && accelerationY != 0 && velocityX != 0 && velocityY != 0) {
             degrees = (float) Utilities.angleDim(velocityX, velocityY);
-            angularVelocity = degrees - degreesCopy;
-            angularAcceleration = angularVelocity - angularVelocityCopy;
-
-            //System.out.println("degreesCopy = " + degreesCopy + " angularVelocityCopy = " + angularVelocityCopy);
-            //System.out.println("degrees = " + degrees + "angularVelocity = " + angularVelocity + " angularAcceleration = " + angularAcceleration);
         }
     }
 
