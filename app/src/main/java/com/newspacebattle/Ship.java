@@ -16,7 +16,7 @@ class Ship extends GameObject {
     float bulletPower, missilePower, laserPower;
     float preScaleX, preScaleY;
     float avoidanceRadius, sensorRadius;
-    int fitness, dmgDone, missedShots, kills, angleAway;
+    double shipWeight;
     boolean movable, autoAttack, dockable, docking, docked, canWarp, selected, attSelected, canAttack, attacking, visible;
     Formation formation;
     Matrix arrow = new Matrix();
@@ -62,7 +62,6 @@ class Ship extends GameObject {
     //Checks if ship still has health left
     boolean checkIfAlive() {
         setSelectColor();
-        //GameScreen.deadShips.add(this);
         return health > 0;
     }
 

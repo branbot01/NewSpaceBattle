@@ -67,12 +67,6 @@ class Bullet extends GameObject {
     void impact(GameObject object) {
         if (object instanceof Ship) {
             ((Ship) object).health -= damage;
-            if (ownShip.destinationFinder.enemies.contains((Ship) object)){
-                this.ownShip.dmgDone += damage;
-                if (((Ship) object).health <= 0) {
-                    this.ownShip.kills++;
-                }
-            }
         }
         for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
             if (!GameScreen.explosions.get(i).active) {

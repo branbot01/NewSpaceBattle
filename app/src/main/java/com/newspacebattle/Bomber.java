@@ -42,6 +42,7 @@ class Bomber extends Ship {
         shootTime = 5000;
         driveTime = 500;
         sensorRadius = radius * 48;
+        shipWeight = 1.4;
     }
 
     //Updates the object's properties

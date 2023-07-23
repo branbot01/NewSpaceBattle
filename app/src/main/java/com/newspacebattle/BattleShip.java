@@ -45,6 +45,7 @@ class BattleShip extends Ship {
         shootTime = 2000;
         driveTime = 1000;
         sensorRadius = radius * 12;
+        shipWeight = 7;
     }
 
     //Updates the object's properties

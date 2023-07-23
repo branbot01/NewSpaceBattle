@@ -168,7 +168,7 @@ class Utilities {
         Ship parent = null;
         int[] scores = new int[population.size()];
         for (int i = 0; i <= population.size() - 1; i++) {
-            scores[i] = population.get(i).fitness;
+            //scores[i] = population.get(i).fitness;
         }
 
         int lowestScore = Integer.MAX_VALUE;

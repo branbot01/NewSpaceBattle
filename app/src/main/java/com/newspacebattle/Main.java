@@ -269,37 +269,37 @@ public class Main extends AppCompatActivity {
                         dock.setAlpha(0.5f);
                     }
                     if (flagShipCount == 1) {
-                        if (GameScreen.resources[0] < 10000) {
+                        if (GameScreen.resources[0] < ResourceCollector.cost) {
                             buildResourceCollector.setAlpha(0.5f);
                         } else {
                             buildResourceCollector.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 3000) {
+                        if (GameScreen.resources[0] < Scout.cost) {
                             buildScout.setAlpha(0.5f);
                         } else {
                             buildScout.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 5000) {
+                        if (GameScreen.resources[0] < Fighter.cost) {
                             buildFighter.setAlpha(0.5f);
                         } else {
                             buildFighter.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 7500) {
+                        if (GameScreen.resources[0] < Bomber.cost) {
                             buildBomber.setAlpha(0.5f);
                         } else {
                             buildBomber.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 25000) {
+                        if (GameScreen.resources[0] < LaserCruiser.cost) {
                             buildLaserCruiser.setAlpha(0.5f);
                         } else {
                             buildLaserCruiser.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 50000) {
+                        if (GameScreen.resources[0] < BattleShip.cost) {
                             buildBattleShip.setAlpha(0.5f);
                         } else {
                             buildBattleShip.setAlpha(1f);
                         }
-                        if (GameScreen.resources[0] < 120000) {
+                        if (GameScreen.resources[0] < SpaceStation.cost) {
                             buildSpaceStation.setAlpha(0.5f);
                         } else {
                             buildSpaceStation.setAlpha(1f);

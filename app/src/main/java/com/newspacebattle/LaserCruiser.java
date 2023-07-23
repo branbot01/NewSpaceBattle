@@ -46,6 +46,7 @@ class LaserCruiser extends Ship {
         shootTime = 2500;
         driveTime = 1000;
         sensorRadius = radius * 20;
+        shipWeight = 3.8;
     }
 
     //Updates the object's properties

@@ -160,13 +160,13 @@ public class GameScreen extends View {
         Scout.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) / 1.9);
         SpaceStation.constRadius = (float) (((Main.screenY / GameScreen.circleRatio) / 2f) * 7);
 
-        BattleShip.cost = 50000;
-        Bomber.cost = 7500;
+        BattleShip.cost = 35000;
+        Bomber.cost = 7000;
         Fighter.cost = 5000;
-        LaserCruiser.cost = 25000;
+        LaserCruiser.cost = 19000;
         ResourceCollector.cost = 10000;
         Scout.cost = 3000;
-        SpaceStation.cost = 120000;
+        SpaceStation.cost = 50000;
 
         resources[0] = 2000000;
 
@@ -782,10 +782,10 @@ public class GameScreen extends View {
         canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2, -mapSizeX / 2, mapSizeY / 2, red);
         canvas.drawLine(mapSizeX / 2, -mapSizeY / 2, mapSizeX / 2, mapSizeY / 2, red);
 
-        /*for (int i = 1; i < grid_size; i++) {
+        for (int i = 1; i < grid_size; i++) {
             canvas.drawLine(-mapSizeX / 2 + i * mapSizeX / grid_size, -mapSizeY / 2, -mapSizeX / 2 + i * mapSizeX / grid_size, mapSizeY / 2, green);
             canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, green);
-        }*/
+        }
 
         for (int i = 0; i <= blackHole.size() - 1; i++) {
             if (blackHole.get(i).centerPosX + blackHole.get(i).radius >= offsetX / scaleX && blackHole.get(i).centerPosX - blackHole.get(i).radius <= offsetX / scaleX + extraOffsetX && blackHole.get(i).centerPosY + blackHole.get(i).radius >= offsetY / scaleY && blackHole.get(i).centerPosY - blackHole.get(i).radius <= offsetY / scaleY + extraOffsetY) {

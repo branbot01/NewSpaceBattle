@@ -46,6 +46,7 @@ class FlagShip extends Ship {
         shootTime = 1000;
         driveTime = 1000;
         sensorRadius = radius * 12;
+        shipWeight = 3.5;
     }
 
     //Updates the object's properties

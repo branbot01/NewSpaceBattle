@@ -42,6 +42,7 @@ class Fighter extends Ship {
         shootTime = 650;
         driveTime = 500;
         sensorRadius = radius * 48;
+        shipWeight = 1;
     }
 
     //Updates the object's properties

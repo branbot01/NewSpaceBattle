@@ -13,7 +13,7 @@ class Blackboard {
     ArrayList<Ship> visibleEnemyShips = new ArrayList<>();
     ArrayList<Triple<Ship, Float, Float>> possibleEnemyShips = new ArrayList<>();
 
-    float[][] grid = new float[GameScreen.grid_size][GameScreen.grid_size];
+    double[][] grid = new double[GameScreen.grid_size][GameScreen.grid_size];
 
     Blackboard(int team) {
         this.team = team;
@@ -129,12 +129,12 @@ class Blackboard {
                 for (int ship = 0; ship < GameScreen.ships.size(); ship++) {
                     if (GameScreen.ships.get(ship).team == this.team) {
                         if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                            grid[j][i]++;
+                            grid[j][i] += GameScreen.ships.get(ship).shipWeight;
                         }
                     }
                     if (visibleEnemyShips.contains(GameScreen.ships.get(ship))){
                         if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                            grid[j][i]++;
+                            grid[j][i] -= GameScreen.ships.get(ship).shipWeight;
                         }
                     }
                 }
@@ -144,7 +144,7 @@ class Blackboard {
                         continue;
                     }
                     if (possibleEnemyShips.get(possibleShip).getSecond() >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getSecond() <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                        grid[j][i]++;
+                        grid[j][i] -= possibleEnemyShips.get(possibleShip).getFirst().shipWeight;
                     }
                 }
             }
@@ -152,10 +152,10 @@ class Blackboard {
     }
 
     void printGrid() {
-        for (float[] floats : grid) {
+        for (double[] doubles : grid) {
             System.out.print("[");
             for (int j = 0; j < grid[0].length; j++) {
-                System.out.print(floats[j] + ", ");
+                System.out.print(doubles[j] + ", ");
             }
             System.out.println("]");
         }
