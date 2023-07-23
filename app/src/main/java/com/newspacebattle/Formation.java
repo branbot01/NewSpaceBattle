@@ -48,9 +48,6 @@ class Formation {
         if (slowShip != null) {
             accelerate = slowShip.accelerate;
         }
-        for (int i = 0; i < this.ships.size(); i++) {
-            this.ships.get(i).maxSpeed = formationMaxSpeed;
-        }
         setShips();
         setCenter();
         if (type == RECTANGLE_FORMATION) {
@@ -91,15 +88,11 @@ class Formation {
         }
         if (formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
             boolean[] inPosition = new boolean[formationShips.size()];
+            boolean allFalse = true;
             for (int i = 0; i < formationShips.size(); i++) {
                 inPosition[i] = !(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination;
-            }
-
-            boolean allFalse = true;
-            for (boolean b : inPosition) {
-                if (b) {
+                if (inPosition[i]) {
                     allFalse = false;
-                    break;
                 }
             }
 
@@ -116,8 +109,26 @@ class Formation {
                         formationShips.get(i).accelerationX = Float.MIN_VALUE;
                         formationShips.get(i).accelerationY = Float.MIN_VALUE;
                     }
+                    formationShips.get(i).maxSpeed = formationMaxSpeed;
                 } else if (!inPosition[i] && !formationShips.get(i).destination && !turning) {
                     formationShips.get(i).setDestination((float) globalCoordinates.get(i).x, (float) globalCoordinates.get(i).y);
+                    if (formationShips.get(i) instanceof BattleShip) {
+                        formationShips.get(i).maxSpeed = BattleShip.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof FlagShip) {
+                        formationShips.get(i).maxSpeed = FlagShip.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof LaserCruiser) {
+                        formationShips.get(i).maxSpeed = LaserCruiser.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof Fighter) {
+                        formationShips.get(i).maxSpeed = Fighter.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof Bomber) {
+                        formationShips.get(i).maxSpeed = Bomber.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof Scout) {
+                        formationShips.get(i).maxSpeed = Scout.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof ResourceCollector) {
+                        formationShips.get(i).maxSpeed = ResourceCollector.MAX_SPEED;
+                    } else if (formationShips.get(i) instanceof SpaceStation) {
+                        formationShips.get(i).maxSpeed = SpaceStation.MAX_SPEED;
+                    }
                 }
                 formationShips.get(i).destinationFinder.destX = (float) globalCoordinates.get(i).x;
                 formationShips.get(i).destinationFinder.destY = (float) globalCoordinates.get(i).y;
@@ -182,7 +193,7 @@ class Formation {
         new Thread(() -> {
             int time = 0;
             Looper.prepare();
-            double requiredAngle = Utilities.anglePoints(centerX, centerY, x, y);
+            double requiredAngle = Utilities.anglePoints(centerX, centerY, destX, destY);
             double requiredPointX = Utilities.circleAngleX(requiredAngle, centerX, Fighter.constRadius);
             double requiredPointY = Utilities.circleAngleY(requiredAngle, centerY, Fighter.constRadius);
             double point1X = Utilities.circleAngleX(degrees + 100, centerX, Fighter.constRadius);
@@ -190,13 +201,14 @@ class Formation {
             double point2X = Utilities.circleAngleX(degrees - 100, centerX, Fighter.constRadius);
             double point2Y = Utilities.circleAngleY(degrees - 100, centerY, Fighter.constRadius);
 
-            double increment = 0.05;
+            double increment = 0.1;
             if (Utilities.distanceFormula(point1X, point1Y, requiredPointX, requiredPointY) < Utilities.distanceFormula(point2X, point2Y, requiredPointX, requiredPointY)) {
                 increment *= -1;
             }
             turning = true;
             while (Math.abs(degrees - requiredAngle) > 1) {
-                degrees -= increment;
+                requiredAngle = Utilities.anglePoints(centerX, centerY, destX, destY);
+                degrees -= increment / ships.size();
                 if (degrees > 360) {
                     degrees -= 360;
                 } else if (degrees < 0) {
