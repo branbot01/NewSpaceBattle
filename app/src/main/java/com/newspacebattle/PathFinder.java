@@ -68,37 +68,29 @@ class PathFinder {
             ship.attacking = false;
             return;
         }
-        if (ship.attacking || ship.formation != null) {
+        if (ship.attacking) {
             return;
         }
         new Thread(() -> {
             Looper.prepare();
             while (ship.exists && !ship.destination && ship.autoAttack) {
                 if (!ship.attacking) {
-                    double closestDistance = 1000000000;
-                    int closestIndex = -1;
-                    boolean isShip = false;
+                    int shipIndex = -1;
                     for (int i = 0; i < GameScreen.ships.size(); i++) {
                         try {
-                            if (GameScreen.ships.get(i).team != ship.team && GameScreen.ships.get(i) != ship && GameScreen.ships.get(i).exists) {
-                                isShip = true;
-                                double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY);
-                                if (distance < closestDistance) {
-                                    closestDistance = distance;
-                                    closestIndex = i;
-                                }
+                            if (GameScreen.ships.get(i).team != ship.team && Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) <= ship.sensorRadius) {
+                                shipIndex = i;
+                                break;
                             }
                         } catch (Exception e) {
                             System.out.println("Error: " + e);
                         }
                     }
-                    if (!isShip) {
-                        ship.stop();
+                    if (shipIndex == -1) {
                         break;
-                    }
-                    if (closestIndex != -1) {
+                    } else {
                         stopFinder();
-                        enemies.add(GameScreen.ships.get(closestIndex));
+                        enemies.add(GameScreen.ships.get(shipIndex));
                         startAttacker();
                     }
                 }

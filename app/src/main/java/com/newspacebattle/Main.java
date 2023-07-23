@@ -41,7 +41,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
     FloatingActionButton nextFormation, controlFormation;
-    FloatingActionButton rectangleFormation;
+    FloatingActionButton rectangleFormation, vFormation;
     ScrollView scroller;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
@@ -673,6 +673,7 @@ public class Main extends AppCompatActivity {
         controlFormation = findViewById(R.id.controlFormation);
         buildFormation = findViewById(R.id.buildFormation);
         rectangleFormation = findViewById(R.id.rectangleFormation);
+        vFormation = findViewById(R.id.vFormation);
         numFormations = findViewById(R.id.numFormations);
     }
 
@@ -1189,6 +1190,7 @@ public class Main extends AppCompatActivity {
             numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
 
             rectangleFormation.setVisibility(View.INVISIBLE);
+            vFormation.setVisibility(View.INVISIBLE);
         } else {
             formationBar.setVisibility(View.INVISIBLE);
             currentFormations.setVisibility(View.INVISIBLE);
@@ -1198,6 +1200,7 @@ public class Main extends AppCompatActivity {
             controlFormation.setVisibility(View.INVISIBLE);
 
             rectangleFormation.setVisibility(View.INVISIBLE);
+            vFormation.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -1209,6 +1212,7 @@ public class Main extends AppCompatActivity {
         buildFormation.setVisibility(View.VISIBLE);
 
         rectangleFormation.setVisibility(View.VISIBLE);
+        vFormation.setVisibility(View.VISIBLE);
 
         numFormations.setVisibility(View.INVISIBLE);
         nextFormation.setVisibility(View.INVISIBLE);
@@ -1224,6 +1228,7 @@ public class Main extends AppCompatActivity {
         controlFormation.setVisibility(View.VISIBLE);
 
         rectangleFormation.setVisibility(View.INVISIBLE);
+        vFormation.setVisibility(View.INVISIBLE);
     }
 
     public void setNextFormation(View view) {
@@ -1255,7 +1260,14 @@ public class Main extends AppCompatActivity {
         formationBar(false);
         shipBar(true);
 
-        GameScreen.formationsTeam1.add(new Formation(selectShips, 0));
+        GameScreen.formationsTeam1.add(new Formation(selectShips, Formation.RECTANGLE_FORMATION));
+    }
+
+    public void setVFormation(View view) {
+        formationBar(false);
+        shipBar(true);
+
+        GameScreen.formationsTeam1.add(new Formation(selectShips, Formation.V_FORMATION));
     }
 
     public FlagShip checkIfOneFlagship() {

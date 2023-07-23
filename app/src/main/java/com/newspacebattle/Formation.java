@@ -9,6 +9,8 @@ import java.util.ArrayList;
  */
 class Formation {
 
+    static int RECTANGLE_FORMATION = 0, V_FORMATION = 1;
+
     ArrayList<Ship> ships;
     ArrayList<Ship> formationShips = new ArrayList<>();
     float degrees, formationMaxSpeed, velocityX, velocityY, accelerationX, accelerationY, accelerate, destX, destY;
@@ -51,8 +53,10 @@ class Formation {
         }
         setShips();
         setCenter();
-        if (type == 0) {
+        if (type == RECTANGLE_FORMATION) {
             rectangleFormation();
+        } else if (type == V_FORMATION) {
+            VFormation();
         }
     }
 
@@ -186,7 +190,7 @@ class Formation {
             double point2X = Utilities.circleAngleX(degrees - 100, centerX, Fighter.constRadius);
             double point2Y = Utilities.circleAngleY(degrees - 100, centerY, Fighter.constRadius);
 
-            double increment = 0.0001;
+            double increment = 0.05;
             if (Utilities.distanceFormula(point1X, point1Y, requiredPointX, requiredPointY) < Utilities.distanceFormula(point2X, point2Y, requiredPointX, requiredPointY)) {
                 increment *= -1;
             }
@@ -198,6 +202,7 @@ class Formation {
                 } else if (degrees < 0) {
                     degrees += 360;
                 }
+                Utilities.delay(1);
             }
             turning = false;
 
