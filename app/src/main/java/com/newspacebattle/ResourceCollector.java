@@ -90,7 +90,7 @@ class ResourceCollector extends Ship {
     void mineAsteroid() {
         new Thread(() -> {
             Looper.prepare();
-            while (resources < RESOURCE_CAPACITY - 4 && harvesting && asteroidSelected.resources > 0) {
+            while (resources < RESOURCE_CAPACITY && harvesting && asteroidSelected.resources > 0) {
                 velocityX = asteroidSelected.velocityX;
                 velocityY = asteroidSelected.velocityY;
                 resources += 4;
@@ -128,7 +128,7 @@ class ResourceCollector extends Ship {
     void transferRes() {
         new Thread(() -> {
             Looper.prepare();
-            while (!(resources < 0) && unloading) {
+            while (!(resources < 4) && unloading) {
                 velocityX = flagShipSelected.velocityX;
                 velocityY = flagShipSelected.velocityY;
                 resources -= 4;
