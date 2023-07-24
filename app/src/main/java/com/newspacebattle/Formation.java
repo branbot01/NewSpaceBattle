@@ -15,6 +15,7 @@ class Formation {
     ArrayList<Ship> formationShips = new ArrayList<>();
     float degrees, formationMaxSpeed, velocityX, velocityY, accelerationX, accelerationY, accelerate, destX, destY;
     boolean destination, turning;
+    ArrayList<Boolean> inPosition = new ArrayList<>();
 
     //visualize ship locations
     ArrayList<PointObject> globalCoordinates = new ArrayList<>();
@@ -48,7 +49,9 @@ class Formation {
         if (slowShip != null) {
             accelerate = slowShip.accelerate;
         }
-        setShips();
+        for (int i = 0; i < this.ships.size(); i++) {
+            ships.get(i).formation = this;
+        }
         setCenter();
         if (type == RECTANGLE_FORMATION) {
             rectangleFormation();
@@ -87,11 +90,11 @@ class Formation {
             globalCoordinates.add(new PointObject(centerX + initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) - initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), centerY + initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
         }
         if (formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
-            boolean[] inPosition = new boolean[formationShips.size()];
+            inPosition.clear();
             boolean allFalse = true;
             for (int i = 0; i < formationShips.size(); i++) {
-                inPosition[i] = !(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination;
-                if (inPosition[i]) {
+                inPosition.add(!(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination);
+                if (inPosition.get(i)) {
                     allFalse = false;
                 }
             }
@@ -102,7 +105,10 @@ class Formation {
             }
 
             for (int i = 0; i < formationShips.size(); i++) {
-                if (inPosition[i] && destination) {
+                if (formationShips.get(i).attacking){
+                    continue;
+                }
+                if (inPosition.get(i) && destination) {
                     formationShips.get(i).velocityX = (float) (globalCoordinates.get(i).x - globalCoordinatesCopy.get(i).x);
                     formationShips.get(i).velocityY = -(float) (globalCoordinates.get(i).y - globalCoordinatesCopy.get(i).y);
                     if (formationShips.get(i).velocityX != 0 && formationShips.get(i).velocityY != 0) {
@@ -110,25 +116,9 @@ class Formation {
                         formationShips.get(i).accelerationY = Float.MIN_VALUE;
                     }
                     formationShips.get(i).maxSpeed = formationMaxSpeed;
-                } else if (!inPosition[i] && !formationShips.get(i).destination && !turning) {
+                } else if (!inPosition.get(i) && !formationShips.get(i).destination && !turning) {
                     formationShips.get(i).setDestination((float) globalCoordinates.get(i).x, (float) globalCoordinates.get(i).y);
-                    if (formationShips.get(i) instanceof BattleShip) {
-                        formationShips.get(i).maxSpeed = BattleShip.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof FlagShip) {
-                        formationShips.get(i).maxSpeed = FlagShip.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof LaserCruiser) {
-                        formationShips.get(i).maxSpeed = LaserCruiser.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof Fighter) {
-                        formationShips.get(i).maxSpeed = Fighter.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof Bomber) {
-                        formationShips.get(i).maxSpeed = Bomber.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof Scout) {
-                        formationShips.get(i).maxSpeed = Scout.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof ResourceCollector) {
-                        formationShips.get(i).maxSpeed = ResourceCollector.MAX_SPEED;
-                    } else if (formationShips.get(i) instanceof SpaceStation) {
-                        formationShips.get(i).maxSpeed = SpaceStation.MAX_SPEED;
-                    }
+                    setShipNormalSpeed(formationShips.get(i));
                 }
                 formationShips.get(i).destinationFinder.destX = (float) globalCoordinates.get(i).x;
                 formationShips.get(i).destinationFinder.destY = (float) globalCoordinates.get(i).y;
@@ -136,9 +126,23 @@ class Formation {
         }
     }
 
-    void setShips() {
-        for (int i = 0; i < ships.size(); i++) {
-            ships.get(i).formation = this;
+    void setShipNormalSpeed(Ship ship){
+        if (ship instanceof BattleShip) {
+            ship.maxSpeed = BattleShip.MAX_SPEED;
+        } else if (ship instanceof FlagShip) {
+            ship.maxSpeed = FlagShip.MAX_SPEED;
+        } else if (ship instanceof LaserCruiser) {
+            ship.maxSpeed = LaserCruiser.MAX_SPEED;
+        } else if (ship instanceof Fighter) {
+            ship.maxSpeed = Fighter.MAX_SPEED;
+        } else if (ship instanceof Bomber) {
+            ship.maxSpeed = Bomber.MAX_SPEED;
+        } else if (ship instanceof Scout) {
+            ship.maxSpeed = Scout.MAX_SPEED;
+        } else if (ship instanceof ResourceCollector) {
+            ship.maxSpeed = ResourceCollector.MAX_SPEED;
+        } else if (ship instanceof SpaceStation) {
+            ship.maxSpeed = SpaceStation.MAX_SPEED;
         }
     }
 
@@ -147,23 +151,7 @@ class Formation {
         for (int i = 0; i < ships.size(); i++) {
             if (ships.get(i).formation != this || !ships.get(i).exists) {
                 formationShips.remove(ships.get(i));
-                if (ships.get(i) instanceof BattleShip) {
-                    ships.get(i).maxSpeed = BattleShip.MAX_SPEED;
-                } else if (ships.get(i) instanceof FlagShip) {
-                    ships.get(i).maxSpeed = FlagShip.MAX_SPEED;
-                } else if (ships.get(i) instanceof LaserCruiser) {
-                    ships.get(i).maxSpeed = LaserCruiser.MAX_SPEED;
-                } else if (ships.get(i) instanceof Fighter) {
-                    ships.get(i).maxSpeed = Fighter.MAX_SPEED;
-                } else if (ships.get(i) instanceof Bomber) {
-                    ships.get(i).maxSpeed = Bomber.MAX_SPEED;
-                } else if (ships.get(i) instanceof Scout) {
-                    ships.get(i).maxSpeed = Scout.MAX_SPEED;
-                } else if (ships.get(i) instanceof ResourceCollector) {
-                    ships.get(i).maxSpeed = ResourceCollector.MAX_SPEED;
-                } else if (ships.get(i) instanceof SpaceStation) {
-                    ships.get(i).maxSpeed = SpaceStation.MAX_SPEED;
-                }
+                setShipNormalSpeed(ships.get(i));
                 ships.remove(ships.get(i));
                 setCenter();
             }

@@ -12,7 +12,7 @@ class PathFinder {
 
     int driveTime, shootTime;
     float destX, destY, tempX, tempY;
-    private boolean pointOrObj;
+    boolean pointOrObj, searchingForEnemy;
     private final Ship ship;
     private GameObject targetObj;
     ArrayList<Ship> enemies;
@@ -68,9 +68,10 @@ class PathFinder {
             ship.attacking = false;
             return;
         }
-        if (ship.attacking) {
+        if (ship.attacking || searchingForEnemy || ship.destination) {
             return;
         }
+        searchingForEnemy = true;
         new Thread(() -> {
             Looper.prepare();
             while (ship.exists && !ship.destination && ship.autoAttack) {
@@ -86,11 +87,10 @@ class PathFinder {
                             System.out.println("Error: " + e);
                         }
                     }
-                    if (shipIndex == -1) {
-                        break;
-                    } else {
+                    if (shipIndex != -1) {
                         stopFinder();
                         enemies.add(GameScreen.ships.get(shipIndex));
+                        searchingForEnemy = false;
                         startAttacker();
                     }
                 }
@@ -107,6 +107,7 @@ class PathFinder {
 
     private void startAttacker() {
         ship.attacking = true;
+        ship.destination = false;
         ship.formation = null;
         while (ship.exists && ship.attacking) {
             try {

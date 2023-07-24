@@ -858,12 +858,14 @@ public class Main extends AppCompatActivity {
             for (int i = 0; i <= selectShips.size() - 1; i++) {
                 if (selectShips.get(i).canAttack) {
                     selectShips.get(i).autoAttack = true;
+                    selectShips.get(i).destinationFinder.searchingForEnemy = false;
                 }
             }
         } else {
             shipMode.setImageResource(R.drawable.ic_evasive);
             for (int i = 0; i <= selectShips.size() - 1; i++) {
                 selectShips.get(i).autoAttack = false;
+                selectShips.get(i).destinationFinder.searchingForEnemy = false;
             }
         }
     }

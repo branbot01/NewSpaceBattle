@@ -75,6 +75,7 @@ class Ship extends GameObject {
 
         destination = false;
         attacking = false;
+        destinationFinder.searchingForEnemy = false;
         destinationFinder.stopFinder();
     }
 

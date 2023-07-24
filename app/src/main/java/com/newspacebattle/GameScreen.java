@@ -1110,7 +1110,11 @@ public class GameScreen extends View {
     public void gameLoop() {
         Main.refresh.postDelayed(() -> {
             if (!paused) {
-                invalidate();
+                try {
+                    invalidate();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
                 for (int i = 0; i <= blackHole.size() - 1; i++) {
                     blackHole.get(i).update();
                 }
