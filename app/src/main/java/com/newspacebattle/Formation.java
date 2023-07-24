@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 class Formation {
 
-    static int RECTANGLE_FORMATION = 0, V_FORMATION = 1;
+    static int RECTANGLE_FORMATION = 0, V_FORMATION = 1, CUSTOM_FORMATION = 3;
 
     ArrayList<Ship> ships;
     ArrayList<Ship> formationShips = new ArrayList<>();
@@ -57,6 +57,8 @@ class Formation {
             rectangleFormation();
         } else if (type == V_FORMATION) {
             VFormation();
+        } else if (type == CUSTOM_FORMATION) {
+            customFormation();
         }
     }
 
