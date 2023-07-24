@@ -275,8 +275,172 @@ class Formation {
         }
     }
 
-    //Creates a rectangle formation
     void rectangleFormation() {
+        int shipCounter = 0;
+        int i = 0, i2 = 2, i3 = 2, j = 1, leftOrRight = 1;
+        float offsetX = 0, offsetY = 0, offsetYDirection = -1, previousLeftOffsetX = 0, previousRightOffsetX = 0, secondPreviousLeftOffsetX = 0, secondPreviousRightOffsetX = 0;
+        float reduceDistance = 1f;
+        boolean leftStart = true;
+
+        if (ships.size() <= 1) {
+            return;
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof FlagShip || ships.get(shipIndex) instanceof BattleShip){
+                if(shipCounter == 0){
+                    ships.get(shipIndex).setDestination((float)centerX, (float)centerY);
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) 0));
+                    formationShips.add(ships.get(shipIndex));
+                    i = 2;
+                    leftOrRight = 1;
+                    System.out.println("L index 0");
+                }else{
+                    if(leftOrRight == 1){
+                        offsetX = (float) -(BattleShip.constRadius * 3.5 * (i - 1));
+                        previousLeftOffsetX = Math.abs(offsetX);
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) 0));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight++;
+                        System.out.println("L1");
+                        System.out.println("left offset = " + previousLeftOffsetX);
+                    }else if(leftOrRight == 2){
+                        offsetX = (float) (BattleShip.constRadius * 3.5 * (i - 1));
+                        previousRightOffsetX = Math.abs(offsetX);
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) 0));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight = 1;
+                        i++;
+                        System.out.println("L2");
+                        System.out.println("right offset = " + previousRightOffsetX);
+                    }
+                }
+                shipCounter++;
+            }
+        }
+
+        if(leftOrRight == 2){
+            leftStart = false;
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof LaserCruiser){
+                if(shipCounter == 0){
+                    ships.get(shipIndex).setDestination((float)centerX, (float)centerY);
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) 0));
+                    formationShips.add(ships.get(shipIndex));
+                    i2 = 2;
+                    leftOrRight = 1;
+                    System.out.println("M index 0");
+                }else{
+                    if(leftOrRight == 1){
+                        offsetX = -previousLeftOffsetX + (float) -(LaserCruiser.constRadius * 4 * (i2 - 1));
+                        secondPreviousLeftOffsetX = Math.abs(offsetX);
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) 0));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight++;
+                        if(!leftStart){
+                            i2++;
+                        }
+                        System.out.println("M1");
+                    }else if(leftOrRight == 2){
+                        offsetX = previousRightOffsetX + (float) (LaserCruiser.constRadius * 4 * (i2 - 1));
+                        secondPreviousRightOffsetX = Math.abs(offsetX);
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) 0));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight = 1;
+                        if(leftStart){
+                            i2++;
+                        }
+                        System.out.println("M2");
+                    }
+                }
+                shipCounter++;
+            }
+        }
+
+        if(leftOrRight == 2){
+            leftStart = false;
+        }
+        if(shipCounter != 0){
+            offsetYDirection *= -1;
+        }else{
+            reduceDistance = 0.6f;
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof Fighter || ships.get(shipIndex) instanceof Bomber || ships.get(shipIndex) instanceof Scout || ships.get(shipIndex) instanceof ResourceCollector){
+                if(shipCounter == 0){
+                    offsetY = (float) -((Fighter.constRadius * 8 * reduceDistance) * (Math.sqrt(3) / 4));
+                    System.out.println("offsetY = " + offsetY);
+                    ships.get(shipIndex).setDestination((float)centerX, (float)(centerY + offsetY));
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) offsetY));
+                    formationShips.add(ships.get(shipIndex));
+                    j = 1;
+                    i3 = 2;
+                    leftOrRight = 1;
+                    System.out.println("S index 0");
+                }else{
+                    if(leftOrRight == 1){
+                        if(j == 1 || j == 3){
+                            offsetYDirection *= -1;
+                        }
+                        offsetY = offsetYDirection * (float) ((Fighter.constRadius * 8 * reduceDistance) * (Math.sqrt(3) / 4));
+                        System.out.println("offsetY = " + offsetY);
+                        if(secondPreviousLeftOffsetX == 0){
+                            secondPreviousLeftOffsetX = previousLeftOffsetX;
+                        }
+                        offsetX = -secondPreviousLeftOffsetX + (float) -(Fighter.constRadius * 8 * reduceDistance * (0.5) * (i3 - 1));
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY + offsetY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) offsetY));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight++;
+                        if(!leftStart){
+                            i3++;
+                        }
+                        if(j == 4){
+                            j = 1;
+                        }else{
+                            j++;
+                        }
+                        System.out.println("S1");
+                    }else if(leftOrRight == 2){
+                        if(j == 1 || j == 3){
+                            offsetYDirection *= -1;
+                        }
+                        offsetY = offsetYDirection * (float) ((Fighter.constRadius * 8 * reduceDistance) * (Math.sqrt(3) / 4));
+                        System.out.println("offsetY = " + offsetY);
+                        if(secondPreviousRightOffsetX == 0){
+                            secondPreviousRightOffsetX = previousRightOffsetX;
+                        }
+                        offsetX = secondPreviousRightOffsetX + (float) (Fighter.constRadius * 8 * reduceDistance * (0.5) * (i3 - 1));
+                        ships.get(shipIndex).setDestination((float)(centerX + offsetX), (float)(centerY + offsetY));
+                        initialRelativeCoordinates.add(new PointObject((float) offsetX, (float) offsetY));
+                        formationShips.add(ships.get(shipIndex));
+                        leftOrRight = 1;
+                        if(leftStart){
+                            i3++;
+                        }
+                        if(j == 4){
+                            j = 1;
+                        }else{
+                            j++;
+                        }
+                        System.out.println("S2");
+                    }
+                }
+                shipCounter++;
+            }
+        }
+    }
+
+
+    //Creates a rectangle formation
+    void oldRectangleFormation() {
         int shipCounter = 0;
         float offsetX = 0, offsetY = 0;
 
