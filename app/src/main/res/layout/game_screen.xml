@@ -179,6 +179,19 @@
         app:srcCompat="@drawable/ic_yellowarrow" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/circleFormation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:clickable="true"
+        android:onClick="setCircleFormation"
+        android:visibility="invisible"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/vFormation"
+        app:srcCompat="@drawable/ic_spacestationring1" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/customFormation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -188,7 +201,7 @@
         android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/vFormation"
+        app:layout_constraintStart_toEndOf="@+id/circleFormation"
         app:srcCompat="@drawable/background" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
