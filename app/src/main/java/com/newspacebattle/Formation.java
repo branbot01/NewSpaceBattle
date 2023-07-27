@@ -644,7 +644,116 @@ class Formation {
         }
     }
 
+    void circleFormation() {
+        float degrees = 0, radius = 0;
+        float largestAvoidanceRadius = 0, avoidanceRadiusBuffer = 1;
+        float offsetX = 0, offsetY = 0, degreeOffset = 0;
+        int shipCounter = 0;
+
+        if(ships.size() <= 1){
+            return;
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex).avoidanceRadius > largestAvoidanceRadius){
+                largestAvoidanceRadius = ships.get(shipIndex).avoidanceRadius;
+            }
+        }
+
+        degrees = 360f / ships.size();
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof LaserCruiser){
+                avoidanceRadiusBuffer = 1.1f;
+            }else if(ships.get(shipIndex) instanceof BattleShip || ships.get(shipIndex) instanceof FlagShip){
+                avoidanceRadiusBuffer = 1.3f;
+            }
+        }
+        radius = (float) (0.5f * (largestAvoidanceRadius * avoidanceRadiusBuffer) * (1f / Math.cos(Math.toRadians(90f - degrees / 2f))));
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof Fighter || ships.get(shipIndex) instanceof Bomber || ships.get(shipIndex) instanceof Scout || ships.get(shipIndex) instanceof ResourceCollector){
+                if(shipCounter == 0){
+                    ships.get(shipIndex).setDestination((float) centerX, (float) (centerY - radius));
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) -radius));
+                    formationShips.add(ships.get(shipIndex));
+                    degreeOffset += degrees;
+                }else{
+                    offsetX = (float) (radius * Math.sin(Math.toRadians(degreeOffset)));
+                    offsetY = (float) -(radius * Math.cos(Math.toRadians(degreeOffset)));
+                    ships.get(shipIndex).setDestination((float) (centerX + offsetX), (float) (centerY + offsetY));
+                    initialRelativeCoordinates.add(new PointObject((float) (offsetX), (float) (offsetY)));
+                    formationShips.add(ships.get(shipIndex));
+                    if(shipCounter % 2 == 0){
+                        if(degreeOffset < 0){
+                            degreeOffset *= -1;
+                        }
+                        degreeOffset += degrees;
+                    }else if(shipCounter % 2 == 1){
+                        degreeOffset *= -1;
+                    }
+                }
+                shipCounter++;
+            }
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof LaserCruiser){
+                if(shipCounter == 0){
+                    ships.get(shipIndex).setDestination((float) centerX, (float) (centerY - radius));
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) -radius));
+                    formationShips.add(ships.get(shipIndex));
+                    degreeOffset += degrees;
+                }else{
+                    offsetX = (float) (radius * Math.sin(Math.toRadians(degreeOffset)));
+                    offsetY = (float) -(radius * Math.cos(Math.toRadians(degreeOffset)));
+                    ships.get(shipIndex).setDestination((float) (centerX + offsetX), (float) (centerY + offsetY));
+                    initialRelativeCoordinates.add(new PointObject((float) (offsetX), (float) (offsetY)));
+                    formationShips.add(ships.get(shipIndex));
+                    if(shipCounter % 2 == 0){
+                        if(degreeOffset < 0){
+                            degreeOffset *= -1;
+                        }
+                        degreeOffset += degrees;
+                    }else if(shipCounter % 2 == 1){
+                        degreeOffset *= -1;
+                    }
+                }
+                shipCounter++;
+            }
+        }
+
+        for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
+            if(ships.get(shipIndex) instanceof BattleShip || ships.get(shipIndex) instanceof FlagShip){
+                if(shipCounter == 0){
+                    ships.get(shipIndex).setDestination((float) centerX, (float) (centerY - radius));
+                    initialRelativeCoordinates.add(new PointObject((float) 0, (float) -radius));
+                    formationShips.add(ships.get(shipIndex));
+                    degreeOffset += degrees;
+                }else{
+                    offsetX = (float) (radius * Math.sin(Math.toRadians(degreeOffset)));
+                    offsetY = (float) -(radius * Math.cos(Math.toRadians(degreeOffset)));
+                    ships.get(shipIndex).setDestination((float) (centerX + offsetX), (float) (centerY + offsetY));
+                    initialRelativeCoordinates.add(new PointObject((float) (offsetX), (float) (offsetY)));
+                    formationShips.add(ships.get(shipIndex));
+                    if(shipCounter % 2 == 0){
+                        if(degreeOffset < 0){
+                            degreeOffset *= -1;
+                        }
+                        degreeOffset += degrees;
+                    }else if(shipCounter % 2 == 1){
+                        degreeOffset *= -1;
+                    }
+                }
+                shipCounter++;
+            }
+        }
+    }
+
     void customFormation() {
+        if(ships.size() <= 1){
+            return;
+        }
         for(int shipIndex = 0; shipIndex < ships.size(); shipIndex++){
             initialRelativeCoordinates.add(new PointObject(ships.get(shipIndex).centerPosX - centerX, ships.get(shipIndex).centerPosY - centerY));
             formationShips.add(ships.get(shipIndex));
