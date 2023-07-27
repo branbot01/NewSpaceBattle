@@ -1,11 +1,14 @@
 package com.newspacebattle;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Dylan on 2018-07-12. Some math functions that come in very handy.
  */
 class Utilities {
+
+    private static final Random random = new Random();
     //Determines an angle from one point to another
     static double anglePoints(double point1x, double point1y, double point2x, double point2y) {
         double distanceX = point2x - point1x;
@@ -204,6 +207,37 @@ class Utilities {
             }
         }
         return parent;
+    }
+
+    public static int pickIndex(double[] probabilities) {
+        double sumProbabilities = 0;
+        for (double probability : probabilities) {
+            if (probability < 0 || probability > 1) {
+                throw new RuntimeException("Probabilities must be between 0 and 1");
+            }
+            sumProbabilities += probability;
+        }
+        if (sumProbabilities != 1) {
+            throw new RuntimeException("Probabilities must sum to 1");
+        }
+
+        double[] cumulativeProbabilities = new double[probabilities.length];
+        double sum = 0;
+        for (int i = 0; i < probabilities.length; i++) {
+            sum += probabilities[i];
+            cumulativeProbabilities[i] = sum;
+        }
+
+        double randomValue = random.nextDouble();
+        int selectedIdx = -1;
+        for (int i = 0; i < cumulativeProbabilities.length; i++) {
+            if (randomValue <= cumulativeProbabilities[i]) {
+                selectedIdx = i;
+                break;
+            }
+        }
+
+        return selectedIdx;
     }
 
     //return the cross product of 2 3-dimensional vectors

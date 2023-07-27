@@ -93,17 +93,8 @@ class Formation {
         }
         if (formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
             inPosition.clear();
-            boolean allFalse = true;
             for (int i = 0; i < formationShips.size(); i++) {
                 inPosition.add(!(Utilities.distanceFormula(formationShips.get(i).centerPosX, formationShips.get(i).centerPosY, globalCoordinates.get(i).x, globalCoordinates.get(i).y) > formationShips.get(i).radius) && !formationShips.get(i).destination);
-                if (inPosition.get(i)) {
-                    allFalse = false;
-                }
-            }
-
-            if (allFalse) {
-                stopMovement();
-                return;
             }
 
             for (int i = 0; i < formationShips.size(); i++) {

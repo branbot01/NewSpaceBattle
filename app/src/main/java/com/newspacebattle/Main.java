@@ -79,7 +79,7 @@ public class Main extends AppCompatActivity {
 
     // Shoot button for ships
     public void shoot(View view) {
-        GameScreen.blackboards[0].printGrid();
+        GameScreen.blackboards[0].printGrid(GameScreen.blackboards[0].friendlyGrid);
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             selectShips.get(i).shoot();
         }

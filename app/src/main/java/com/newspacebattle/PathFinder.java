@@ -115,6 +115,7 @@ class PathFinder {
                     enemies.remove(0);
                     if (enemies.size() == 0) {
                         ship.attacking = false;
+                        ship.stop();
                         return;
                     }
                 }
@@ -256,7 +257,7 @@ class PathFinder {
         }
 
         int index;
-        if (!ship.attacking && nearbyObjects.stream().noneMatch(BlackHole.class::isInstance)) {
+        if (!ship.attacking || nearbyObjects.stream().anyMatch(BlackHole.class::isInstance) || nearbyObjects.stream().anyMatch(Asteroid.class::isInstance)) {
             double min = Double.MAX_VALUE;
             index = -1;
             for (int i = 0; i < distances.length; i++) {

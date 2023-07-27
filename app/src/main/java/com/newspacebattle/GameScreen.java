@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class GameScreen extends View {
 
-    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, grid_size;
+    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, grid_size, game_tick;
     static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
@@ -199,7 +199,7 @@ public class GameScreen extends View {
         lastSeenPaint.setStrokeWidth(20);
         lastSeenPaint.setAntiAlias(true);
 
-        generateMap();
+        generateGame();
 
         try {
             bitLoader.join();
@@ -246,6 +246,7 @@ public class GameScreen extends View {
         objects.clear();
         objects.addAll(ships);
         objects.addAll(asteroids);
+        objects.addAll(blackHole);
     }
 
     //Checks before game loads to make sure ships aren't spawned on top on each other
@@ -257,7 +258,7 @@ public class GameScreen extends View {
                 }
             }
             for (BlackHole ii : blackHole) {
-                if (Utilities.distanceFormula(i.centerPosX, i.centerPosY, ii.centerPosX, ii.centerPosY) <= i.radius + ii.radius * ii.pullDistance) {
+                if (Utilities.distanceFormula(i.centerPosX, i.centerPosY, ii.centerPosX, ii.centerPosY) <= i.radius + ii.radius * ii.pullDistance && i != ii) {
                     return true;
                 }
             }
@@ -655,12 +656,12 @@ public class GameScreen extends View {
 
             placeShips();
         } while (doShipsCollide());
-        objects.addAll(blackHole);
 
         for (int i = 0; i < blackboards.length; i++) {
             blackboards[i] = new Blackboard(i + 1);
         }
 
+        new EnemyAI(1, blackboards[0]);
         new EnemyAI(2, blackboards[1]);
 
         if (flagShips.size() > 0) {
@@ -1249,6 +1250,7 @@ public class GameScreen extends View {
                 }
                 //System.out.println("Bullets: " + bulletCount + " Missiles: " + missileCount + " Lasers: " + laserCount + " Explosions: " + explosionCount);
                 followShips();
+                game_tick += 16;
             }
             gameLoop();
         }, 16);

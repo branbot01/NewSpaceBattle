@@ -13,6 +13,7 @@ class FlagShip extends Ship {
     static float constRadius;
     static float MAX_SPEED;
     int[] costCounter = new int[7];
+    EnemyAI enemyAI;
 
     //Constructor method
     FlagShip(float x, float y, int team) {
@@ -224,54 +225,26 @@ class FlagShip extends Ship {
     }
 
     void checkResourceForBuild() {
-        if (buildingSpaceStation) {
-            if (costCounter[0] == 0 && GameScreen.resources[team - 1] < SpaceStation.cost) {
-                buildingSpaceStation = false;
-            } else {
-                updateResourceForBuild("SpaceStation", SpaceStation.cost, 0);
-            }
+        if (buildingSpaceStation && countSpaceStation > 0) {
+            updateResourceForBuild("SpaceStation", SpaceStation.cost, 0);
         }
-        if (buildingBattleShip) {
-            if (costCounter[1] == 0 && GameScreen.resources[team - 1] < BattleShip.cost) {
-                buildingBattleShip = false;
-            } else {
-                updateResourceForBuild("BattleShip", BattleShip.cost, 1);
-            }
+        if (buildingBattleShip && countBattleShip > 0) {
+            updateResourceForBuild("BattleShip", BattleShip.cost, 1);
         }
-        if (buildingLaserCruiser) {
-            if (costCounter[2] == 0 && GameScreen.resources[team - 1] < LaserCruiser.cost) {
-                buildingLaserCruiser = false;
-            } else {
-                updateResourceForBuild("LaserCruiser", LaserCruiser.cost, 2);
-            }
+        if (buildingLaserCruiser && countLaserCruiser > 0) {
+            updateResourceForBuild("LaserCruiser", LaserCruiser.cost, 2);
         }
-        if (buildingBomber) {
-            if (costCounter[3] == 0 && GameScreen.resources[team - 1] < Bomber.cost) {
-                buildingBomber = false;
-            } else {
-                updateResourceForBuild("Bomber", Bomber.cost, 3);
-            }
+        if (buildingBomber && countBomber > 0) {
+            updateResourceForBuild("Bomber", Bomber.cost, 3);
         }
-        if (buildingFighter) {
-            if (costCounter[4] == 0 && GameScreen.resources[team - 1] < Fighter.cost) {
-                buildingFighter = false;
-            } else {
-                updateResourceForBuild("Fighter", Fighter.cost, 4);
-            }
+        if (buildingFighter && countFighter > 0) {
+            updateResourceForBuild("Fighter", Fighter.cost, 4);
         }
-        if (buildingScout) {
-            if (costCounter[5] == 0 && GameScreen.resources[team - 1] < Scout.cost) {
-                buildingScout = false;
-            } else {
-                updateResourceForBuild("Scout", Scout.cost, 5);
-            }
+        if (buildingScout && countScout > 0) {
+            updateResourceForBuild("Scout", Scout.cost, 5);
         }
-        if (buildingResourceCollector) {
-            if (costCounter[6] == 0 && GameScreen.resources[team - 1] < ResourceCollector.cost) {
-                buildingResourceCollector = false;
-            } else {
-                updateResourceForBuild("ResourceCollector", ResourceCollector.cost, 6);
-            }
+        if (buildingResourceCollector && countResourceCollector > 0) {
+            updateResourceForBuild("ResourceCollector", ResourceCollector.cost, 6);
         }
     }
 
@@ -324,12 +297,13 @@ class FlagShip extends Ship {
                 return false;
             }
             BattleShip newBattleShip = new BattleShip((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newBattleShip.velocityX = velocityX;
-            newBattleShip.velocityY = velocityY;
             newBattleShip.degrees = degrees;
             GameScreen.battleShips.add(newBattleShip);
             GameScreen.ships.add(newBattleShip);
             GameScreen.objects.add(newBattleShip);
+            if (enemyAI != null){
+                enemyAI.freeShips.add(newBattleShip);
+            }
         } else if (Objects.equals(type, "LaserCruiser")){
             radius = LaserCruiser.constRadius;
             shipSpacing = 11f;
@@ -338,12 +312,13 @@ class FlagShip extends Ship {
                 return false;
             }
             LaserCruiser newLaserCruiser = new LaserCruiser((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newLaserCruiser.velocityX = velocityX;
-            newLaserCruiser.velocityY = velocityY;
             newLaserCruiser.degrees = degrees;
             GameScreen.laserCruisers.add(newLaserCruiser);
             GameScreen.ships.add(newLaserCruiser);
             GameScreen.objects.add(newLaserCruiser);
+            if (enemyAI != null){
+                enemyAI.freeShips.add(newLaserCruiser);
+            }
         } else if (Objects.equals(type, "Bomber")) {
             radius = Bomber.constRadius;
             shipSpacing = 11f;
@@ -352,12 +327,13 @@ class FlagShip extends Ship {
                 return false;
             }
             Bomber newBomber = new Bomber((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newBomber.velocityX = velocityX;
-            newBomber.velocityY = velocityY;
             newBomber.degrees = degrees;
             GameScreen.bombers.add(newBomber);
             GameScreen.ships.add(newBomber);
             GameScreen.objects.add(newBomber);
+            if (enemyAI != null){
+                enemyAI.freeShips.add(newBomber);
+            }
         } else if (Objects.equals(type, "Fighter")) {
             radius = Fighter.constRadius;
             shipSpacing = 5.5f;
@@ -366,12 +342,13 @@ class FlagShip extends Ship {
                 return false;
             }
             Fighter newFighter = new Fighter((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newFighter.velocityX = velocityX;
-            newFighter.velocityY = velocityY;
             newFighter.degrees = degrees;
             GameScreen.fighters.add(newFighter);
             GameScreen.ships.add(newFighter);
             GameScreen.objects.add(newFighter);
+            if (enemyAI != null){
+                enemyAI.freeShips.add(newFighter);
+            }
         } else if (Objects.equals(type, "Scout")) {
             radius = Scout.constRadius;
             shipSpacing = 8f;
@@ -380,8 +357,6 @@ class FlagShip extends Ship {
                 return false;
             }
             Scout newScout = new Scout((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newScout.velocityX = velocityX;
-            newScout.velocityY = velocityY;
             newScout.degrees = degrees;
             GameScreen.scouts.add(newScout);
             GameScreen.ships.add(newScout);
@@ -394,8 +369,6 @@ class FlagShip extends Ship {
                 return false;
             }
             ResourceCollector newResourceCollector = new ResourceCollector((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
-            newResourceCollector.velocityX = velocityX;
-            newResourceCollector.velocityY = velocityY;
             newResourceCollector.degrees = degrees;
             GameScreen.resourceCollectors.add(newResourceCollector);
             GameScreen.ships.add(newResourceCollector);
