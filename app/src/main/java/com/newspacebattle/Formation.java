@@ -668,7 +668,7 @@ class Formation {
             if(ships.get(shipIndex) instanceof LaserCruiser){
                 avoidanceRadiusBuffer = 1.1f;
             }else if(ships.get(shipIndex) instanceof BattleShip || ships.get(shipIndex) instanceof FlagShip){
-                avoidanceRadiusBuffer = 1.3f;
+                avoidanceRadiusBuffer = 1.4f;
             }
         }
         radius = (float) (0.5f * (largestAvoidanceRadius * avoidanceRadiusBuffer) * (1f / Math.cos(Math.toRadians(90f - degrees / 2f))));
