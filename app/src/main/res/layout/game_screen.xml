@@ -40,11 +40,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="minimap"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/design_default_color_on_secondary"
         app:fabSize="mini"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
+        app:srcCompat="@drawable/mapbutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/select"
@@ -160,10 +160,10 @@
         android:clickable="true"
         android:onClick="setRectangleFormation"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_zoomout" />
+        app:srcCompat="@drawable/ic_rectangleformation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/vFormation"
@@ -173,10 +173,10 @@
         android:clickable="true"
         android:onClick="setVFormation"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rectangleFormation"
-        app:srcCompat="@drawable/ic_yellowarrow" />
+        app:srcCompat="@drawable/ic_vformation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/circleFormation"
@@ -186,10 +186,10 @@
         android:clickable="true"
         android:onClick="setCircleFormation"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/vFormation"
-        app:srcCompat="@drawable/ic_spacestationring1" />
+        app:srcCompat="@drawable/ic_circleformation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/customFormation"
