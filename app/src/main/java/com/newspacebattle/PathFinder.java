@@ -293,7 +293,7 @@ class PathFinder {
     //Checks how close ship is to the destination
     private void checkDestination() {
         double stopDistance = ship.radius / 2;
-        if (pointOrObj) {
+        if (pointOrObj && targetObj != null) {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;
             stopDistance = (ship.radius + targetObj.radius) * 2;

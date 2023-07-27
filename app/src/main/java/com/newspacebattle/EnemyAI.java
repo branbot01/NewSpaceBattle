@@ -179,7 +179,9 @@ class EnemyAI {
         if (fleetWeight >= buildFleetWeight) {
             buildingFleet = false;
             Formation formation = new Formation(freeShips, Formation.RECTANGLE_FORMATION);
-            fleets.add(new Triple<>(freeShips, formation, false));
+            ArrayList<Ship> newShips = new ArrayList<>();
+            newShips.addAll(freeShips);
+            fleets.add(new Triple<>(newShips, formation, false));
             formations.add(formation);
             freeShips.clear();
 
@@ -231,8 +233,10 @@ class EnemyAI {
                 }
             }
 
-            if (noneAttacking && fleets.get(i).getFirst().size() != fleets.get(i).getSecond().ships.size()) {
-                fleets.set(i, new Triple<>(ships, new Formation(ships, Formation.RECTANGLE_FORMATION), false));
+            if (noneAttacking && ships.size() != fleets.get(i).getSecond().ships.size()){
+                Formation formation = new Formation(ships, Formation.RECTANGLE_FORMATION);
+                formations.add(formation);
+                fleets.set(i, new Triple<>(ships, formation, false));
             }
         }
     }

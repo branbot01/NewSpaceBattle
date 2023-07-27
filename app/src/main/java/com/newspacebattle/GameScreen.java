@@ -169,6 +169,7 @@ public class GameScreen extends View {
         SpaceStation.cost = 50000;
 
         resources[0] = 2000000;
+        resources[1] = 2000000;
 
         green.setColor(Color.GREEN);
         green.setStrokeWidth(20);
@@ -1246,6 +1247,13 @@ public class GameScreen extends View {
                         formationsTeam1.remove(formationsTeam1.get(i));
                     } else {
                         formationsTeam1.get(i).update();
+                    }
+                }
+                for (int i = 0; i <= formationsTeam2.size() - 1; i++) {
+                    if (formationsTeam2.get(i).ships.size() == 0) {
+                        formationsTeam2.remove(formationsTeam2.get(i));
+                    } else {
+                        formationsTeam2.get(i).update();
                     }
                 }
                 //System.out.println("Bullets: " + bulletCount + " Missiles: " + missileCount + " Lasers: " + laserCount + " Explosions: " + explosionCount);
