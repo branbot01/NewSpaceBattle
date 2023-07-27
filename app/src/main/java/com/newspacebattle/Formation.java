@@ -148,7 +148,7 @@ class Formation {
                 formationShips.remove(ships.get(i));
                 setShipNormalSpeed(ships.get(i));
                 ships.remove(ships.get(i));
-                setCenter();
+                //setCenter();
             }
         }
     }
