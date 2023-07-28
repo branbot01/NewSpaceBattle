@@ -4,7 +4,6 @@ import android.os.Looper;
 import android.util.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import kotlin.Triple;
 
@@ -21,6 +20,7 @@ class EnemyAI {
     ArrayList<Ship> freeShips = new ArrayList<>();
     ArrayList<Triple<ArrayList<Ship>, Formation, Boolean>> fleets = new ArrayList<>();
     ArrayList<Formation> formations = new ArrayList<>();
+    ArrayList<Pair<Integer, Integer>> blackholeCoords = new ArrayList<>();
 
     double[][] threats = new double[GameScreen.grid_size][GameScreen.grid_size];
 
@@ -37,7 +37,7 @@ class EnemyAI {
             formations = GameScreen.formationsTeam1;
         } else if (team == 2) {
             formations = GameScreen.formationsTeam2;
-        } else if (team == 3){
+        } else if (team == 3) {
             formations = GameScreen.formationsTeam3;
         } else if (team == 4) {
             formations = GameScreen.formationsTeam4;
@@ -45,6 +45,19 @@ class EnemyAI {
 
         new Thread(() -> {
             Looper.prepare();
+
+            if (GameScreen.blackHole.size() > 0) {
+                for (int i = 0; i < GameScreen.grid_size; i++) {
+                    for (int j = 0; j < GameScreen.grid_size; j++) {
+                        for (int k = 0; k < GameScreen.blackHole.size(); k++) {
+                            if (GameScreen.blackHole.get(k).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.blackHole.get(k).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.blackHole.get(k).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.blackHole.get(k).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                                blackholeCoords.add(new Pair<>(i, j));
+                            }
+                        }
+                    }
+                }
+            }
+
             while (teamSize() > 0) {
                 if (!GameScreen.paused) {
                     update();
@@ -178,7 +191,8 @@ class EnemyAI {
 
         if (fleetWeight >= buildFleetWeight) {
             buildingFleet = false;
-            Formation formation = new Formation(freeShips, Formation.RECTANGLE_FORMATION);
+            int randomType = (int) (Math.random() * 3);
+            Formation formation = new Formation(freeShips, randomType);
             ArrayList<Ship> newShips = new ArrayList<>();
             newShips.addAll(freeShips);
             fleets.add(new Triple<>(newShips, formation, false));
@@ -203,7 +217,13 @@ class EnemyAI {
 
             outer:
             for (int i = flagShipX - 1; i <= flagShipX + 1; i++) {
+                inner:
                 for (int j = flagShipY - 1; j <= flagShipY + 1; j++) {
+                    for (int k = 0; k < blackholeCoords.size(); k++) {
+                        if (blackholeCoords.get(k).first == i && blackholeCoords.get(k).second == j) {
+                            break inner;
+                        }
+                    }
                     try {
                         if (blackboard.friendlyGrid[j][i] == 0) {
                             float posX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
@@ -233,8 +253,8 @@ class EnemyAI {
                 }
             }
 
-            if (noneAttacking && ships.size() != fleets.get(i).getSecond().ships.size()){
-                Formation formation = new Formation(ships, Formation.RECTANGLE_FORMATION);
+            if (noneAttacking && ships.size() != fleets.get(i).getSecond().ships.size()) {
+                Formation formation = new Formation(ships, fleets.get(i).getSecond().type);
                 formations.add(formation);
                 fleets.set(i, new Triple<>(ships, formation, false));
             }

@@ -143,12 +143,26 @@ class Formation {
 
     //renamed from remakeFormation
     void resetCenter() {
+        Ship attacker = null;
         for (int i = 0; i < ships.size(); i++) {
+            if (ships.get(i).attacking){
+                attacker = ships.get(i);
+                break;
+            }
             if (ships.get(i).formation != this || !ships.get(i).exists) {
                 formationShips.remove(ships.get(i));
                 setShipNormalSpeed(ships.get(i));
                 ships.remove(ships.get(i));
-                //setCenter();
+            }
+        }
+
+        if (attacker != null) {
+            for (int i = 0; i < ships.size(); i++) {
+                ships.get(i).destination = false;
+                ships.get(i).destinationFinder.runAttack(new ArrayList<>(attacker.destinationFinder.enemies));
+                formationShips.remove(ships.get(i));
+                setShipNormalSpeed(ships.get(i));
+                ships.remove(ships.get(i));
             }
         }
     }
@@ -328,7 +342,7 @@ class Formation {
                     formationShips.add(ships.get(shipIndex));
                     i2 = 2;
                     leftOrRight = 1;
-                    System.out.println("M index 0");
+                    //System.out.println("M index 0");
                 }else{
                     if(leftOrRight == 1){
                         offsetX = -previousLeftOffsetX + (float) -(LaserCruiser.constRadius * 4 * (i2 - 1));

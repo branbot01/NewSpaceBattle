@@ -301,6 +301,8 @@ class PathFinder {
                 stopDistance = (ship.radius + targetObj.radius) * 1.1;
             } else if (ship instanceof ResourceCollector && ((ResourceCollector) ship).unloading) {
                 stopDistance = (ship.radius + targetObj.radius) * 1.3;
+            } else if (targetObj instanceof FlagShip){
+                stopDistance = (ship.radius + targetObj.radius) * 4;
             }
         }
         if (Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, destX, destY) <= stopDistance) {
