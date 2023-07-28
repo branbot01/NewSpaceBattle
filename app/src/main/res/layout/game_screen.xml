@@ -16,11 +16,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="pauseButton"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/transparent"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_stop" />
+        app:srcCompat="@drawable/ic_pausebutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/logbutton"
@@ -28,11 +28,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="showBlackboard"
-        app:backgroundTint="#3FD200"
+        app:backgroundTint="@color/transparent"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pauseButton"
-        app:srcCompat="@android:drawable/stat_notify_chat" />
+        app:srcCompat="@drawable/ic_logbutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/minimapButton"
@@ -40,11 +40,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="minimap"
-        app:backgroundTint="@color/design_default_color_on_secondary"
+        app:backgroundTint="@color/transparent"
         app:fabSize="mini"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mapbutton" />
+        app:srcCompat="@drawable/ic_mapbutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/select"
@@ -54,10 +54,11 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="selectShips"
-        app:backgroundTint="@android:color/holo_blue_dark"
+        app:maxImageSize="48dp"
+        app:backgroundTint="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_select" />
+        app:srcCompat="@drawable/ic_selectbutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/formationButton"
@@ -67,11 +68,12 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="formationButton"
-        android:rotation="180"
-        app:backgroundTint="@color/colorAccent"
+        android:rotation="0"
+        app:backgroundTint="@color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/select"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_formation" />
+        app:maxImageSize="48dp"
+        app:srcCompat="@drawable/ic_formationbutton" />
 
     <View
         android:id="@+id/bottomFormationBar"
@@ -223,7 +225,7 @@
         android:id="@+id/bottomBar"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:background="@android:color/holo_blue_dark"
+        android:background="@color/darkGREEN"
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"

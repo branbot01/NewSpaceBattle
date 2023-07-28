@@ -137,7 +137,6 @@ public class Main extends AppCompatActivity {
             clearSelectionReferences();
 
             pause.setImageResource(R.drawable.ic_blackhole);
-            pause.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             GameScreen.paused = false;
 
@@ -145,8 +144,7 @@ public class Main extends AppCompatActivity {
             formation.setVisibility(View.VISIBLE);
             minimap.setVisibility(View.VISIBLE);
 
-            pause.setImageResource(R.drawable.ic_stop);
-            pause.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF4081")));
+            pause.setImageResource(R.drawable.ic_pausebutton);
         }
     }
 
@@ -694,7 +692,7 @@ public class Main extends AppCompatActivity {
         }
 
         if (hiddenOrNot) {
-            bar.setBackgroundColor(Color.parseColor("#0099CC"));
+            //bar.setBackgroundColor(Color.parseColor("#0099CC"));
 
             bar.setVisibility(View.VISIBLE);
             move.setVisibility(View.VISIBLE);
@@ -990,7 +988,7 @@ public class Main extends AppCompatActivity {
         formationBar(false);
 
         if (!startSelection) {
-            select.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+            select.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
             startSelection = true;
         } else {
             select.setBackgroundTintList(fabColor);
