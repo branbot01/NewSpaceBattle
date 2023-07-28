@@ -909,7 +909,6 @@ public class Main extends AppCompatActivity {
         }
         countDockedShips(spaceStation);
 
-        bar.setBackgroundColor(Color.parseColor("#FF4081"));
         dockedShips.setVisibility(View.VISIBLE);
 
         harvest.setVisibility(View.INVISIBLE);
@@ -998,8 +997,6 @@ public class Main extends AppCompatActivity {
 
     //Opens special menu
     public void specialMenu(View view) {
-        bar.setBackgroundColor(Color.parseColor("#0099CC"));
-
         stop.setVisibility(View.VISIBLE);
         move.setVisibility(View.VISIBLE);
         attack.setVisibility(View.VISIBLE);
@@ -1053,8 +1050,6 @@ public class Main extends AppCompatActivity {
 
     //Opens normal menu
     public void normalMenu(View view) {
-        bar.setBackgroundColor(Color.parseColor("#0099CC"));
-
         stop.setVisibility(View.INVISIBLE);
         move.setVisibility(View.INVISIBLE);
         attack.setVisibility(View.INVISIBLE);
@@ -1120,8 +1115,6 @@ public class Main extends AppCompatActivity {
         if (checkIfOneFlagship() == null) {
             return;
         }
-
-        bar.setBackgroundColor(Color.parseColor("#FFEB3B"));
         buildShips.setVisibility(View.VISIBLE);
 
         harvest.setVisibility(View.INVISIBLE);
