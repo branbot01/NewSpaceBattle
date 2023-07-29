@@ -206,21 +206,6 @@
         app:layout_constraintStart_toEndOf="@+id/circleFormation"
         app:srcCompat="@drawable/background" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/shootButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="shoot"
-        android:visibility="invisible"
-        app:backgroundTint="@android:color/holo_blue_light"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:rippleColor="@android:color/holo_blue_bright"
-        app:srcCompat="@drawable/ic_aggressive" />
-
     <View
         android:id="@+id/bottomBar"
         android:layout_width="wrap_content"

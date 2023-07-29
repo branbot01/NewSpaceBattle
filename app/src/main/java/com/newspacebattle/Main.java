@@ -37,7 +37,7 @@ public class Main extends AppCompatActivity {
     static ColorStateList fabColor;
     static Collisions collisions;
     ProgressBar loadingBar;
-    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, shoot, buildMenu, formation, pause, minimap, scoutMode;
+    FloatingActionButton move, stop, destroy, select, attack, shipMode, follow, harvest, dock, dockMenu, buildMenu, formation, pause, minimap, scoutMode;
     FloatingActionButton resourceCollector, scout, fighter, bomber;
     FloatingActionButton buildSpaceStation, buildBattleShip, buildLaserCruiser, buildBomber, buildFighter, buildScout, buildResourceCollector;
     FloatingActionButton nextFormation, controlFormation;
@@ -79,7 +79,6 @@ public class Main extends AppCompatActivity {
 
     // Shoot button for ships
     public void shoot(View view) {
-        GameScreen.blackboards[0].printGrid(GameScreen.blackboards[0].friendlyGrid);
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             selectShips.get(i).shoot();
         }
@@ -624,7 +623,6 @@ public class Main extends AppCompatActivity {
         harvest = findViewById(R.id.harvestButton);
         dock = findViewById(R.id.dockButton);
         dockMenu = findViewById(R.id.dockMenuButton);
-        shoot = findViewById(R.id.shootButton);
         buildMenu = findViewById(R.id.buildButton);
         scoutMode = findViewById(R.id.scoutModeButton);
         fabColor = select.getBackgroundTintList();
@@ -698,7 +696,6 @@ public class Main extends AppCompatActivity {
             move.setVisibility(View.VISIBLE);
             stop.setVisibility(View.VISIBLE);
             attack.setVisibility(View.VISIBLE);
-            shoot.setVisibility(View.VISIBLE);
             destroy.setVisibility(View.VISIBLE);
             shipMode.setVisibility(View.VISIBLE);
             follow.setVisibility(View.VISIBLE);
@@ -724,7 +721,6 @@ public class Main extends AppCompatActivity {
             dock.setVisibility(View.INVISIBLE);
             dockedShips.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
-            shoot.setVisibility(View.INVISIBLE);
             buildMenu.setVisibility(View.INVISIBLE);
             scoutMode.setVisibility(View.INVISIBLE);
             resourceCollector.setVisibility(View.INVISIBLE);
@@ -911,6 +907,7 @@ public class Main extends AppCompatActivity {
 
         dockedShips.setVisibility(View.VISIBLE);
 
+        scoutMode.setVisibility(View.INVISIBLE);
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);

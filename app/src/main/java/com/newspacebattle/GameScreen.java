@@ -1115,7 +1115,7 @@ public class GameScreen extends View {
                 try {
                     invalidate();
                 } catch (Exception e) {
-                    System.out.println("Error: " + e);
+                    System.out.println("Error in onDraw: " + e);
                 }
                 for (int i = 0; i <= blackHole.size() - 1; i++) {
                     blackHole.get(i).update();

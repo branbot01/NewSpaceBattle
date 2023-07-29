@@ -158,8 +158,12 @@ class Formation {
 
         if (attacker != null) {
             for (int i = 0; i < ships.size(); i++) {
-                ships.get(i).destination = false;
-                ships.get(i).destinationFinder.runAttack(new ArrayList<>(attacker.destinationFinder.enemies));
+                if (ships.get(i).attacking){
+                    continue;
+                }
+                ships.get(i).stop();
+                ArrayList<Ship> shipsCopy = new ArrayList<>(attacker.destinationFinder.enemies);
+                ships.get(i).destinationFinder.runAttack(shipsCopy);
                 formationShips.remove(ships.get(i));
                 setShipNormalSpeed(ships.get(i));
                 ships.remove(ships.get(i));

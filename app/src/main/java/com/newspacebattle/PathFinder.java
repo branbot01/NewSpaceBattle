@@ -60,7 +60,10 @@ class PathFinder {
         if (this.enemies.size() == 0) {
             return;
         }
-        new Thread(this::startAttacker).start();
+        new Thread(() -> {
+            Looper.prepare();
+            startAttacker();
+        }).start();
     }
 
     void autoAttack() {
@@ -84,13 +87,12 @@ class PathFinder {
                                 break;
                             }
                         } catch (Exception e) {
-                            System.out.println("Error: " + e);
+                            System.out.println("Error in autoAttack: " + e);
                         }
                     }
                     if (shipIndex != -1) {
                         stopFinder();
                         enemies.add(GameScreen.ships.get(shipIndex));
-                        searchingForEnemy = false;
                         startAttacker();
                     }
                 }
@@ -109,6 +111,7 @@ class PathFinder {
         ship.attacking = true;
         ship.destination = false;
         ship.formation = null;
+        searchingForEnemy = false;
         while (ship.exists && ship.attacking) {
             try {
                 if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
@@ -135,7 +138,7 @@ class PathFinder {
                     ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY) * Math.PI / 180);
                 }
             } catch (Exception e) {
-                System.out.println("Error: " + e);
+                System.out.println("Error in startAttacker, : " + enemies.size());
             }
             Utilities.delay(5);
         }
@@ -203,7 +206,11 @@ class PathFinder {
             if (obj instanceof SpaceStation) {
                 addedDistance = obj.radius * 1.5;
             } else if (obj instanceof BlackHole) {
-                addedDistance = obj.radius * 4;
+                if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
+                    addedDistance = obj.radius * 8;
+                } else {
+                    addedDistance = obj.radius * 4;
+                }
             }
             if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
                 nearbyObjects.add(obj);
@@ -248,7 +255,11 @@ class PathFinder {
                 if (obj instanceof SpaceStation) {
                     addedDistance = obj.radius / 2;
                 } else if (obj instanceof BlackHole) {
-                    addedDistance = obj.radius * 2;
+                    if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
+                        addedDistance = obj.radius * 4;
+                    } else {
+                        addedDistance = obj.radius * 2;
+                    }
                 }
                 if (distance <= ship.avoidanceRadius + addedDistance) {
                     possiblePoints[i] = false;

@@ -153,9 +153,22 @@ class EnemyAI {
             }
         }
 
-        if (!inAsteroidCluster && !flagShip.attacking && !flagShip.destination && Utilities.distanceFormula(flagShip.centerPosX, flagShip.centerPosY, resCentroidX, resCentroidY) > flagShip.radius * 3) {
-            flagShip.stop();
-            flagShip.setDestination(resCentroidX, resCentroidY);
+        boolean closeToBlackHole = false;
+        for (int i = 0; i < GameScreen.blackHole.size(); i++) {
+            if (Utilities.distanceFormula(resCentroidX, resCentroidY, GameScreen.blackHole.get(i).centerPosX, GameScreen.blackHole.get(i).centerPosY) < GameScreen.blackHole.get(i).radius * GameScreen.blackHole.get(i).pullDistance) {
+                closeToBlackHole = true;
+                break;
+            }
+        }
+
+        if (!closeToBlackHole && !inAsteroidCluster && !flagShip.attacking && Utilities.distanceFormula(flagShip.centerPosX, flagShip.centerPosY, resCentroidX, resCentroidY) > flagShip.radius * 3) {
+            if (!flagShip.destination) {
+                flagShip.stop();
+                flagShip.setDestination(resCentroidX, resCentroidY);
+            } else {
+                flagShip.destinationFinder.destX = resCentroidX;
+                flagShip.destinationFinder.destY = resCentroidY;
+            }
         }
     }
 
@@ -171,13 +184,13 @@ class EnemyAI {
 
     private void assessFreeShips() {
         if (freeShips.size() == 0) {
-            int fleetWeight = (int) Math.log(GameScreen.game_tick);
-            if (fleetWeight > 20) {
-                fleetWeight = 20;
-            } else if (fleetWeight < 8) {
-                fleetWeight = 8;
+            int newFleetWeight = (int) Math.log(GameScreen.game_tick);
+            if (newFleetWeight > 20) {
+                newFleetWeight = 20;
+            } else if (newFleetWeight < 8) {
+                newFleetWeight = 8;
             }
-            buildFleet(fleetWeight, defaultFleet);
+            buildFleet(newFleetWeight, defaultFleet);
             return;
         }
 
@@ -235,6 +248,14 @@ class EnemyAI {
                     }
                 }
             }
+        } else if (flagShip.countFighter + flagShip.countBomber + flagShip.countLaserCruiser + flagShip.countBattleShip == 0) {
+            int newFleetWeight = (int) Math.log(GameScreen.game_tick);
+            if (newFleetWeight > 20) {
+                newFleetWeight = 20;
+            } else if (newFleetWeight < 8) {
+                newFleetWeight = 8;
+            }
+            buildFleet(newFleetWeight, defaultFleet);
         }
     }
 
