@@ -14,7 +14,7 @@ class Formation {
     ArrayList<Ship> ships;
     ArrayList<Ship> formationShips = new ArrayList<>();
     float degrees, formationMaxSpeed, velocityX, velocityY, accelerationX, accelerationY, accelerate, destX, destY;
-    boolean destination, turning;
+    boolean destination, turning, inBlackHole;
     ArrayList<Boolean> inPosition = new ArrayList<>();
 
     //visualize ship locations
@@ -93,6 +93,24 @@ class Formation {
         for (int i = 0; i < formationShips.size(); i++) {
             globalCoordinates.add(new PointObject(centerX + initialRelativeCoordinates.get(i).x * Math.cos(Math.toRadians(degrees)) - initialRelativeCoordinates.get(i).y * Math.sin(Math.toRadians(degrees)), centerY + initialRelativeCoordinates.get(i).x * Math.sin(Math.toRadians(degrees)) + initialRelativeCoordinates.get(i).y * Math.cos(Math.toRadians(degrees))));
         }
+
+        inBlackHole = false;
+        for (int i = 0; i < GameScreen.blackHole.size(); i++) {
+            if (Utilities.distanceFormula(GameScreen.blackHole.get(i).centerPosX, GameScreen.blackHole.get(i).centerPosY, centerX, centerY) < GameScreen.blackHole.get(i).radius * GameScreen.blackHole.get(i).pullDistance) {
+                inBlackHole = true;
+                for (int j = 0; j < formationShips.size(); j++) {
+                    if (!formationShips.get(j).destination) {
+                        formationShips.get(j).setDestination((float) globalCoordinates.get(j).x, (float) globalCoordinates.get(j).y);
+                        setShipNormalSpeed(formationShips.get(j));
+                    } else {
+                        formationShips.get(j).destinationFinder.destX = (float) globalCoordinates.get(j).x;
+                        formationShips.get(j).destinationFinder.destY = (float) globalCoordinates.get(j).y;
+                    }
+                }
+                return;
+            }
+        }
+
         if (formationShips.size() > 0 && globalCoordinates.size() > 0 && globalCoordinatesCopy.size() > 0) {
             inPosition.clear();
             for (int i = 0; i < formationShips.size(); i++) {
@@ -162,8 +180,7 @@ class Formation {
                     continue;
                 }
                 ships.get(i).stop();
-                ArrayList<Ship> shipsCopy = new ArrayList<>(attacker.destinationFinder.enemies);
-                ships.get(i).destinationFinder.runAttack(shipsCopy);
+                ships.get(i).destinationFinder.runAttack(new ArrayList<>(attacker.destinationFinder.enemies));
                 formationShips.remove(ships.get(i));
                 setShipNormalSpeed(ships.get(i));
                 ships.remove(ships.get(i));
