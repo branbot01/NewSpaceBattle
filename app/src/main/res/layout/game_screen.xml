@@ -143,14 +143,13 @@
         app:srcCompat="@drawable/ic_greenarrow" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/controlFormation2"
+        android:id="@+id/disbandFormation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="56dp"
         android:clickable="true"
-        android:onClick="controlFormation"
-        android:rotation="34"
+        android:onClick="disbandFormation"
         android:visibility="invisible"
         app:backgroundTint="#4CAF50"
         app:fabSize="mini"

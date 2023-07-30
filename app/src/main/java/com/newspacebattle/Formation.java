@@ -83,6 +83,15 @@ class Formation {
         centerY = sumY / sumMass;
     }
 
+    void disbandFormation(){
+        for (int i = 0; i < ships.size(); i++) {
+            ships.get(i).formation = null;
+            formationShips.remove(ships.get(i));
+            setShipNormalSpeed(ships.get(i));
+            ships.remove(ships.get(i));
+        }
+    }
+
     //update position of ship if formation rotates
     void updatePositions() {
         globalCoordinatesCopy.clear();
