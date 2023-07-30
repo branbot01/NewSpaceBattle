@@ -213,10 +213,8 @@ public class Main extends AppCompatActivity {
                     GameScreen.blackboards[0].newMessage = false;
                 }
                 if (selectShips.size() == 0) {
-                    disbandFormation.setAlpha(0.5f);
                     shipBar(false);
                 } else {
-                    disbandFormation.setAlpha(1f);
                     boolean allDocked = true;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (!selectShips.get(i).docked) {
@@ -353,8 +351,12 @@ public class Main extends AppCompatActivity {
 
                     numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
                 }
+                if (isFormationSelected() != null) {
+                    disbandFormation.setAlpha(1f);
+                } else {
+                    disbandFormation.setAlpha(0.5f);
+                }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
-                //resourceCount.setText("Gen/time: " + GameScreen.generation + "/" + GameScreen.time);
             }
             UILoop();
         }, 16);
