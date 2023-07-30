@@ -16,11 +16,13 @@ class PathFinder {
     private final Ship ship;
     private GameObject targetObj;
     ArrayList<Ship> enemies;
+    ArrayList<GameObject> nearbyObjects;
 
     //Constructor method
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
+        nearbyObjects = new ArrayList<>();
     }
 
     //Go to these coordinates
@@ -173,7 +175,7 @@ class PathFinder {
 
     private PointObject pathFind() {
         PointObject direction = new PointObject(destX, destY);
-        ArrayList<GameObject> nearbyObjects = new ArrayList<>();
+        nearbyObjects.clear();
 
         for (int i = 0; i < GameScreen.objects.size(); i++) {
             GameObject obj = GameScreen.objects.get(i);
