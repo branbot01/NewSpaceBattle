@@ -88,7 +88,7 @@ class Formation {
             ships.get(i).formation = null;
             formationShips.remove(ships.get(i));
             setShipNormalSpeed(ships.get(i));
-            ships.remove(ships.get(i));
+            ships.remove(i);
         }
     }
 
@@ -179,7 +179,7 @@ class Formation {
             if (ships.get(i).formation != this || !ships.get(i).exists) {
                 formationShips.remove(ships.get(i));
                 setShipNormalSpeed(ships.get(i));
-                ships.remove(ships.get(i));
+                ships.remove(i);
             }
         }
 
