@@ -348,6 +348,8 @@ public class Main extends AppCompatActivity {
                     } else {
                         buildMenu.setAlpha(0.5f);
                     }
+
+                    numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
                 }
                 resourceCount.setText("Resources: " + GameScreen.resources[0]);
                 //resourceCount.setText("Gen/time: " + GameScreen.generation + "/" + GameScreen.time);
@@ -1180,8 +1182,6 @@ public class Main extends AppCompatActivity {
             nextFormation.setVisibility(View.VISIBLE);
             controlFormation.setVisibility(View.VISIBLE);
             disbandFormation.setVisibility(View.VISIBLE);
-
-            numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
 
             rectangleFormation.setVisibility(View.INVISIBLE);
             vFormation.setVisibility(View.INVISIBLE);
