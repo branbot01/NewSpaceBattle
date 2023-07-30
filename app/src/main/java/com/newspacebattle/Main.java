@@ -213,8 +213,10 @@ public class Main extends AppCompatActivity {
                     GameScreen.blackboards[0].newMessage = false;
                 }
                 if (selectShips.size() == 0) {
+                    disbandFormation.setAlpha(0.5f);
                     shipBar(false);
                 } else {
+                    disbandFormation.setAlpha(1f);
                     boolean allDocked = true;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (!selectShips.get(i).docked) {
@@ -1271,9 +1273,7 @@ public class Main extends AppCompatActivity {
                 GameScreen.formationsTeam2.remove(formation);
             } else if (GameScreen.formationsTeam3.contains(formation)){
                 GameScreen.formationsTeam3.remove(formation);
-            } else if (GameScreen.formationsTeam4.contains(formation)){
-                GameScreen.formationsTeam4.remove(formation);
-            }
+            } else GameScreen.formationsTeam4.remove(formation);
         }
     }
 
