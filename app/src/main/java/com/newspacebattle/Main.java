@@ -1262,16 +1262,9 @@ public class Main extends AppCompatActivity {
     }
 
     public void disbandFormation(View view){
-        if (selectShips.size() == 0) {
-            return;
-        }
-        for (int i = 0; i < GameScreen.formationsTeam1.size(); i++) {
-            if (formationSelected == i) {
-                GameScreen.formationsTeam1.get(i).disbandFormation();
-                GameScreen.formationsTeam1.remove(i);
-                formationSelected = 0;
-                break;
-            }
+        Formation formation = isFormationSelected();
+        if (formation != null){
+            formation.disbandFormation();
         }
     }
 
