@@ -1265,6 +1265,15 @@ public class Main extends AppCompatActivity {
         Formation formation = isFormationSelected();
         if (formation != null){
             formation.disbandFormation();
+            if (GameScreen.formationsTeam1.contains(formation)){
+                GameScreen.formationsTeam1.remove(formation);
+            } else if (GameScreen.formationsTeam2.contains(formation)){
+                GameScreen.formationsTeam2.remove(formation);
+            } else if (GameScreen.formationsTeam3.contains(formation)){
+                GameScreen.formationsTeam3.remove(formation);
+            } else if (GameScreen.formationsTeam4.contains(formation)){
+                GameScreen.formationsTeam4.remove(formation);
+            }
         }
     }
 
