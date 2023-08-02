@@ -190,10 +190,8 @@ class Formation {
                 }
                 ships.get(i).stop();
                 ships.get(i).destinationFinder.runAttack(new ArrayList<>(attacker.destinationFinder.enemies));
-                formationShips.remove(ships.get(i));
-                setShipNormalSpeed(ships.get(i));
-                ships.remove(ships.get(i));
             }
+            disbandFormation();
         }
     }
 

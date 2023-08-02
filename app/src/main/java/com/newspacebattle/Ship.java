@@ -49,7 +49,7 @@ class Ship extends GameObject {
     }
 
     //Determines ship highlight color
-    private void setSelectColor() {
+    void setSelectColor() {
         if (selected) {
             selector.setColor(Color.GREEN);
         } else if (attSelected) {

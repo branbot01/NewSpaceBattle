@@ -25,6 +25,7 @@ public class GameScreen extends View {
     static boolean paused;
 
     static Blackboard[] blackboards = new Blackboard[4];
+    static EnemyAI p1, p2;
 
     static ArrayList<Formation> formationsTeam1 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam2 = new ArrayList<>();
@@ -662,8 +663,8 @@ public class GameScreen extends View {
             blackboards[i] = new Blackboard(i + 1);
         }
 
-        new EnemyAI(1, blackboards[0]);
-        new EnemyAI(2, blackboards[1]);
+        p1 = new EnemyAI(1, blackboards[0]);
+        p2 = new EnemyAI(2, blackboards[1]);
 
         if (flagShips.size() > 0) {
             Main.selectShips.add(flagShips.get(0));
@@ -784,10 +785,22 @@ public class GameScreen extends View {
         canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2, -mapSizeX / 2, mapSizeY / 2, red);
         canvas.drawLine(mapSizeX / 2, -mapSizeY / 2, mapSizeX / 2, mapSizeY / 2, red);
 
-        for (int i = 1; i < grid_size; i++) {
+        /*for (int i = 1; i < grid_size; i++) {
             canvas.drawLine(-mapSizeX / 2 + i * mapSizeX / grid_size, -mapSizeY / 2, -mapSizeX / 2 + i * mapSizeX / grid_size, mapSizeY / 2, green);
             canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, green);
-        }
+        }*/
+
+        /*for (int i = 0; i < GameScreen.grid_size; i++) {
+            for (int j = 0; j < GameScreen.grid_size; j++) {
+                for (int k = 0; k < p2.blackholeCoords.size(); k++) {
+                    if (i == p2.blackholeCoords.get(k).first && j == p2.blackholeCoords.get(k).second) {
+                        float posX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
+                        float posY = (-GameScreen.mapSizeY / 2f + j * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f;
+                        canvas.drawCircle(posX, posY, 500, blue);
+                    }
+                }
+            }
+        }*/
 
         for (int i = 0; i <= blackHole.size() - 1; i++) {
             if (blackHole.get(i).centerPosX + blackHole.get(i).radius >= offsetX / scaleX && blackHole.get(i).centerPosX - blackHole.get(i).radius <= offsetX / scaleX + extraOffsetX && blackHole.get(i).centerPosY + blackHole.get(i).radius >= offsetY / scaleY && blackHole.get(i).centerPosY - blackHole.get(i).radius <= offsetY / scaleY + extraOffsetY) {
@@ -1084,7 +1097,7 @@ public class GameScreen extends View {
             }
         }
 
-        for (int i = 0; i < formationsTeam1.size(); i++) {
+        /*for (int i = 0; i < formationsTeam1.size(); i++) {
             for (int j = 0; j < formationsTeam1.get(i).globalCoordinates.size(); j++) {
                 if (formationsTeam1.get(i).globalCoordinates != null) {
                     canvas.drawCircle((float) formationsTeam1.get(i).globalCoordinates.get(j).x, (float) formationsTeam1.get(i).globalCoordinates.get(j).y, 50, green);
@@ -1093,7 +1106,7 @@ public class GameScreen extends View {
             canvas.drawCircle((float) formationsTeam1.get(i).centerX, (float) formationsTeam1.get(i).centerY, 50, red);
             canvas.drawCircle((float) formationsTeam1.get(i).destX, (float) formationsTeam1.get(i).destY, 50, white);
             canvas.drawCircle((float) Utilities.circleAngleX(formationsTeam1.get(i).degrees, formationsTeam1.get(i).centerX, Fighter.constRadius), (float) Utilities.circleAngleY(formationsTeam1.get(i).degrees, formationsTeam1.get(i).centerY, Fighter.constRadius), 50, blue);
-        }
+        }*/
 
         if (Main.startSelection) {
             canvas.drawLine(startSelX, startSelY, endSelX, startSelY, green);

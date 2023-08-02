@@ -16,13 +16,11 @@ class PathFinder {
     private final Ship ship;
     private GameObject targetObj;
     ArrayList<Ship> enemies;
-    ArrayList<GameObject> nearbyObjects;
 
     //Constructor method
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
-        nearbyObjects = new ArrayList<>();
     }
 
     //Go to these coordinates
@@ -116,13 +114,13 @@ class PathFinder {
         searchingForEnemy = false;
         while (ship.exists && ship.attacking) {
             try {
-                if (!enemies.get(0).exists) {// || Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, enemies.get(0).centerPosX, enemies.get(0).centerPosY) > SpaceStation.constRadius * 20) {
+                if (enemies.size() == 0) {
+                    ship.attacking = false;
+                    ship.stop();
+                    return;
+                }
+                if (!enemies.get(0).exists) {
                     enemies.remove(0);
-                    if (enemies.size() == 0) {
-                        ship.attacking = false;
-                        ship.stop();
-                        return;
-                    }
                 }
                 destX = enemies.get(0).centerPosX;
                 destY = enemies.get(0).centerPosY;
@@ -175,131 +173,138 @@ class PathFinder {
 
     private PointObject pathFind() {
         PointObject direction = new PointObject(destX, destY);
-        nearbyObjects.clear();
+        ArrayList<GameObject> nearbyObjects = new ArrayList<>();
 
-        for (int i = 0; i < GameScreen.objects.size(); i++) {
-            GameObject obj = GameScreen.objects.get(i);
-            if (obj == ship) {
-                continue;
-            }
-            double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
-            double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
-            double addedDistance = 0;
-
-            if (ship.attacking && obj.team != ship.team && !(obj instanceof Asteroid)) {
-                double shootDegree = 10;
-                if (obj instanceof SpaceStation || obj instanceof BattleShip || obj instanceof FlagShip) {
-                    shootDegree = 20;
-                }
-                if (ship instanceof BattleShip || ship instanceof Bomber) {
-                    if (shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
-                        ship.shoot();
-                        shootTime = 0;
-                    }
-                } else {
-                    if (Math.abs(angle - ship.degrees) <= shootDegree && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
-                        ship.shoot();
-                        shootTime = 0;
-                    }
-                }
-            }
-
-
-            if (obj instanceof SpaceStation) {
-                addedDistance = obj.radius * 1.5;
-            } else if (obj instanceof BlackHole) {
-                if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
-                    addedDistance = obj.radius * 8;
-                } else {
-                    addedDistance = obj.radius * 4;
-                }
-            }
-            if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
-                nearbyObjects.add(obj);
-                if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship) {
-                    nearbyObjects.remove(obj);
+        try {
+            boolean shot = false;
+            for (int i = 0; i < GameScreen.objects.size(); i++) {
+                GameObject obj = GameScreen.objects.get(i);
+                if (obj == ship) {
                     continue;
                 }
+                double distance = Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
+                double angle = Utilities.anglePoints(ship.centerPosX, ship.centerPosY, obj.centerPosX, obj.centerPosY);
+                double addedDistance = 0;
 
-                if (Utilities.distanceFormula(destX, destY, obj.centerPosX, obj.centerPosY) <= obj.radius && !ship.docking) {
-                    if (ship instanceof ResourceCollector) {
-                        if (((ResourceCollector) ship).harvesting || ((ResourceCollector) ship).unloading) {
-                            nearbyObjects.remove(obj);
+                if (ship.attacking && obj.team != ship.team && !(obj instanceof Asteroid)) {
+                    double shootDegree = 10;
+                    if (obj instanceof SpaceStation || obj instanceof BattleShip || obj instanceof FlagShip) {
+                        shootDegree = 20;
+                    }
+                    if (ship instanceof BattleShip || ship instanceof Bomber) {
+                        if (!shot && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                            ship.shoot();
+                            shot = true;
+                            shootTime = 0;
+                        }
+                    } else {
+                        if (!shot && Math.abs(angle - ship.degrees) <= shootDegree && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                            ship.shoot();
+                            shot = true;
+                            shootTime = 0;
+                        }
+                    }
+                }
+
+
+                if (obj instanceof SpaceStation) {
+                    addedDistance = obj.radius * 1.5;
+                } else if (obj instanceof BlackHole) {
+                    if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
+                        addedDistance = obj.radius * 9;
+                    } else {
+                        addedDistance = obj.radius * 4;
+                    }
+                }
+                if (distance <= ship.avoidanceRadius + obj.radius + addedDistance) {
+                    nearbyObjects.add(obj);
+                    if (obj instanceof ResourceCollector && ((ResourceCollector) obj).flagShipSelected == ship) {
+                        nearbyObjects.remove(obj);
+                        continue;
+                    }
+
+                    if (Utilities.distanceFormula(destX, destY, obj.centerPosX, obj.centerPosY) <= obj.radius && !ship.docking) {
+                        if (ship instanceof ResourceCollector) {
+                            if (((ResourceCollector) ship).harvesting || ((ResourceCollector) ship).unloading) {
+                                nearbyObjects.remove(obj);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (nearbyObjects.size() == 0) {
-            return direction;
-        }
+            if (nearbyObjects.size() == 0) {
+                return direction;
+            }
 
-        final int MAX_POINTS = 16;
-        boolean[] possiblePoints = new boolean[MAX_POINTS];
-        Arrays.fill(possiblePoints, true);
-        double[] distances = new double[MAX_POINTS];
-        Arrays.fill(distances, Double.MAX_VALUE);
-        for (int i = 0; i < MAX_POINTS; i++) {
-            float angle = ship.degrees + (float) (i * (360 / MAX_POINTS));
-            double newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
-            double newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
-            distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
-            for (int ii = 0; ii < nearbyObjects.size(); ii++) {
-                GameObject obj = nearbyObjects.get(ii);
-                if (obj instanceof BlackHole) {
-                    newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius * 3);
-                    newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius * 3);
-                    distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
-                }
-                double distance = Utilities.distanceFormula(newX, newY, obj.centerPosX, obj.centerPosY);
-                double addedDistance = 0;
-                if (obj instanceof SpaceStation) {
-                    addedDistance = obj.radius / 2;
-                } else if (obj instanceof BlackHole) {
-                    if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
-                        addedDistance = obj.radius * 4;
-                    } else {
-                        addedDistance = obj.radius * 2;
+            final int MAX_POINTS = 16;
+            boolean[] possiblePoints = new boolean[MAX_POINTS];
+            Arrays.fill(possiblePoints, true);
+            double[] distances = new double[MAX_POINTS];
+            Arrays.fill(distances, Double.MAX_VALUE);
+            for (int i = 0; i < MAX_POINTS; i++) {
+                float angle = ship.degrees + (float) (i * (360 / MAX_POINTS));
+                double newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
+                double newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
+                distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
+                for (int ii = 0; ii < nearbyObjects.size(); ii++) {
+                    GameObject obj = nearbyObjects.get(ii);
+                    if (obj instanceof BlackHole) {
+                        newX = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius * 3);
+                        newY = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius * 3);
+                        distances[i] = Utilities.distanceFormula(newX, newY, destX, destY);
+                    }
+                    double distance = Utilities.distanceFormula(newX, newY, obj.centerPosX, obj.centerPosY);
+                    double addedDistance = 0;
+                    if (obj instanceof SpaceStation) {
+                        addedDistance = obj.radius / 2;
+                    } else if (obj instanceof BlackHole) {
+                        if (ship instanceof LaserCruiser || ship instanceof BattleShip || ship instanceof FlagShip) {
+                            addedDistance = obj.radius * 5;
+                        } else {
+                            addedDistance = obj.radius * 2;
+                        }
+                    }
+                    if (distance <= ship.avoidanceRadius + addedDistance) {
+                        possiblePoints[i] = false;
                     }
                 }
-                if (distance <= ship.avoidanceRadius + addedDistance) {
-                    possiblePoints[i] = false;
-                }
             }
-        }
 
-        int index;
-        if (!ship.attacking || nearbyObjects.stream().anyMatch(BlackHole.class::isInstance) || nearbyObjects.stream().anyMatch(Asteroid.class::isInstance)) {
-            double min = Double.MAX_VALUE;
-            index = -1;
-            for (int i = 0; i < distances.length; i++) {
-                if (distances[i] < min && possiblePoints[i]) {
-                    min = distances[i];
-                    index = i;
+            int index;
+            if (!ship.attacking || nearbyObjects.stream().anyMatch(BlackHole.class::isInstance) || nearbyObjects.stream().anyMatch(Asteroid.class::isInstance)) {
+                double min = Double.MAX_VALUE;
+                index = -1;
+                for (int i = 0; i < distances.length; i++) {
+                    if (distances[i] < min && possiblePoints[i]) {
+                        min = distances[i];
+                        index = i;
+                    }
                 }
-            }
-            if (index == -1) {
-                return direction;
-            }
-        } else {
-            boolean allFalse = true;
-            for (boolean possiblePoint : possiblePoints) {
-                if (possiblePoint) {
-                    allFalse = false;
-                    break;
+                if (index == -1) {
+                    return direction;
                 }
+            } else {
+                boolean allFalse = true;
+                for (boolean possiblePoint : possiblePoints) {
+                    if (possiblePoint) {
+                        allFalse = false;
+                        break;
+                    }
+                }
+                if (allFalse) {
+                    return direction;
+                }
+                do {
+                    index = (int) (Math.random() * MAX_POINTS);
+                } while (!possiblePoints[index]);
             }
-            if (allFalse) {
-                return direction;
-            }
-            do {
-                index = (int) (Math.random() * MAX_POINTS);
-            } while (!possiblePoints[index]);
+            float angle = ship.degrees + (float) (index * (360 / MAX_POINTS));
+            direction.x = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
+            direction.y = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
+        } catch (Exception e) {
+            System.out.println("Error in pathFind: " + e);
         }
-        float angle = ship.degrees + (float) (index * (360 / MAX_POINTS));
-        direction.x = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
-        direction.y = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
         return direction;
     }
 
@@ -314,7 +319,7 @@ class PathFinder {
                 stopDistance = (ship.radius + targetObj.radius) * 1.1;
             } else if (ship instanceof ResourceCollector && ((ResourceCollector) ship).unloading) {
                 stopDistance = (ship.radius + targetObj.radius) * 1.3;
-            } else if (targetObj instanceof FlagShip){
+            } else if (targetObj instanceof FlagShip) {
                 stopDistance = (ship.radius + targetObj.radius) * 4;
             }
         }

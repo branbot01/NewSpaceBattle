@@ -54,6 +54,15 @@ class Scout extends Ship {
         rotate();
     }
 
+    boolean checkIfAlive() {
+        setSelectColor();
+        if (health <= 0) {
+
+            return false;
+        }
+        return true;
+    }
+
     void setAllAsteroidsUnvisited() {
         asteroidsVisited.clear();
         for (int i = 0; i < GameScreen.asteroidClusters.size(); i++) {
@@ -76,6 +85,9 @@ class Scout extends Ship {
                 }
                 try {
                     ArrayList<Triple<Ship, Float, Float>> possibleEnemyShips = GameScreen.blackboards[team - 1].possibleEnemyShips;
+                    if (possibleEnemyShips.size() == 0) {
+                        lastSeenMode = false;
+                    }
                     boolean allScouts = true;
                     for (int i = 0; i < possibleEnemyShips.size(); i++) {
                         if (!(possibleEnemyShips.get(i).getFirst() instanceof Scout)) {
@@ -96,14 +108,25 @@ class Scout extends Ship {
                                 if (possibleEnemyShips.get(i).getFirst() instanceof Scout) {
                                     continue;
                                 }
+                                for (int j = 0; j < GameScreen.blackHole.size(); j++) {
+                                    if (Utilities.distanceFormula(possibleEnemyShips.get(i).getSecond(), possibleEnemyShips.get(i).getThird(), GameScreen.blackHole.get(j).positionX, GameScreen.blackHole.get(j).positionY) <= GameScreen.blackHole.get(j).radius * GameScreen.blackHole.get(j).pullDistance + radius) {
+                                        continue;
+                                    }
+                                }
                                 double distance = Utilities.distanceFormula(centerPosX, centerPosY, possibleEnemyShips.get(i).getSecond(), possibleEnemyShips.get(i).getThird());
                                 if (distance <= sensorRadius) {
+                                    if (exists) {
+                                        possibleEnemyShips.remove(i);
+                                    }
                                     continue;
                                 }
                                 if (distance < closestDistance) {
                                     closestIndex = i;
                                     closestDistance = distance;
                                 }
+                            }
+                            if (!exists) {
+                                return;
                             }
                             if (!destination && closestIndex != -1) {
                                 float closerRadius = sensorRadius / 1.2f;
@@ -112,6 +135,9 @@ class Scout extends Ship {
                             }
                         }
                     } else {
+                        if (!exists) {
+                            return;
+                        }
                         boolean allAsteroidsVisited = true;
                         for (int i = 0; i < asteroidsVisited.size(); i++) {
                             if (!asteroidsVisited.get(i).second) {

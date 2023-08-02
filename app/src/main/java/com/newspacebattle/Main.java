@@ -266,42 +266,6 @@ public class Main extends AppCompatActivity {
                         dock.setAlpha(0.5f);
                     }
                     if (flagShipCount == 1) {
-                        if (GameScreen.resources[0] < ResourceCollector.cost) {
-                            buildResourceCollector.setAlpha(0.5f);
-                        } else {
-                            buildResourceCollector.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < Scout.cost) {
-                            buildScout.setAlpha(0.5f);
-                        } else {
-                            buildScout.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < Fighter.cost) {
-                            buildFighter.setAlpha(0.5f);
-                        } else {
-                            buildFighter.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < Bomber.cost) {
-                            buildBomber.setAlpha(0.5f);
-                        } else {
-                            buildBomber.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < LaserCruiser.cost) {
-                            buildLaserCruiser.setAlpha(0.5f);
-                        } else {
-                            buildLaserCruiser.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < BattleShip.cost) {
-                            buildBattleShip.setAlpha(0.5f);
-                        } else {
-                            buildBattleShip.setAlpha(1f);
-                        }
-                        if (GameScreen.resources[0] < SpaceStation.cost) {
-                            buildSpaceStation.setAlpha(0.5f);
-                        } else {
-                            buildSpaceStation.setAlpha(1f);
-                        }
-
                         if (flagShip.buildingResourceCollector) {
                             progressResourceCollector.setProgress((int) (flagShip.costCounter[6] / (double) (ResourceCollector.cost) * 100));
                         } else {
@@ -1178,6 +1142,8 @@ public class Main extends AppCompatActivity {
 
     public void formationBar(boolean hiddenOrNot) {
         if (hiddenOrNot) {
+            numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
+
             formationBar.setVisibility(View.VISIBLE);
             currentFormations.setVisibility(View.VISIBLE);
             buildFormation.setVisibility(View.INVISIBLE);
@@ -1187,10 +1153,6 @@ public class Main extends AppCompatActivity {
             controlFormation.setVisibility(View.VISIBLE);
             disbandFormation.setVisibility(View.VISIBLE);
 
-            rectangleFormation.setVisibility(View.INVISIBLE);
-            vFormation.setVisibility(View.INVISIBLE);
-            circleFormation.setVisibility(View.INVISIBLE);
-            customFormation.setVisibility(View.INVISIBLE);
         } else {
             formationBar.setVisibility(View.INVISIBLE);
             currentFormations.setVisibility(View.INVISIBLE);
@@ -1200,11 +1162,11 @@ public class Main extends AppCompatActivity {
             disbandFormation.setVisibility(View.INVISIBLE);
             controlFormation.setVisibility(View.INVISIBLE);
 
-            rectangleFormation.setVisibility(View.INVISIBLE);
-            vFormation.setVisibility(View.INVISIBLE);
-            circleFormation.setVisibility(View.INVISIBLE);
-            customFormation.setVisibility(View.INVISIBLE);
         }
+        rectangleFormation.setVisibility(View.INVISIBLE);
+        vFormation.setVisibility(View.INVISIBLE);
+        circleFormation.setVisibility(View.INVISIBLE);
+        customFormation.setVisibility(View.INVISIBLE);
     }
 
     public void currentFormations(View view) {

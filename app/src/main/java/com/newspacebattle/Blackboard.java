@@ -97,6 +97,19 @@ class Blackboard {
                         break;
                     }
                 }
+                if (!possibleEnemyShips.get(i).getFirst().exists) {
+                    possibleEnemyShips.remove(i);
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error: " + e);
+            }
+        }
+
+        for (int i = 0; i < discoveredEnemyShips.size(); i++) {
+            try {
+                if (!discoveredEnemyShips.get(i).exists) {
+                    discoveredEnemyShips.remove(i);
+                }
             } catch (IndexOutOfBoundsException | NullPointerException e) {
                 System.out.println("Error: " + e);
             }
@@ -128,26 +141,30 @@ class Blackboard {
         Arrays.stream(enemyGrid).forEach(a -> Arrays.fill(a, 0));
         for (int i = 0; i < friendlyGrid.length; i++) {
             for (int j = 0; j < friendlyGrid[0].length; j++) {
-                for (int ship = 0; ship < GameScreen.ships.size(); ship++) {
-                    if (GameScreen.ships.get(ship).team == this.team) {
-                        if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                            friendlyGrid[j][i] += GameScreen.ships.get(ship).shipWeight;
+                try {
+                    for (int ship = 0; ship < GameScreen.ships.size(); ship++) {
+                        if (GameScreen.ships.get(ship).team == this.team) {
+                            if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                                friendlyGrid[j][i] += GameScreen.ships.get(ship).shipWeight;
+                            }
+                        }
+                        if (visibleEnemyShips.contains(GameScreen.ships.get(ship))) {
+                            if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                                enemyGrid[j][i] -= GameScreen.ships.get(ship).shipWeight;
+                            }
                         }
                     }
-                    if (visibleEnemyShips.contains(GameScreen.ships.get(ship))){
-                        if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                            enemyGrid[j][i] -= GameScreen.ships.get(ship).shipWeight;
-                        }
-                    }
-                }
 
-                for (int possibleShip = 0; possibleShip < possibleEnemyShips.size(); possibleShip++) {
-                    if (visibleEnemyShips.contains(possibleEnemyShips.get(possibleShip).getFirst())) {
-                        continue;
+                    for (int possibleShip = 0; possibleShip < possibleEnemyShips.size(); possibleShip++) {
+                        if (visibleEnemyShips.contains(possibleEnemyShips.get(possibleShip).getFirst())) {
+                            continue;
+                        }
+                        if (possibleEnemyShips.get(possibleShip).getSecond() >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getSecond() <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                            enemyGrid[j][i] -= possibleEnemyShips.get(possibleShip).getFirst().shipWeight;
+                        }
                     }
-                    if (possibleEnemyShips.get(possibleShip).getSecond() >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getSecond() <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && possibleEnemyShips.get(possibleShip).getThird() <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                        enemyGrid[j][i] -= possibleEnemyShips.get(possibleShip).getFirst().shipWeight;
-                    }
+                } catch (IndexOutOfBoundsException | NullPointerException e) {
+                    System.out.println("Error in populateGrid: " + e);
                 }
             }
         }

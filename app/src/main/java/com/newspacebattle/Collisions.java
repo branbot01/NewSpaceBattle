@@ -183,7 +183,11 @@ class Collisions {
 
     private void setAllShipsVisible(){
         for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
-            GameScreen.ships.get(i).visible = true;
+            try {
+                GameScreen.ships.get(i).visible = true;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error in setAllShipsVisible" + e);
+            }
         }
     }
 

@@ -52,6 +52,9 @@ class ResourceCollector extends Ship {
         exists = checkIfAlive();
         move();
         rotate();
+        if (selected){
+            System.out.println("harvesting: " + harvesting + ", unloading: " + unloading + ", destination: " + destination + ", asteroidSelected: " + (asteroidSelected == null));
+        }
     }
 
     //Finds closest asteroid with resources
