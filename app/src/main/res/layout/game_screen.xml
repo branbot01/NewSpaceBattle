@@ -225,11 +225,11 @@
         android:clickable="true"
         android:onClick="setCustomFormation"
         android:visibility="invisible"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/design_default_color_background"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/circleFormation"
-        app:srcCompat="@drawable/background" />
+        app:srcCompat="@drawable/ic_customformationbutton" />
 
     <View
         android:id="@+id/bottomBar"
