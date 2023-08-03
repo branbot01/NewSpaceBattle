@@ -188,7 +188,10 @@ class Formation {
                 if (ships.get(i).attacking){
                     continue;
                 }
-                ships.get(i).stop();
+                ships.get(i).destination = false;
+                ships.get(i).attacking = false;
+                ships.get(i).destinationFinder.searchingForEnemy = false;
+                ships.get(i).destinationFinder.stopFinder();
                 ships.get(i).destinationFinder.runAttack(new ArrayList<>(attacker.destinationFinder.enemies));
             }
             disbandFormation();

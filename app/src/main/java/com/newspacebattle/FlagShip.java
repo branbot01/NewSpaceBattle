@@ -370,6 +370,15 @@ class FlagShip extends Ship {
             }
             ResourceCollector newResourceCollector = new ResourceCollector((float) finalBuildPos.x - radius / 2, (float) finalBuildPos.y - radius / 2, team);
             newResourceCollector.degrees = degrees;
+            if (team == 1 && GameScreen.p1 == null){
+                newResourceCollector.goToAsteroid();
+            } else if (team == 2 && GameScreen.p2 == null){
+                newResourceCollector.goToAsteroid();
+            } else if (team == 3 && GameScreen.p3 == null){
+                newResourceCollector.goToAsteroid();
+            } else if (team == 4 && GameScreen.p4 == null){
+                newResourceCollector.goToAsteroid();
+            }
             GameScreen.resourceCollectors.add(newResourceCollector);
             GameScreen.ships.add(newResourceCollector);
             GameScreen.objects.add(newResourceCollector);

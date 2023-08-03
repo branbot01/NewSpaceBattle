@@ -25,7 +25,7 @@ public class GameScreen extends View {
     static boolean paused;
 
     static Blackboard[] blackboards = new Blackboard[4];
-    static EnemyAI p1, p2;
+    static EnemyAI p1, p2, p3, p4;
 
     static ArrayList<Formation> formationsTeam1 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam2 = new ArrayList<>();
@@ -665,6 +665,8 @@ public class GameScreen extends View {
 
         p1 = new EnemyAI(1, blackboards[0]);
         p2 = new EnemyAI(2, blackboards[1]);
+        p3 = null;
+        p4 = null;
 
         if (flagShips.size() > 0) {
             Main.selectShips.add(flagShips.get(0));

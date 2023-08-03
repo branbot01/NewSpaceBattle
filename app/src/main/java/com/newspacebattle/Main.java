@@ -43,7 +43,7 @@ public class Main extends AppCompatActivity {
     FloatingActionButton nextFormation, controlFormation, disbandFormation;
     FloatingActionButton rectangleFormation, vFormation, circleFormation, customFormation;
     ScrollView scroller;
-    Button special, normal, dockedShips, buildShips, currentFormations, buildFormation;
+    Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
@@ -136,6 +136,10 @@ public class Main extends AppCompatActivity {
             clearSelectionReferences();
 
             pause.setImageResource(R.drawable.ic_resumebutton);
+
+            bar.setVisibility(View.VISIBLE);
+            quitButton.setVisibility(View.VISIBLE);
+            guideButton.setVisibility(View.VISIBLE);
         } else {
             GameScreen.paused = false;
 
@@ -143,8 +147,18 @@ public class Main extends AppCompatActivity {
             formation.setVisibility(View.VISIBLE);
             minimap.setVisibility(View.VISIBLE);
 
+            quitButton.setVisibility(View.INVISIBLE);
+            guideButton.setVisibility(View.INVISIBLE);
+
             pause.setImageResource(R.drawable.ic_pausebutton);
         }
+    }
+
+    public void quitButton(View view) {
+        restart = true;
+    }
+
+    public void guideButton(View view) {
     }
 
     //If user hits back button
@@ -576,6 +590,8 @@ public class Main extends AppCompatActivity {
         team1Blackboard = findViewById(R.id.blackboard);
         scroller = findViewById(R.id.scroller);
         pause = findViewById(R.id.pauseButton);
+        quitButton = findViewById(R.id.quitButton);
+        guideButton = findViewById(R.id.guideButton);
         minimap = findViewById(R.id.minimapButton);
         bar = findViewById(R.id.bottomBar);
         formationBar = findViewById(R.id.bottomFormationBar);
