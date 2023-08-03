@@ -135,7 +135,7 @@ public class Main extends AppCompatActivity {
             formationBar(false);
             clearSelectionReferences();
 
-            pause.setImageResource(R.drawable.ic_blackhole);
+            pause.setImageResource(R.drawable.ic_resumebutton);
         } else {
             GameScreen.paused = false;
 
