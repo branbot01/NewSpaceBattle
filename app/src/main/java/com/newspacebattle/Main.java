@@ -267,6 +267,12 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
+                if (GameScreen.gameOver){
+                    shipBar(false);
+                    formationBar(false);
+                    select.setVisibility(View.INVISIBLE);
+                    formation.setVisibility(View.INVISIBLE);
+                }
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);

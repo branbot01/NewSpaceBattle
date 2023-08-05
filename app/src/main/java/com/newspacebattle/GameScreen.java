@@ -22,7 +22,7 @@ public class GameScreen extends View {
     static float startAttX, startAttY, endAttX, endAttY;
     static double midPointX, midPointY;
     static float[] starXPos, starYPos;
-    static boolean paused;
+    static boolean paused, classic, gameOver, victory;
 
     static Blackboard[] blackboards = new Blackboard[4];
     static EnemyAI p1, p2, p3, p4;
@@ -77,6 +77,7 @@ public class GameScreen extends View {
         super(context);
 
         teams = 4;
+        classic = true;
 
         Thread bitLoader = new Thread(() -> {
             bitArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_greenarrow)), Main.screenX / 6, Main.screenY / 9, true);
@@ -773,6 +774,52 @@ public class GameScreen extends View {
         }
     }
 
+    void determineVictory(){
+        if (classic) {
+            int numTeam1FlagShips = 0, numTeam2FlagShips = 0, numTeam3FlagShips = 0, numTeam4FlagShips = 0;
+            for (int i = 0; i < flagShips.size(); i++) {
+                if (flagShips.get(i).team == 1) {
+                    numTeam1FlagShips++;
+                } else if (flagShips.get(i).team == 2) {
+                    numTeam2FlagShips++;
+                } else if (flagShips.get(i).team == 3) {
+                    numTeam3FlagShips++;
+                } else if (flagShips.get(i).team == 4) {
+                    numTeam4FlagShips++;
+                }
+            }
+
+            if (numTeam1FlagShips == 0 && (numTeam2FlagShips != 0 || numTeam3FlagShips != 0 || numTeam4FlagShips != 0)){
+                gameOver = true;
+                victory = false;
+            } else if (numTeam1FlagShips != 0 && numTeam2FlagShips == 0 && numTeam3FlagShips == 0 && numTeam4FlagShips == 0) {
+                gameOver = true;
+                victory = true;
+            }
+        } else {
+            int numTeam1Ships = 0, numTeam2Ships = 0, numTeam3Ships = 0, numTeam4Ships = 0;
+            for (int i = 0; i < flagShips.size(); i++) {
+                if (flagShips.get(i).team == 1) {
+                    numTeam1Ships++;
+                } else if (flagShips.get(i).team == 2) {
+                    numTeam2Ships++;
+                } else if (flagShips.get(i).team == 3) {
+                    numTeam3Ships++;
+                } else if (flagShips.get(i).team == 4) {
+                    numTeam4Ships++;
+                }
+            }
+
+            if (numTeam1Ships == 0 && (numTeam2Ships != 0 || numTeam3Ships != 0 || numTeam4Ships != 0)){
+                gameOver = true;
+                victory = false;
+            } else if (numTeam1Ships != 0 && numTeam2Ships == 0 && numTeam3Ships == 0 && numTeam4Ships == 0) {
+                gameOver = true;
+                victory = true;
+            }
+        }
+    }
+
     void makeExplosion(GameObject object) {
         for (int i = 0; i <= explosions.size() - 1; i++) {
             if (!explosions.get(i).active) {
@@ -1407,6 +1454,12 @@ public class GameScreen extends View {
                 }
                 //System.out.println("Bullets: " + bulletCount + " Missiles: " + missileCount + " Lasers: " + laserCount + " Explosions: " + explosionCount);
                 followShips();
+                if (!gameOver){
+                    determineVictory();
+                    if (gameOver){
+                        blackboards[0].addToLog("All fleets now visible.");
+                    }
+                }
                 game_tick += 16;
             }
             gameLoop();
