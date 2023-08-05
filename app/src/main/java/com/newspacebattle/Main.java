@@ -208,6 +208,8 @@ public class Main extends AppCompatActivity {
         annihilationButton.setVisibility(View.INVISIBLE);
         gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
         gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
+
+        GameScreen.classic = true;
     }
 
     public void annihilationButton(View view){
@@ -219,6 +221,8 @@ public class Main extends AppCompatActivity {
         annihilationButton.setVisibility(View.INVISIBLE);
         gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
         gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
+
+        GameScreen.classic = false;
     }
 
     //Upon pressing play, sets up game
