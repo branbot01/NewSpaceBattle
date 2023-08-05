@@ -11,9 +11,9 @@
 
     <Button
         android:id="@+id/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_bright"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_menubuttonbackground"
         android:onClick="playGame"
         android:text="@string/play_button"
         android:textAlignment="center"
@@ -31,11 +31,94 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="52dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play" />
+        app:layout_constraintTop_toBottomOf="@+id/exit" />
+
+    <Button
+        android:id="@+id/guide"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_menubuttonbackground"
+        android:onClick="play"
+        android:text="@string/guide_button"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play"
+        app:layout_constraintVertical_bias="0.113" />
+
+    <Button
+        android:id="@+id/exit"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_menubuttonbackground"
+        android:text="@string/exit_button"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guide"
+        app:layout_constraintVertical_bias="0.165" />
+
+    <View
+        android:id="@+id/gametitle"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="128dp"
+        android:background="@drawable/ic_bottombar"
+        app:layout_constraintBottom_toTopOf="@+id/play"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/gamemodeBackground"
+        android:layout_width="330dp"
+        android:layout_height="660dp"
+        android:background="@drawable/ic_gamemodemenubackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
+
+    <View
+        android:id="@+id/gamemodeTitleBackground"
+        android:layout_width="250dp"
+        android:layout_height="125dp"
+        android:background="@drawable/ic_menubuttonbackground"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.069"
+        tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/gamemodeTitle"
+        android:layout_width="203dp"
+        android:layout_height="52dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/gamemode_title"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeTitleBackground"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

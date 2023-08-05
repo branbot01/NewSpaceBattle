@@ -45,6 +45,9 @@ public class Main extends AppCompatActivity {
     ScrollView scroller;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
+    Button play, guide, exit;
+    View title, gamemodeBackground;
+    TextView gamemodeTitle;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -104,7 +107,7 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         setContentView(R.layout.title_screen);
-        playGame(null);
+        //playGame(null);
     }
 
     //When the app is resumed
@@ -165,6 +168,27 @@ public class Main extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    public void play(View view){
+        title = findViewById(R.id.gametitle);
+        play = findViewById(R.id.play);
+        guide = findViewById(R.id.guide);
+        exit = findViewById(R.id.exit);
+        gamemodeBackground = findViewById(R.id.gamemodeBackground);
+        gamemodeTitle = findViewById(R.id.gamemodeTitle);
+
+        title.setVisibility(View.INVISIBLE);
+        play.setVisibility(View.INVISIBLE);
+        guide.setVisibility(View.INVISIBLE);
+        exit.setVisibility(View.INVISIBLE);
+        gamemodeBackground.setVisibility(View.VISIBLE);
+        gamemodeTitle.setVisibility(View.VISIBLE);
+
+
+
+
+
     }
 
     //Upon pressing play, sets up game
