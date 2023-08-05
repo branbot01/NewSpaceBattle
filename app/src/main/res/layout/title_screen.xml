@@ -88,7 +88,7 @@
         android:layout_width="330dp"
         android:layout_height="660dp"
         android:background="@drawable/ic_gamemodemenubackground"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,5 +158,31 @@
         app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
         app:layout_constraintTop_toBottomOf="@+id/gamemodeTitle"
         app:layout_constraintVertical_bias="0.582" />
+
+    <View
+        android:id="@+id/classicButton"
+        android:layout_width="221dp"
+        android:layout_height="221dp"
+        android:onClick="classicButton"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.366" />
+
+    <View
+        android:id="@+id/annihilationButton"
+        android:layout_width="221dp"
+        android:layout_height="221dp"
+        android:onClick="annihilationButton"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.92" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,7 +46,7 @@ public class Main extends AppCompatActivity {
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     Button play, guide, exit;
-    View title, gamemodeBackground;
+    View title, gamemodeBackground, classicButton, annihilationButton;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
@@ -179,6 +179,8 @@ public class Main extends AppCompatActivity {
         gamemodeTitle = findViewById(R.id.gamemodeTitle);
         gamemode_classicTitle = findViewById(R.id.gamemode_classicTitle);
         gamemode_annihilationTitle = findViewById(R.id.gamemode_annihilationTitle);
+        classicButton = findViewById(R.id.classicButton);
+        annihilationButton = findViewById(R.id.annihilationButton);
 
         title.setVisibility(View.INVISIBLE);
         play.setVisibility(View.INVISIBLE);
@@ -188,11 +190,27 @@ public class Main extends AppCompatActivity {
         gamemodeTitle.setVisibility(View.VISIBLE);
         gamemode_classicTitle.setVisibility(View.VISIBLE);
         gamemode_annihilationTitle.setVisibility(View.VISIBLE);
+        classicButton.setVisibility(View.VISIBLE);
+        annihilationButton.setVisibility(View.VISIBLE);
 
+    }
 
+    public void classicButton(View view){
+        gamemodeBackground.setVisibility(View.INVISIBLE);
+        gamemodeTitle.setVisibility(View.INVISIBLE);
+        gamemode_classicTitle.setVisibility(View.INVISIBLE);
+        gamemode_annihilationTitle.setVisibility(View.INVISIBLE);
+        classicButton.setVisibility(View.INVISIBLE);
+        annihilationButton.setVisibility(View.INVISIBLE);
+    }
 
-
-
+    public void annihilationButton(View view){
+        gamemodeBackground.setVisibility(View.INVISIBLE);
+        gamemodeTitle.setVisibility(View.INVISIBLE);
+        gamemode_classicTitle.setVisibility(View.INVISIBLE);
+        gamemode_annihilationTitle.setVisibility(View.INVISIBLE);
+        classicButton.setVisibility(View.INVISIBLE);
+        annihilationButton.setVisibility(View.INVISIBLE);
     }
 
     //Upon pressing play, sets up game
