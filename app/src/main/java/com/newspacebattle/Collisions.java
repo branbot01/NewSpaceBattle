@@ -18,8 +18,11 @@ class Collisions {
         new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
-                    //checkVisibility();
-                    setAllShipsVisible();
+                    if (!GameScreen.gameOver) {
+                        checkVisibility();
+                    } else {
+                        setAllShipsVisible();
+                    }
                 }
                 Utilities.delay(1);
             }
