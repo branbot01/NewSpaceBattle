@@ -47,7 +47,7 @@ public class Main extends AppCompatActivity {
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     Button play, guide, exit;
     View title, gamemodeBackground, classicButton, annihilationButton;
-    TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle;
+    TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -181,6 +181,8 @@ public class Main extends AppCompatActivity {
         gamemode_annihilationTitle = findViewById(R.id.gamemode_annihilationTitle);
         classicButton = findViewById(R.id.classicButton);
         annihilationButton = findViewById(R.id.annihilationButton);
+        gamemodeClassicExplanation = findViewById(R.id.gamemodeClassicExplanation);
+        gamemodeAnnihilationExplanation = findViewById(R.id.gamemodeAnnihilationExplanation);
 
         title.setVisibility(View.INVISIBLE);
         play.setVisibility(View.INVISIBLE);
@@ -192,6 +194,8 @@ public class Main extends AppCompatActivity {
         gamemode_annihilationTitle.setVisibility(View.VISIBLE);
         classicButton.setVisibility(View.VISIBLE);
         annihilationButton.setVisibility(View.VISIBLE);
+        gamemodeClassicExplanation.setVisibility(View.VISIBLE);
+        gamemodeAnnihilationExplanation.setVisibility(View.VISIBLE);
 
     }
 
@@ -202,6 +206,8 @@ public class Main extends AppCompatActivity {
         gamemode_annihilationTitle.setVisibility(View.INVISIBLE);
         classicButton.setVisibility(View.INVISIBLE);
         annihilationButton.setVisibility(View.INVISIBLE);
+        gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
+        gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
     }
 
     public void annihilationButton(View view){
@@ -211,6 +217,8 @@ public class Main extends AppCompatActivity {
         gamemode_annihilationTitle.setVisibility(View.INVISIBLE);
         classicButton.setVisibility(View.INVISIBLE);
         annihilationButton.setVisibility(View.INVISIBLE);
+        gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
+        gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
     }
 
     //Upon pressing play, sets up game
