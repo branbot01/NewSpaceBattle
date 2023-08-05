@@ -48,6 +48,7 @@
         android:text="@string/guide_button"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -87,24 +88,24 @@
         android:layout_width="330dp"
         android:layout_height="660dp"
         android:background="@drawable/ic_gamemodemenubackground"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/gamemodeTitleBackground"
         android:layout_width="250dp"
         android:layout_height="125dp"
         android:background="@drawable/ic_menubuttonbackground"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
         app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
         app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
-        app:layout_constraintVertical_bias="0.069"
-        tools:visibility="invisible" />
+        app:layout_constraintVertical_bias="0.069" />
 
     <TextView
         android:id="@+id/gamemodeTitle"
@@ -113,12 +114,49 @@
         android:fontFamily="sans-serif-medium"
         android:text="@string/gamemode_title"
         android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/gamemodeTitleBackground"
         app:layout_constraintEnd_toEndOf="@+id/gamemodeTitleBackground"
         app:layout_constraintStart_toStartOf="@+id/gamemodeTitleBackground"
-        app:layout_constraintTop_toTopOf="@+id/gamemodeTitleBackground"
-        tools:visibility="invisible" />
+        app:layout_constraintTop_toTopOf="@+id/gamemodeTitleBackground" />
+
+    <TextView
+        android:id="@+id/gamemode_classicTitle"
+        android:layout_width="139dp"
+        android:layout_height="39dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/gamemode_classic"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toBottomOf="@+id/gamemodeTitle"
+        app:layout_constraintVertical_bias="0.102" />
+
+    <TextView
+        android:id="@+id/gamemode_annihilationTitle"
+        android:layout_width="139dp"
+        android:layout_height="39dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/gamemode_annihilation"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toBottomOf="@+id/gamemodeTitle"
+        app:layout_constraintVertical_bias="0.582" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

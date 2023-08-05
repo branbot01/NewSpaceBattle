@@ -4,6 +4,8 @@
     <string name="guide_button">GUIDE</string>
     <string name="exit_button">EXIT</string>
     <string name="gamemode_title">GAME MODE</string>
+    <string name="gamemode_classic">CLASSIC</string>
+    <string name="gamemode_annihilation">ANNIHILATION</string>
     <string name="start">Tap To Start</string>
     <string name="next">NEXT</string>
     <string name="SpecialOptions">SPECIAL</string>

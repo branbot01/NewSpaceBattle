@@ -47,7 +47,7 @@ public class Main extends AppCompatActivity {
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     Button play, guide, exit;
     View title, gamemodeBackground;
-    TextView gamemodeTitle;
+    TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -177,6 +177,8 @@ public class Main extends AppCompatActivity {
         exit = findViewById(R.id.exit);
         gamemodeBackground = findViewById(R.id.gamemodeBackground);
         gamemodeTitle = findViewById(R.id.gamemodeTitle);
+        gamemode_classicTitle = findViewById(R.id.gamemode_classicTitle);
+        gamemode_annihilationTitle = findViewById(R.id.gamemode_annihilationTitle);
 
         title.setVisibility(View.INVISIBLE);
         play.setVisibility(View.INVISIBLE);
@@ -184,6 +186,8 @@ public class Main extends AppCompatActivity {
         exit.setVisibility(View.INVISIBLE);
         gamemodeBackground.setVisibility(View.VISIBLE);
         gamemodeTitle.setVisibility(View.VISIBLE);
+        gamemode_classicTitle.setVisibility(View.VISIBLE);
+        gamemode_annihilationTitle.setVisibility(View.VISIBLE);
 
 
 
