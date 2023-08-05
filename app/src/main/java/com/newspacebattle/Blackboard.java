@@ -118,10 +118,15 @@ class Blackboard {
 
     private int teamSize() {
         int teamSize = 0;
-        for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
-            if (GameScreen.ships.get(i).team == team) {
-                teamSize++;
+        try {
+            for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
+                if (GameScreen.ships.get(i).team == team) {
+                    teamSize++;
+                }
             }
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            teamSize = 1;
+            System.out.println("Error: " + e);
         }
         return teamSize;
     }

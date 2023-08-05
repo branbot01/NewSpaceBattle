@@ -83,7 +83,20 @@ class PathFinder {
                     for (int i = 0; i < GameScreen.ships.size(); i++) {
                         try {
                             if (GameScreen.ships.get(i).team != ship.team && Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) <= ship.sensorRadius) {
+                                if (ship.formation != null && GameScreen.ships.get(i) instanceof Scout) {
+                                    if (ship.formation.destination){
+                                        continue;
+                                    }
+                                }
                                 shipIndex = i;
+                                break;
+                            } else if (GameScreen.ships.get(i).team == ship.team && Utilities.distanceFormula(ship.centerPosX, ship.centerPosY, GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY) <= ship.sensorRadius && GameScreen.ships.get(i).destinationFinder.enemies.size() > 0) {
+                                for (int ii = 0; ii < GameScreen.ships.size(); ii++) {
+                                    if (GameScreen.ships.get(i).destinationFinder.enemies.get(0) == GameScreen.ships.get(ii) && !ship.destinationFinder.enemies.contains(GameScreen.ships.get(ii)) && GameScreen.ships.get(ii).team != ship.team) {
+                                        shipIndex = ii;
+                                        break;
+                                    }
+                                }
                                 break;
                             }
                         } catch (Exception e) {
@@ -176,7 +189,6 @@ class PathFinder {
         ArrayList<GameObject> nearbyObjects = new ArrayList<>();
 
         try {
-            boolean shot = false;
             for (int i = 0; i < GameScreen.objects.size(); i++) {
                 GameObject obj = GameScreen.objects.get(i);
                 if (obj == ship) {
@@ -192,15 +204,13 @@ class PathFinder {
                         shootDegree = 20;
                     }
                     if (ship instanceof BattleShip || ship instanceof Bomber) {
-                        if (!shot && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                        if (shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
                             ship.shoot();
-                            shot = true;
                             shootTime = 0;
                         }
                     } else {
-                        if (!shot && Math.abs(angle - ship.degrees) <= shootDegree && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
+                        if (Math.abs(angle - ship.degrees) <= shootDegree && shootTime >= ship.shootTime && distance <= ship.avoidanceRadius * 3) {
                             ship.shoot();
-                            shot = true;
                             shootTime = 0;
                         }
                     }

@@ -26,6 +26,7 @@ class Ship extends GameObject {
     //Constructor method
     Ship() {
         destinationFinder = new PathFinder(this);
+        autoAttack = true;
 
         stopperX = ValueAnimator.ofFloat(velocityX, 0);
         stopperX.setInterpolator(new LinearInterpolator());

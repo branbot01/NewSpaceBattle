@@ -53,7 +53,7 @@ class ResourceCollector extends Ship {
         move();
         rotate();
         if (selected){
-            System.out.println("harvesting: " + harvesting + ", unloading: " + unloading + ", destination: " + destination + ", asteroidSelected: " + (asteroidSelected == null));
+            System.out.println("harvesting: " + harvesting + ", unloading: " + unloading + ", destination: " + destination + ", asteroidSelected: " + (asteroidSelected != null));
         }
     }
 

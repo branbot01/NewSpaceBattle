@@ -56,11 +56,7 @@ class Scout extends Ship {
 
     boolean checkIfAlive() {
         setSelectColor();
-        if (health <= 0) {
-
-            return false;
-        }
-        return true;
+        return !(health <= 0);
     }
 
     void setAllAsteroidsUnvisited() {
@@ -104,13 +100,14 @@ class Scout extends Ship {
                         double closestDistance = Double.MAX_VALUE;
                         int closestIndex = -1;
                         if (possibleEnemyShips.size() > 0) {
+                            outer:
                             for (int i = 0; i <= possibleEnemyShips.size() - 1; i++) {
                                 if (possibleEnemyShips.get(i).getFirst() instanceof Scout) {
                                     continue;
                                 }
                                 for (int j = 0; j < GameScreen.blackHole.size(); j++) {
                                     if (Utilities.distanceFormula(possibleEnemyShips.get(i).getSecond(), possibleEnemyShips.get(i).getThird(), GameScreen.blackHole.get(j).positionX, GameScreen.blackHole.get(j).positionY) <= GameScreen.blackHole.get(j).radius * GameScreen.blackHole.get(j).pullDistance + radius) {
-                                        continue;
+                                        continue outer;
                                     }
                                 }
                                 double distance = Utilities.distanceFormula(centerPosX, centerPosY, possibleEnemyShips.get(i).getSecond(), possibleEnemyShips.get(i).getThird());
