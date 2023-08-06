@@ -9,8 +9,10 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -46,6 +48,11 @@ public class Main extends AppCompatActivity {
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     Button play, guide, exit;
+    Button difficulty_easy, difficulty_medium, difficulty_hard, enemy_1, enemy_2, enemy_3, small_map, medium_map, large_map;
+    SeekBar initialResourcesBar;
+    TextView resourceBarDisplay;
+    CheckBox blackholeCheck, botsOnlyCheck;
+    Button playGame;
     View title, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
     TextView parameterTitle, difficulty, enemies, galaxysize, resources, blackhole, bots;
@@ -54,7 +61,7 @@ public class Main extends AppCompatActivity {
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
     TextView numFormations, team1Blackboard;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
-    View decorView, gameView, bar, formationBar;
+    View decorView, gameView, bar, formationBar, guideView;
 
     private ScaleGestureDetector mScaleDetector;
 
@@ -138,6 +145,9 @@ public class Main extends AppCompatActivity {
     }
 
     public void guideButton(View view) {
+        setContentView(R.layout.guide);
+        guideView = findViewById(R.id.guide);
+        setContentView(R.layout.title_screen);
     }
 
     //If user hits back button
@@ -176,37 +186,16 @@ public class Main extends AppCompatActivity {
     }
 
     public void classicButton(View view){
-        gamemodeBackground.setVisibility(View.INVISIBLE);
-        gamemodeTitle.setVisibility(View.INVISIBLE);
-        gamemode_classicTitle.setVisibility(View.INVISIBLE);
-        gamemode_annihilationTitle.setVisibility(View.INVISIBLE);
-        classicButton.setVisibility(View.INVISIBLE);
-        annihilationButton.setVisibility(View.INVISIBLE);
-        gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
-        gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
-
-        parameterBackground = findViewById(R.id.parameterBackground);
-        parameterTitle = findViewById(R.id.parameterTitle);
-        difficulty = findViewById(R.id.difficulty);
-        enemies = findViewById(R.id.enemies);
-        galaxysize = findViewById(R.id.galaxySize);
-        resources = findViewById(R.id.resources);
-        blackhole = findViewById(R.id.blackhole);
-        bots = findViewById(R.id.bots);
-
-        parameterBackground.setVisibility(View.VISIBLE);
-        parameterTitle.setVisibility(View.VISIBLE);
-        difficulty.setVisibility(View.VISIBLE);
-        enemies.setVisibility(View.VISIBLE);
-        galaxysize.setVisibility(View.VISIBLE);
-        resources.setVisibility(View.VISIBLE);
-        blackhole.setVisibility(View.VISIBLE);
-        bots.setVisibility(View.VISIBLE);
-
+        parameterView();
         GameScreen.classic = true;
     }
 
     public void annihilationButton(View view){
+        parameterView();
+        GameScreen.classic = false;
+    }
+
+    public void parameterView(){
         gamemodeBackground.setVisibility(View.INVISIBLE);
         gamemodeTitle.setVisibility(View.INVISIBLE);
         gamemode_classicTitle.setVisibility(View.INVISIBLE);
@@ -234,13 +223,136 @@ public class Main extends AppCompatActivity {
         blackhole.setVisibility(View.VISIBLE);
         bots.setVisibility(View.VISIBLE);
 
-        GameScreen.classic = false;
+        difficulty_easy = findViewById(R.id.difficulty_easy);
+        difficulty_medium = findViewById(R.id.difficulty_medium);
+        difficulty_hard = findViewById(R.id.difficulty_hard);
+        enemy_1 = findViewById(R.id.enemy_1);
+        enemy_2 = findViewById(R.id.enemy_2);
+        enemy_3 = findViewById(R.id.enemy_3);
+        small_map = findViewById(R.id.small_map);
+        medium_map = findViewById(R.id.medium_map);
+        large_map = findViewById(R.id.large_map);
+        initialResourcesBar = findViewById(R.id.initialResourcesBar);
+        resourceBarDisplay = findViewById(R.id.resourceBarDisplay);
+        blackholeCheck = findViewById(R.id.blackholeCheck);
+        botsOnlyCheck = findViewById(R.id.botsOnlyCheck);
+        playGame = findViewById(R.id.playGame);
+
+        difficulty_easy.setVisibility(View.VISIBLE);
+        difficulty_easy(null);
+        difficulty_medium.setVisibility(View.VISIBLE);
+        difficulty_hard.setVisibility(View.VISIBLE);
+        enemy_1.setVisibility(View.VISIBLE);
+        enemy_1(null);
+        enemy_2.setVisibility(View.VISIBLE);
+        enemy_3.setVisibility(View.VISIBLE);
+        small_map.setVisibility(View.VISIBLE);
+        small_map(null);
+        medium_map.setVisibility(View.VISIBLE);
+        large_map.setVisibility(View.VISIBLE);
+        initialResourcesBar.setVisibility(View.VISIBLE);
+        GameScreen.initialResources = 10000;
+        initialResourcesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressChangedValue = 0;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                progressChangedValue = i;
+                GameScreen.initialResources = progressChangedValue;
+                resourceBarDisplay.setText(Integer.toString(progressChangedValue));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                GameScreen.initialResources = progressChangedValue;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                GameScreen.initialResources = progressChangedValue;
+            }
+        });
+        resourceBarDisplay.setVisibility(View.VISIBLE);
+        blackholeCheck.setVisibility(View.VISIBLE);
+        blackholeCheck.setChecked(true);
+        GameScreen.isBlackHole = true;
+        blackholeCheck.setOnClickListener(view -> {
+            GameScreen.isBlackHole = blackholeCheck.isChecked();
+        });
+        botsOnlyCheck.setVisibility(View.VISIBLE);
+        botsOnlyCheck.setOnClickListener(view -> {
+            GameScreen.botsOnly = botsOnlyCheck.isChecked();
+        });
+        playGame.setVisibility(View.VISIBLE);
+    }
+
+    public void difficulty_easy(View view){
+        difficulty_easy.setTextColor(Color.RED);
+        difficulty_medium.setTextColor(Color.BLACK);
+        difficulty_hard.setTextColor(Color.BLACK);
+        GameScreen.difficulty = 0;
+    }
+
+    public void difficulty_medium(View view){
+        difficulty_easy.setTextColor(Color.BLACK);
+        difficulty_medium.setTextColor(Color.RED);
+        difficulty_hard.setTextColor(Color.BLACK);
+        GameScreen.difficulty = 1;
+    }
+
+    public void difficulty_hard(View view){
+        difficulty_easy.setTextColor(Color.BLACK);
+        difficulty_medium.setTextColor(Color.BLACK);
+        difficulty_hard.setTextColor(Color.RED);
+        GameScreen.difficulty = 2;
+    }
+
+    public void enemy_1(View view){
+        enemy_1.setTextColor(Color.RED);
+        enemy_2.setTextColor(Color.BLACK);
+        enemy_3.setTextColor(Color.BLACK);
+        GameScreen.teams = 2;
+    }
+
+    public void enemy_2(View view){
+        enemy_1.setTextColor(Color.BLACK);
+        enemy_2.setTextColor(Color.RED);
+        enemy_3.setTextColor(Color.BLACK);
+        GameScreen.teams = 3;
+    }
+
+    public void enemy_3(View view){
+        enemy_1.setTextColor(Color.BLACK);
+        enemy_2.setTextColor(Color.BLACK);
+        enemy_3.setTextColor(Color.RED);
+        GameScreen.teams = 4;
+    }
+
+    public void small_map(View view){
+        small_map.setTextColor(Color.RED);
+        medium_map.setTextColor(Color.BLACK);
+        large_map.setTextColor(Color.BLACK);
+        GameScreen.grid_size = 8;
+    }
+
+    public void medium_map(View view){
+        small_map.setTextColor(Color.BLACK);
+        medium_map.setTextColor(Color.RED);
+        large_map.setTextColor(Color.BLACK);
+        GameScreen.grid_size = 20;
+    }
+
+    public void large_map(View view){
+        small_map.setTextColor(Color.BLACK);
+        medium_map.setTextColor(Color.BLACK);
+        large_map.setTextColor(Color.RED);
+        GameScreen.grid_size = 32;
     }
 
     //Upon pressing play, sets up game
     public void playGame(View view) {
         if (!pressed) {
             pressed = true;
+            playGame.setVisibility(View.INVISIBLE);
 
             Display display = getWindowManager().getDefaultDisplay();
             Point size = new Point();
@@ -286,7 +398,7 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                if (GameScreen.gameOver){
+                if (GameScreen.gameOver || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     select.setVisibility(View.INVISIBLE);

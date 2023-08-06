@@ -15,14 +15,14 @@ import java.util.ArrayList;
  */
 public class GameScreen extends View {
 
-    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, grid_size, game_tick, initialResources, teams;
+    static int offsetX, offsetY, mapSizeX, mapSizeY, clusterSize, grid_size, game_tick, initialResources, teams, difficulty;
     static int[] resources = new int[4];
     static float scaleX, scaleY, circleRatio;
     static float startSelX, startSelY, endSelX, endSelY;
     static float startAttX, startAttY, endAttX, endAttY;
     static double midPointX, midPointY;
     static float[] starXPos, starYPos;
-    static boolean paused, classic, gameOver, victory;
+    static boolean paused, classic, gameOver, victory, isBlackHole, botsOnly;
 
     static Blackboard[] blackboards = new Blackboard[4];
     static EnemyAI p1, p2, p3, p4;
@@ -75,9 +75,6 @@ public class GameScreen extends View {
     //Initiates the game
     public GameScreen(Context context) {
         super(context);
-
-        teams = 4;
-        classic = true;
 
         Thread bitLoader = new Thread(() -> {
             bitArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_greenarrow)), Main.screenX / 6, Main.screenY / 9, true);
@@ -193,8 +190,6 @@ public class GameScreen extends View {
         scaleX = 0.05f;
         scaleY = 0.05f;
 
-        grid_size = 8;
-
         mapSizeX = (int) (Main.screenX / scaleX * grid_size);
         mapSizeY = (int) (Main.screenY / scaleY * grid_size);
         clusterSize = (int) (Main.screenX / 0.1);
@@ -215,8 +210,6 @@ public class GameScreen extends View {
         ResourceCollector.cost = 10000;
         Scout.cost = 3000;
         SpaceStation.cost = 50000;
-
-        initialResources = 2000000;
 
         resources[0] = initialResources;
         resources[1] = initialResources;
@@ -657,7 +650,9 @@ public class GameScreen extends View {
 
     //Generates ships randomly around the map
     public static void generateGame() {
-        //blackHole.add(new BlackHole(0, 0));
+        if (isBlackHole) {
+            blackHole.add(new BlackHole(0, 0));
+        }
         int bulletNum = 500;
         int explosionNum = 500;
         final int missileNum = 200;
@@ -755,7 +750,11 @@ public class GameScreen extends View {
             blackboards[i] = new Blackboard(i + 1);
         }
 
-        p1 = new EnemyAI(1, blackboards[0]);
+        if (botsOnly) {
+            p1 = new EnemyAI(1, blackboards[0]);
+        } else {
+            p1 = null;
+        }
         p2 = new EnemyAI(2, blackboards[1]);
         p3 = new EnemyAI(3, blackboards[2]);
         p4 = new EnemyAI(4, blackboards[3]);

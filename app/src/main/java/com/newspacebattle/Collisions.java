@@ -18,7 +18,7 @@ class Collisions {
         new Thread(() -> {
             while (true) {
                 if (!GameScreen.paused) {
-                    if (!GameScreen.gameOver) {
+                    if (!GameScreen.gameOver && !GameScreen.botsOnly) {
                         checkVisibility();
                     } else {
                         setAllShipsVisible();

@@ -26,18 +26,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
 
-    <ProgressBar
-        android:id="@+id/loading"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exit" />
-
     <Button
         android:id="@+id/guide"
         android:layout_width="100dp"
@@ -62,7 +50,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/ic_menubuttonbackground"
-        android:onClick="playGame"
+        android:onClick="exitButton"
         android:text="@string/exit_button"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -223,7 +211,7 @@
         android:layout_width="330dp"
         android:layout_height="660dp"
         android:background="@drawable/ic_parametermenubackground"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -358,13 +346,212 @@
         android:layout_width="80dp"
         android:layout_height="30dp"
         android:background="@color/transparent"
+        android:onClick="difficulty_easy"
         android:text="@string/difficulty_easy"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
         app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
         app:layout_constraintHorizontal_bias="0.17"
         app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
         app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
         app:layout_constraintVertical_bias="0.31" />
+
+    <Button
+        android:id="@+id/difficulty_medium"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="difficulty_medium"
+        android:text="@string/difficulty_medium"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/difficulty_easy"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.31" />
+
+    <Button
+        android:id="@+id/difficulty_hard"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="difficulty_hard"
+        android:text="@string/difficulty_hard"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintStart_toEndOf="@+id/difficulty_medium"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.31" />
+
+    <Button
+        android:id="@+id/enemy_1"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="enemy_1"
+        android:text="@string/enemy_1"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.168"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.461" />
+
+    <Button
+        android:id="@+id/enemy_2"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="enemy_2"
+        android:text="@string/enemy_2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toEndOf="@+id/enemy_1"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.46" />
+
+    <Button
+        android:id="@+id/enemy_3"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="enemy_3"
+        android:text="@string/enemy_3"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toEndOf="@+id/enemy_2"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.46" />
+
+    <Button
+        android:id="@+id/small_map"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="small_map"
+        android:text="@string/small_map"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.168"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.606" />
+
+    <Button
+        android:id="@+id/medium_map"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="medium_map"
+        android:text="@string/medium_map"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toEndOf="@+id/small_map"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.606" />
+
+    <Button
+        android:id="@+id/large_map"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:onClick="large_map"
+        android:text="@string/large_map"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/medium_map"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.606" />
+
+    <SeekBar
+        android:id="@+id/initialResourcesBar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:max="1000000"
+        android:progress="10000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/exit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.34"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeAnnihilationExplanation"
+        app:layout_constraintVertical_bias="0.17000002" />
+
+    <TextView
+        android:id="@+id/resourceBarDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="204dp"
+        android:text="10000"
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/initialResourcesBar" />
+
+    <CheckBox
+        android:id="@+id/blackholeCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/blackhole" />
+
+    <CheckBox
+        android:id="@+id/botsOnlyCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.66"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bots" />
+
+    <Button
+        android:id="@+id/playGame"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_menubuttonbackground"
+        android:onClick="playGame"
+        android:text="@string/play_button"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.928" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

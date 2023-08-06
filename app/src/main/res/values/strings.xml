@@ -13,6 +13,14 @@
     <string name="parameter_title">PARAMETERS</string>
     <string name='difficulty_title'>DIFFICULTY</string>
     <string name="difficulty_easy">EASY</string>
+    <string name="difficulty_medium">MEDIUM</string>
+    <string name="difficulty_hard">HARD</string>
+    <string name="enemy_1">1</string>
+    <string name="enemy_2">2</string>
+    <string name="enemy_3">3</string>
+    <string name="small_map">SMALL</string>
+    <string name="medium_map">MEDIUM</string>
+    <string name="large_map">LARGE</string>
     <string name="enemies_title">ENEMIES</string>
     <string name="galaxysize_title">GALAXY SIZE</string>
     <string name="resources_title">RESOURCES</string>
