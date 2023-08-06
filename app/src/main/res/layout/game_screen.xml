@@ -114,12 +114,12 @@
         android:focusable="true"
         android:onClick="buildMenu"
         android:visibility="visible"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="@color/transparent"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@+id/formationButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="48dp"
-        app:srcCompat="@drawable/ic_flagship" />
+        app:srcCompat="@drawable/ic_buildmenubutton" />
 
     <View
         android:id="@+id/bottomFormationBar"
