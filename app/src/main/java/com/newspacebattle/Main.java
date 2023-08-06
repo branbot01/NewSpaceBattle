@@ -30,7 +30,7 @@ public class Main extends AppCompatActivity {
 
     static int screenX, screenY, movedX, movedY, formationSelected;
     static float miniX, miniY;
-    static boolean pressed, startSelection, selection, startAttack, following, shipBehave, loaded, minimapOn, restart;
+    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
@@ -53,15 +53,6 @@ public class Main extends AppCompatActivity {
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
     TextView numFormations, team1Blackboard;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
-    MediaPlayer rickRoll;
-    Thread loader = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            gameScreen = new GameScreen(getApplicationContext());
-            loaded = true;
-            //rickRoll.start();
-        }
-    });
     View decorView, gameView, bar, formationBar;
 
     private ScaleGestureDetector mScaleDetector;
@@ -69,23 +60,6 @@ public class Main extends AppCompatActivity {
     private float mScaleFactor = 0.05f;
 
     boolean zooming = false;
-
-    //Clears any ships that are selected
-    public static void clearSelectionReferences() {
-        for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
-            GameScreen.ships.get(i).selected = false;
-            GameScreen.ships.get(i).attSelected = false;
-        }
-        selectShips.clear();
-        enemySelect.clear();
-    }
-
-    // Shoot button for ships
-    public void shoot(View view) {
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            selectShips.get(i).shoot();
-        }
-    }
 
     //Method runs on creation of app
     @Override
@@ -102,12 +76,9 @@ public class Main extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
 
-        rickRoll = MediaPlayer.create(this, R.raw.music);
-
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         setContentView(R.layout.title_screen);
-        //playGame(null);
     }
 
     //When the app is resumed
@@ -159,6 +130,10 @@ public class Main extends AppCompatActivity {
 
     public void quitButton(View view) {
         restart = true;
+    }
+
+    public void exitButton(View view) {
+        finish();
     }
 
     public void guideButton(View view) {
@@ -237,9 +212,10 @@ public class Main extends AppCompatActivity {
             screenX = size.x;
             GameScreen.circleRatio = (float) screenY / screenX;
 
-            makeCSVFiles();
-
-            loader.start();
+            new Thread(() -> {
+                gameScreen = new GameScreen(getApplicationContext());
+                loaded = true;
+            }).start();
             loadingBar = findViewById(R.id.loading);
             loadingBar.setVisibility(View.VISIBLE);
             showGameScreen();
@@ -264,12 +240,6 @@ public class Main extends AppCompatActivity {
                 showGameScreen();
             }
         }, 16);
-    }
-
-    public void makeCSVFiles() {
-        InputStream inputStream = getResources().openRawResource(R.raw.nn);
-        CSVFile csvFile = new CSVFile(inputStream);
-        //fighterBrain = csvFile.read()
     }
 
     //Loop updating ui elements
@@ -402,6 +372,16 @@ public class Main extends AppCompatActivity {
             }
             UILoop();
         }, 16);
+    }
+
+    //Clears any ships that are selected
+    public static void clearSelectionReferences() {
+        for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
+            GameScreen.ships.get(i).selected = false;
+            GameScreen.ships.get(i).attSelected = false;
+        }
+        selectShips.clear();
+        enemySelect.clear();
     }
 
     public void minimap(View view) {

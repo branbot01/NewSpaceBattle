@@ -721,7 +721,7 @@ public class GameScreen extends View {
             outer:
             for (int i = 0; i <= flagShips.size() - 1; i++) {
                 for (int ii = 0; ii <= flagShips.size() - 1; ii++) {
-                    if (Utilities.distanceFormula(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(ii).centerPosX, flagShips.get(ii).centerPosY) < FlagShip.constRadius * 30 && i != ii) {
+                    if (Utilities.distanceFormula(flagShips.get(i).centerPosX, flagShips.get(i).centerPosY, flagShips.get(ii).centerPosX, flagShips.get(ii).centerPosY) < FlagShip.constRadius * 50 && i != ii) {
                         spacing = false;
                         break outer;
                     }
@@ -798,14 +798,14 @@ public class GameScreen extends View {
             }
         } else {
             int numTeam1Ships = 0, numTeam2Ships = 0, numTeam3Ships = 0, numTeam4Ships = 0;
-            for (int i = 0; i < flagShips.size(); i++) {
-                if (flagShips.get(i).team == 1) {
+            for (int i = 0; i < ships.size(); i++) {
+                if (ships.get(i).team == 1) {
                     numTeam1Ships++;
-                } else if (flagShips.get(i).team == 2) {
+                } else if (ships.get(i).team == 2) {
                     numTeam2Ships++;
-                } else if (flagShips.get(i).team == 3) {
+                } else if (ships.get(i).team == 3) {
                     numTeam3Ships++;
-                } else if (flagShips.get(i).team == 4) {
+                } else if (ships.get(i).team == 4) {
                     numTeam4Ships++;
                 }
             }
