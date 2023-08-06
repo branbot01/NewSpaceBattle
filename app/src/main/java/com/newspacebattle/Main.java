@@ -46,8 +46,9 @@ public class Main extends AppCompatActivity {
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
     Button play, guide, exit;
-    View title, gamemodeBackground, classicButton, annihilationButton;
+    View title, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
+    TextView parameterTitle, difficulty, enemies;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -184,6 +185,16 @@ public class Main extends AppCompatActivity {
         gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
         gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
 
+        parameterBackground = findViewById(R.id.parameterBackground);
+        parameterTitle = findViewById(R.id.parameterTitle);
+        difficulty = findViewById(R.id.difficulty);
+        enemies = findViewById(R.id.enemies);
+
+        parameterBackground.setVisibility(View.VISIBLE);
+        parameterTitle.setVisibility(View.VISIBLE);
+        difficulty.setVisibility(View.VISIBLE);
+        enemies.setVisibility(View.VISIBLE);
+
         GameScreen.classic = true;
     }
 
@@ -196,6 +207,16 @@ public class Main extends AppCompatActivity {
         annihilationButton.setVisibility(View.INVISIBLE);
         gamemodeClassicExplanation.setVisibility(View.INVISIBLE);
         gamemodeAnnihilationExplanation.setVisibility(View.INVISIBLE);
+
+        parameterBackground = findViewById(R.id.parameterBackground);
+        parameterTitle = findViewById(R.id.parameterTitle);
+        difficulty = findViewById(R.id.difficulty);
+        enemies = findViewById(R.id.enemies);
+
+        parameterBackground.setVisibility(View.VISIBLE);
+        parameterTitle.setVisibility(View.VISIBLE);
+        difficulty.setVisibility(View.VISIBLE);
+        enemies.setVisibility(View.VISIBLE);
 
         GameScreen.classic = false;
     }

@@ -217,4 +217,67 @@
         app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
         app:layout_constraintVertical_bias="0.851" />
 
+    <View
+        android:id="@+id/parameterBackground"
+        android:layout_width="330dp"
+        android:layout_height="660dp"
+        android:background="@drawable/ic_parametermenubackground"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/parameterTitle"
+        android:layout_width="203dp"
+        android:layout_height="52dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/parameter_title"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeTitleBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeTitleBackground" />
+
+    <TextView
+        android:id="@+id/difficulty"
+        android:layout_width="130dp"
+        android:layout_height="26dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/difficulty_title"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.257" />
+
+    <TextView
+        android:id="@+id/enemies"
+        android:layout_width="130dp"
+        android:layout_height="26dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/enemies_title"
+        android:textAlignment="center"
+        android:textColor="@color/design_default_color_on_secondary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.406" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
