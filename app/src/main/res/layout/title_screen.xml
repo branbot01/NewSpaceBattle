@@ -223,7 +223,7 @@
         android:layout_width="330dp"
         android:layout_height="660dp"
         android:background="@drawable/ic_parametermenubackground"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -352,5 +352,19 @@
         app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
         app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
         app:layout_constraintVertical_bias="0.847" />
+
+    <Button
+        android:id="@+id/difficulty_easy"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@color/transparent"
+        android:text="@string/difficulty_easy"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/gamemodeBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gamemodeBackground"
+        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintStart_toStartOf="@+id/gamemodeBackground"
+        app:layout_constraintTop_toTopOf="@+id/gamemodeBackground"
+        app:layout_constraintVertical_bias="0.31" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

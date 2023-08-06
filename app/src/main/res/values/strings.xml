@@ -12,6 +12,7 @@
     </string>
     <string name="parameter_title">PARAMETERS</string>
     <string name='difficulty_title'>DIFFICULTY</string>
+    <string name="difficulty_easy">EASY</string>
     <string name="enemies_title">ENEMIES</string>
     <string name="galaxysize_title">GALAXY SIZE</string>
     <string name="resources_title">RESOURCES</string>
