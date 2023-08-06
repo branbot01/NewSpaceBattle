@@ -48,7 +48,7 @@ public class Main extends AppCompatActivity {
     Button play, guide, exit;
     View title, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
-    TextView parameterTitle, difficulty, enemies;
+    TextView parameterTitle, difficulty, enemies, galaxysize, resources, blackhole, bots;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -189,11 +189,19 @@ public class Main extends AppCompatActivity {
         parameterTitle = findViewById(R.id.parameterTitle);
         difficulty = findViewById(R.id.difficulty);
         enemies = findViewById(R.id.enemies);
+        galaxysize = findViewById(R.id.galaxySize);
+        resources = findViewById(R.id.resources);
+        blackhole = findViewById(R.id.blackhole);
+        bots = findViewById(R.id.bots);
 
         parameterBackground.setVisibility(View.VISIBLE);
         parameterTitle.setVisibility(View.VISIBLE);
         difficulty.setVisibility(View.VISIBLE);
         enemies.setVisibility(View.VISIBLE);
+        galaxysize.setVisibility(View.VISIBLE);
+        resources.setVisibility(View.VISIBLE);
+        blackhole.setVisibility(View.VISIBLE);
+        bots.setVisibility(View.VISIBLE);
 
         GameScreen.classic = true;
     }
@@ -212,11 +220,19 @@ public class Main extends AppCompatActivity {
         parameterTitle = findViewById(R.id.parameterTitle);
         difficulty = findViewById(R.id.difficulty);
         enemies = findViewById(R.id.enemies);
+        galaxysize = findViewById(R.id.galaxySize);
+        resources = findViewById(R.id.resources);
+        blackhole = findViewById(R.id.blackhole);
+        bots = findViewById(R.id.bots);
 
         parameterBackground.setVisibility(View.VISIBLE);
         parameterTitle.setVisibility(View.VISIBLE);
         difficulty.setVisibility(View.VISIBLE);
         enemies.setVisibility(View.VISIBLE);
+        galaxysize.setVisibility(View.VISIBLE);
+        resources.setVisibility(View.VISIBLE);
+        blackhole.setVisibility(View.VISIBLE);
+        bots.setVisibility(View.VISIBLE);
 
         GameScreen.classic = false;
     }

@@ -13,6 +13,10 @@
     <string name="parameter_title">PARAMETERS</string>
     <string name='difficulty_title'>DIFFICULTY</string>
     <string name="enemies_title">ENEMIES</string>
+    <string name="galaxysize_title">GALAXY SIZE</string>
+    <string name="resources_title">RESOURCES</string>
+    <string name="blackhole_title">BLACK HOLE</string>
+    <string name="bots_title">BOTS ONLY</string>
     <string name="start">Tap To Start</string>
     <string name="next">NEXT</string>
     <string name="SpecialOptions">SPECIAL</string>
