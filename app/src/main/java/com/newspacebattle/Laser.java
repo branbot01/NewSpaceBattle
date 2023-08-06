@@ -8,6 +8,7 @@ class Laser extends GameObject {
 
     final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f, MAX_SPEED = 700; //may change later
     private float scale, damage;
+    boolean visible;
 
     private int timeLeft;
     private Ship ownShip;

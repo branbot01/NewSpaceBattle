@@ -11,7 +11,7 @@ class Missile extends GameObject {
     final static float SIZE = Main.screenY / GameScreen.circleRatio / 3f / 2, MAX_SPEED = 100;
     private float scale, damage;
     private int timeLeft;
-    private boolean followingShip;
+    boolean followingShip, visible;
     private Handler delay = new Handler(Looper.getMainLooper());
     private Ship target, ownShip;
 

@@ -21,7 +21,7 @@ class Collisions {
                     if (!GameScreen.gameOver && !GameScreen.botsOnly) {
                         checkVisibility();
                     } else {
-                        setAllShipsVisible();
+                        setAllVisible();
                     }
                 }
                 Utilities.delay(1);
@@ -165,7 +165,7 @@ class Collisions {
                 if (GameScreen.ships.get(i).team != 1) {
                     for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
                         if (GameScreen.ships.get(ii).team == 1) {
-                            if (Utilities.distanceFormula(GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.ships.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius){
+                            if (Utilities.distanceFormula(GameScreen.ships.get(i).centerPosX, GameScreen.ships.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.ships.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius) {
                                 inRange = true;
                                 GameScreen.ships.get(i).visible = true;
                                 break;
@@ -182,14 +182,142 @@ class Collisions {
                 break;
             }
         }
+
+        for (int i = 0; i <= GameScreen.bullets.size() - 1; i++) {
+            try {
+                boolean inRange = false;
+                if (GameScreen.bullets.get(i).team != 1) {
+                    for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
+                        if (GameScreen.ships.get(ii).team == 1) {
+                            if (Utilities.distanceFormula(GameScreen.bullets.get(i).centerPosX, GameScreen.bullets.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.bullets.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius) {
+                                inRange = true;
+                                GameScreen.bullets.get(i).visible = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!inRange) {
+                        GameScreen.bullets.get(i).visible = false;
+                    }
+                } else {
+                    GameScreen.bullets.get(i).visible = true;
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                break;
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.missiles.size() - 1; i++) {
+            try {
+                boolean inRange = false;
+                if (GameScreen.missiles.get(i).team != 1) {
+                    for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
+                        if (GameScreen.ships.get(ii).team == 1) {
+                            if (Utilities.distanceFormula(GameScreen.missiles.get(i).centerPosX, GameScreen.missiles.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.missiles.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius) {
+                                inRange = true;
+                                GameScreen.missiles.get(i).visible = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!inRange) {
+                        GameScreen.missiles.get(i).visible = false;
+                    }
+                } else {
+                    GameScreen.missiles.get(i).visible = true;
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                break;
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
+            try {
+                boolean inRange = false;
+                if (GameScreen.lasers.get(i).team != 1) {
+                    for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
+                        if (GameScreen.ships.get(ii).team == 1) {
+                            if (Utilities.distanceFormula(GameScreen.lasers.get(i).centerPosX, GameScreen.lasers.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.lasers.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius) {
+                                inRange = true;
+                                GameScreen.lasers.get(i).visible = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!inRange) {
+                        GameScreen.lasers.get(i).visible = false;
+                    }
+                } else {
+                    GameScreen.lasers.get(i).visible = true;
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                break;
+            }
+        }
+
+        for (int i = 0; i < GameScreen.explosions.size(); i++) {
+            try {
+                boolean inRange = false;
+                if (GameScreen.explosions.get(i).explodingObj.team != 1) {
+                    for (int ii = 0; ii <= GameScreen.ships.size() - 1; ii++) {
+                        if (GameScreen.ships.get(ii).team == 1) {
+                            if (Utilities.distanceFormula(GameScreen.explosions.get(i).centerPosX, GameScreen.explosions.get(i).centerPosY, GameScreen.ships.get(ii).centerPosX, GameScreen.ships.get(ii).centerPosY) <= GameScreen.explosions.get(i).radius + GameScreen.ships.get(ii).sensorRadius + GameScreen.ships.get(ii).radius) {
+                                inRange = true;
+                                GameScreen.explosions.get(i).visible = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!inRange) {
+                        GameScreen.explosions.get(i).visible = false;
+                    }
+                } else {
+                    GameScreen.explosions.get(i).visible = true;
+                }
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                break;
+            }
+        }
     }
 
-    private void setAllShipsVisible(){
+    private void setAllVisible() {
         for (int i = 0; i <= GameScreen.ships.size() - 1; i++) {
             try {
                 GameScreen.ships.get(i).visible = true;
             } catch (IndexOutOfBoundsException | NullPointerException e) {
                 System.out.println("Error in setAllShipsVisible" + e);
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.bullets.size() - 1; i++) {
+            try {
+                GameScreen.bullets.get(i).visible = true;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error in setAllBulletsVisible" + e);
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.missiles.size() - 1; i++) {
+            try {
+                GameScreen.missiles.get(i).visible = true;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error in setAllMissilesVisible" + e);
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.lasers.size() - 1; i++) {
+            try {
+                GameScreen.lasers.get(i).visible = true;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error in setAllLasersVisible" + e);
+            }
+        }
+
+        for (int i = 0; i <= GameScreen.explosions.size() - 1; i++) {
+            try {
+                GameScreen.explosions.get(i).visible = true;
+            } catch (IndexOutOfBoundsException | NullPointerException e) {
+                System.out.println("Error in setAllExplosionsVisible" + e);
             }
         }
     }

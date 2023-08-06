@@ -112,9 +112,11 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
+            buildMenu.setVisibility(View.INVISIBLE);
             minimap.setVisibility(View.INVISIBLE);
             shipBar(false);
             formationBar(false);
+            buildBar(false);
             clearSelectionReferences();
 
             pause.setImageResource(R.drawable.ic_resumebutton);
@@ -127,6 +129,7 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.VISIBLE);
             formation.setVisibility(View.VISIBLE);
+            buildMenu.setVisibility(View.VISIBLE);
             minimap.setVisibility(View.VISIBLE);
 
             quitButton.setVisibility(View.INVISIBLE);
@@ -398,11 +401,13 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                if (GameScreen.gameOver || GameScreen.botsOnly){
+                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
+                    buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
+                    buildMenu.setVisibility(View.INVISIBLE);
                 }
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
@@ -506,8 +511,6 @@ public class Main extends AppCompatActivity {
                         cancelFighter.setText("x" + flagShip.countFighter);
                         cancelScout.setText("x" + flagShip.countScout);
                         cancelResourceCollector.setText("x" + flagShip.countResourceCollector);
-                    } else {
-                        buildMenu.setAlpha(0.5f);
                     }
 
                     numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
@@ -539,6 +542,7 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.VISIBLE);
             formation.setVisibility(View.VISIBLE);
+            buildMenu.setVisibility(View.VISIBLE);
             pause.setVisibility(View.VISIBLE);
 
             for (int i = 0; i < selectShips.size(); i++) {
@@ -549,9 +553,11 @@ public class Main extends AppCompatActivity {
 
             select.setVisibility(View.INVISIBLE);
             formation.setVisibility(View.INVISIBLE);
+            buildMenu.setVisibility(View.INVISIBLE);
             pause.setVisibility(View.INVISIBLE);
             shipBar(false);
             formationBar(false);
+            buildBar(false);
 
             if (!isAllMovable()) {
                 clearSelectionReferences();
@@ -741,6 +747,7 @@ public class Main extends AppCompatActivity {
                         following = false;
                         shipBar(false);
                         formationBar(false);
+                        buildBar(false);
                         break;
 
                     case MotionEvent.ACTION_MOVE:
@@ -870,8 +877,6 @@ public class Main extends AppCompatActivity {
         }
 
         if (hiddenOrNot) {
-            //bar.setBackgroundColor(Color.parseColor("#0099CC"));
-
             bar.setVisibility(View.VISIBLE);
             move.setVisibility(View.VISIBLE);
             stop.setVisibility(View.VISIBLE);
@@ -901,48 +906,11 @@ public class Main extends AppCompatActivity {
             dock.setVisibility(View.INVISIBLE);
             dockedShips.setVisibility(View.INVISIBLE);
             dockMenu.setVisibility(View.INVISIBLE);
-            buildMenu.setVisibility(View.INVISIBLE);
             scoutMode.setVisibility(View.INVISIBLE);
             resourceCollector.setVisibility(View.INVISIBLE);
             scout.setVisibility(View.INVISIBLE);
             fighter.setVisibility(View.INVISIBLE);
             bomber.setVisibility(View.INVISIBLE);
-            numResourceCollectors.setVisibility(View.INVISIBLE);
-            numScouts.setVisibility(View.INVISIBLE);
-            numFighters.setVisibility(View.INVISIBLE);
-            numBombers.setVisibility(View.INVISIBLE);
-            buildShips.setVisibility(View.INVISIBLE);
-            buildSpaceStation.setVisibility(View.INVISIBLE);
-            buildBattleShip.setVisibility(View.INVISIBLE);
-            buildLaserCruiser.setVisibility(View.INVISIBLE);
-            buildBomber.setVisibility(View.INVISIBLE);
-            buildFighter.setVisibility(View.INVISIBLE);
-            buildScout.setVisibility(View.INVISIBLE);
-            buildResourceCollector.setVisibility(View.INVISIBLE);
-
-            costResourceCollector.setVisibility(View.INVISIBLE);
-            costScout.setVisibility(View.INVISIBLE);
-            costFighter.setVisibility(View.INVISIBLE);
-            costBomber.setVisibility(View.INVISIBLE);
-            costLaserCruiser.setVisibility(View.INVISIBLE);
-            costBattleShip.setVisibility(View.INVISIBLE);
-            costSpaceStation.setVisibility(View.INVISIBLE);
-
-            progressResourceCollector.setVisibility(View.INVISIBLE);
-            progressScout.setVisibility(View.INVISIBLE);
-            progressFighter.setVisibility(View.INVISIBLE);
-            progressBomber.setVisibility(View.INVISIBLE);
-            progressLaserCruiser.setVisibility(View.INVISIBLE);
-            progressBattleShip.setVisibility(View.INVISIBLE);
-            progressSpaceStation.setVisibility(View.INVISIBLE);
-
-            cancelSpaceStation.setVisibility(View.INVISIBLE);
-            cancelBattleShip.setVisibility(View.INVISIBLE);
-            cancelLaserCruiser.setVisibility(View.INVISIBLE);
-            cancelBomber.setVisibility(View.INVISIBLE);
-            cancelFighter.setVisibility(View.INVISIBLE);
-            cancelScout.setVisibility(View.INVISIBLE);
-            cancelResourceCollector.setVisibility(View.INVISIBLE);
 
             clearButtonsToWhite();
         }
@@ -1091,7 +1059,6 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);
-        buildMenu.setVisibility(View.INVISIBLE);
         special.setVisibility(View.INVISIBLE);
 
         costResourceCollector.setVisibility(View.INVISIBLE);
@@ -1162,6 +1129,7 @@ public class Main extends AppCompatActivity {
         clearSelectionReferences();
         shipBar(false);
         formationBar(false);
+        buildBar(false);
 
         if (!startSelection) {
             select.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
@@ -1189,40 +1157,9 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.INVISIBLE);
         dock.setVisibility(View.INVISIBLE);
         dockMenu.setVisibility(View.INVISIBLE);
-        buildMenu.setVisibility(View.INVISIBLE);
         scoutMode.setVisibility(View.INVISIBLE);
 
-        buildSpaceStation.setVisibility(View.INVISIBLE);
-        buildBattleShip.setVisibility(View.INVISIBLE);
-        buildLaserCruiser.setVisibility(View.INVISIBLE);
-        buildBomber.setVisibility(View.INVISIBLE);
-        buildFighter.setVisibility(View.INVISIBLE);
-        buildScout.setVisibility(View.INVISIBLE);
-        buildResourceCollector.setVisibility(View.INVISIBLE);
-
-        costResourceCollector.setVisibility(View.INVISIBLE);
-        costScout.setVisibility(View.INVISIBLE);
-        costFighter.setVisibility(View.INVISIBLE);
-        costBomber.setVisibility(View.INVISIBLE);
-        costLaserCruiser.setVisibility(View.INVISIBLE);
-        costBattleShip.setVisibility(View.INVISIBLE);
-        costSpaceStation.setVisibility(View.INVISIBLE);
-
-        progressResourceCollector.setVisibility(View.INVISIBLE);
-        progressScout.setVisibility(View.INVISIBLE);
-        progressFighter.setVisibility(View.INVISIBLE);
-        progressBomber.setVisibility(View.INVISIBLE);
-        progressLaserCruiser.setVisibility(View.INVISIBLE);
-        progressBattleShip.setVisibility(View.INVISIBLE);
-        progressSpaceStation.setVisibility(View.INVISIBLE);
-
-        cancelResourceCollector.setVisibility(View.INVISIBLE);
-        cancelScout.setVisibility(View.INVISIBLE);
-        cancelFighter.setVisibility(View.INVISIBLE);
-        cancelBomber.setVisibility(View.INVISIBLE);
-        cancelLaserCruiser.setVisibility(View.INVISIBLE);
-        cancelBattleShip.setVisibility(View.INVISIBLE);
-        cancelSpaceStation.setVisibility(View.INVISIBLE);
+        buildBar(false);
     }
 
     //Opens normal menu
@@ -1242,7 +1179,6 @@ public class Main extends AppCompatActivity {
         harvest.setVisibility(View.VISIBLE);
         dock.setVisibility(View.VISIBLE);
         dockMenu.setVisibility(View.VISIBLE);
-        buildMenu.setVisibility(View.VISIBLE);
         scoutMode.setVisibility(View.VISIBLE);
 
         resourceCollector.setVisibility(View.INVISIBLE);
@@ -1255,83 +1191,93 @@ public class Main extends AppCompatActivity {
         numFighters.setVisibility(View.INVISIBLE);
         numBombers.setVisibility(View.INVISIBLE);
 
-        buildSpaceStation.setVisibility(View.INVISIBLE);
-        buildBattleShip.setVisibility(View.INVISIBLE);
-        buildLaserCruiser.setVisibility(View.INVISIBLE);
-        buildBomber.setVisibility(View.INVISIBLE);
-        buildFighter.setVisibility(View.INVISIBLE);
-        buildScout.setVisibility(View.INVISIBLE);
-        buildResourceCollector.setVisibility(View.INVISIBLE);
-
-        costResourceCollector.setVisibility(View.INVISIBLE);
-        costScout.setVisibility(View.INVISIBLE);
-        costFighter.setVisibility(View.INVISIBLE);
-        costBomber.setVisibility(View.INVISIBLE);
-        costLaserCruiser.setVisibility(View.INVISIBLE);
-        costBattleShip.setVisibility(View.INVISIBLE);
-        costSpaceStation.setVisibility(View.INVISIBLE);
-
-        progressResourceCollector.setVisibility(View.INVISIBLE);
-        progressScout.setVisibility(View.INVISIBLE);
-        progressFighter.setVisibility(View.INVISIBLE);
-        progressBomber.setVisibility(View.INVISIBLE);
-        progressLaserCruiser.setVisibility(View.INVISIBLE);
-        progressBattleShip.setVisibility(View.INVISIBLE);
-        progressSpaceStation.setVisibility(View.INVISIBLE);
-
-        cancelResourceCollector.setVisibility(View.INVISIBLE);
-        cancelScout.setVisibility(View.INVISIBLE);
-        cancelFighter.setVisibility(View.INVISIBLE);
-        cancelBomber.setVisibility(View.INVISIBLE);
-        cancelLaserCruiser.setVisibility(View.INVISIBLE);
-        cancelBattleShip.setVisibility(View.INVISIBLE);
-        cancelSpaceStation.setVisibility(View.INVISIBLE);
+        buildBar(false);
     }
 
     public void buildMenu(View view) {
-        if (checkIfOneFlagship() == null) {
-            return;
+        shipBar(false);
+        formationBar(false);
+        buildBar(true);
+    }
+
+    public void buildBar(boolean hiddenOrNot){
+        if (hiddenOrNot){
+            for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+                if (GameScreen.flagShips.get(i).team == 1) {
+                    selectShips.add(GameScreen.flagShips.get(i));
+                    GameScreen.flagShips.get(i).selected = true;
+                    following = true;
+                    break;
+                }
+            }
+
+            formationBar.setVisibility(View.VISIBLE);
+            buildShips.setVisibility(View.VISIBLE);
+            buildSpaceStation.setVisibility(View.VISIBLE);
+            buildBattleShip.setVisibility(View.VISIBLE);
+            buildLaserCruiser.setVisibility(View.VISIBLE);
+            buildBomber.setVisibility(View.VISIBLE);
+            buildFighter.setVisibility(View.VISIBLE);
+            buildScout.setVisibility(View.VISIBLE);
+            buildResourceCollector.setVisibility(View.VISIBLE);
+
+            costResourceCollector.setVisibility(View.VISIBLE);
+            costScout.setVisibility(View.VISIBLE);
+            costFighter.setVisibility(View.VISIBLE);
+            costBomber.setVisibility(View.VISIBLE);
+            costLaserCruiser.setVisibility(View.VISIBLE);
+            costBattleShip.setVisibility(View.VISIBLE);
+            costSpaceStation.setVisibility(View.VISIBLE);
+
+            progressResourceCollector.setVisibility(View.VISIBLE);
+            progressScout.setVisibility(View.VISIBLE);
+            progressFighter.setVisibility(View.VISIBLE);
+            progressBomber.setVisibility(View.VISIBLE);
+            progressLaserCruiser.setVisibility(View.VISIBLE);
+            progressBattleShip.setVisibility(View.VISIBLE);
+            progressSpaceStation.setVisibility(View.VISIBLE);
+
+            cancelResourceCollector.setVisibility(View.VISIBLE);
+            cancelScout.setVisibility(View.VISIBLE);
+            cancelFighter.setVisibility(View.VISIBLE);
+            cancelBomber.setVisibility(View.VISIBLE);
+            cancelLaserCruiser.setVisibility(View.VISIBLE);
+            cancelBattleShip.setVisibility(View.VISIBLE);
+            cancelSpaceStation.setVisibility(View.VISIBLE);
+        } else {
+            buildShips.setVisibility(View.INVISIBLE);
+            buildSpaceStation.setVisibility(View.INVISIBLE);
+            buildBattleShip.setVisibility(View.INVISIBLE);
+            buildLaserCruiser.setVisibility(View.INVISIBLE);
+            buildBomber.setVisibility(View.INVISIBLE);
+            buildFighter.setVisibility(View.INVISIBLE);
+            buildScout.setVisibility(View.INVISIBLE);
+            buildResourceCollector.setVisibility(View.INVISIBLE);
+
+            costResourceCollector.setVisibility(View.INVISIBLE);
+            costScout.setVisibility(View.INVISIBLE);
+            costFighter.setVisibility(View.INVISIBLE);
+            costBomber.setVisibility(View.INVISIBLE);
+            costLaserCruiser.setVisibility(View.INVISIBLE);
+            costBattleShip.setVisibility(View.INVISIBLE);
+            costSpaceStation.setVisibility(View.INVISIBLE);
+
+            progressResourceCollector.setVisibility(View.INVISIBLE);
+            progressScout.setVisibility(View.INVISIBLE);
+            progressFighter.setVisibility(View.INVISIBLE);
+            progressBomber.setVisibility(View.INVISIBLE);
+            progressLaserCruiser.setVisibility(View.INVISIBLE);
+            progressBattleShip.setVisibility(View.INVISIBLE);
+            progressSpaceStation.setVisibility(View.INVISIBLE);
+
+            cancelResourceCollector.setVisibility(View.INVISIBLE);
+            cancelScout.setVisibility(View.INVISIBLE);
+            cancelFighter.setVisibility(View.INVISIBLE);
+            cancelBomber.setVisibility(View.INVISIBLE);
+            cancelLaserCruiser.setVisibility(View.INVISIBLE);
+            cancelBattleShip.setVisibility(View.INVISIBLE);
+            cancelSpaceStation.setVisibility(View.INVISIBLE);
         }
-        buildShips.setVisibility(View.VISIBLE);
-
-        harvest.setVisibility(View.INVISIBLE);
-        dock.setVisibility(View.INVISIBLE);
-        dockMenu.setVisibility(View.INVISIBLE);
-        buildMenu.setVisibility(View.INVISIBLE);
-        scoutMode.setVisibility(View.INVISIBLE);
-        special.setVisibility(View.INVISIBLE);
-
-        buildSpaceStation.setVisibility(View.VISIBLE);
-        buildBattleShip.setVisibility(View.VISIBLE);
-        buildLaserCruiser.setVisibility(View.VISIBLE);
-        buildBomber.setVisibility(View.VISIBLE);
-        buildFighter.setVisibility(View.VISIBLE);
-        buildScout.setVisibility(View.VISIBLE);
-        buildResourceCollector.setVisibility(View.VISIBLE);
-
-        costResourceCollector.setVisibility(View.VISIBLE);
-        costScout.setVisibility(View.VISIBLE);
-        costFighter.setVisibility(View.VISIBLE);
-        costBomber.setVisibility(View.VISIBLE);
-        costLaserCruiser.setVisibility(View.VISIBLE);
-        costBattleShip.setVisibility(View.VISIBLE);
-        costSpaceStation.setVisibility(View.VISIBLE);
-
-        progressResourceCollector.setVisibility(View.VISIBLE);
-        progressScout.setVisibility(View.VISIBLE);
-        progressFighter.setVisibility(View.VISIBLE);
-        progressBomber.setVisibility(View.VISIBLE);
-        progressLaserCruiser.setVisibility(View.VISIBLE);
-        progressBattleShip.setVisibility(View.VISIBLE);
-        progressSpaceStation.setVisibility(View.VISIBLE);
-
-        cancelResourceCollector.setVisibility(View.VISIBLE);
-        cancelScout.setVisibility(View.VISIBLE);
-        cancelFighter.setVisibility(View.VISIBLE);
-        cancelBomber.setVisibility(View.VISIBLE);
-        cancelLaserCruiser.setVisibility(View.VISIBLE);
-        cancelBattleShip.setVisibility(View.VISIBLE);
-        cancelSpaceStation.setVisibility(View.VISIBLE);
     }
 
     public void scoutMode(View view) {
@@ -1345,12 +1291,14 @@ public class Main extends AppCompatActivity {
     public void formationButton(View view) {
         shipBar(false);
         formationBar(true);
+        buildBar(false);
         startSelection = false;
         select.setBackgroundTintList(fabColor);
     }
 
     public void formationBar(boolean hiddenOrNot) {
         if (hiddenOrNot) {
+            buildBar(false);
             numFormations.setText("Number of Formations: " + GameScreen.formationsTeam1.size());
 
             formationBar.setVisibility(View.VISIBLE);
@@ -1434,6 +1382,7 @@ public class Main extends AppCompatActivity {
         }
         shipBar(true);
         formationBar(false);
+        buildBar(false);
     }
 
     public void disbandFormation(View view){
@@ -1451,6 +1400,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void setRectangleFormation(View view) {
+        buildBar(false);
         formationBar(false);
         shipBar(true);
 
@@ -1458,6 +1408,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void setVFormation(View view) {
+        buildBar(false);
         formationBar(false);
         shipBar(true);
 
@@ -1465,6 +1416,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void setCircleFormation(View view) {
+        buildBar(false);
         formationBar(false);
         shipBar(true);
 
@@ -1472,6 +1424,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void setCustomFormation(View view) {
+        buildBar(false);
         formationBar(false);
         shipBar(true);
 

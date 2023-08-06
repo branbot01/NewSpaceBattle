@@ -32,11 +32,6 @@ public class GameScreen extends View {
     static ArrayList<Formation> formationsTeam3 = new ArrayList<>();
     static ArrayList<Formation> formationsTeam4 = new ArrayList<>();
 
-    //static int time;
-    //static ArrayList<Ship> deadShips = new ArrayList<>();
-    //static ArrayList<Ship> population = new ArrayList<>();
-    //static File fitness;
-
     static ArrayList<GameObject> objects = new ArrayList<>();
     static ArrayList<Ship> ships = new ArrayList<>();
     static ArrayList<FlagShip> flagShips = new ArrayList<>();
@@ -949,7 +944,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= bullets.size() - 1; i++) {
-                if (bullets.get(i).exists) {
+                if (bullets.get(i).exists && bullets.get(i).visible) {
                     if (bullets.get(i).centerPosX + bullets.get(i).radius >= offsetX / scaleX && bullets.get(i).centerPosX - bullets.get(i).radius <= offsetX / scaleX + extraOffsetX && bullets.get(i).centerPosY + bullets.get(i).radius >= offsetY / scaleY && bullets.get(i).centerPosY - bullets.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                         //canvas.drawCircle(bullets.get(i).centerPosX, bullets.get(i).centerPosY, bullets.get(i).radius, green);
                         if (bullets.get(i).team == 1) {
@@ -962,7 +957,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= missiles.size() - 1; i++) {
-                if (missiles.get(i).exists) {
+                if (missiles.get(i).exists && missiles.get(i).visible) {
                     if (missiles.get(i).centerPosX + missiles.get(i).radius >= offsetX / scaleX && missiles.get(i).centerPosX - missiles.get(i).radius <= offsetX / scaleX + extraOffsetX && missiles.get(i).centerPosY + missiles.get(i).radius >= offsetY / scaleY && missiles.get(i).centerPosY - missiles.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                         //canvas.drawCircle(missiles.get(i).centerPosX, missiles.get(i).centerPosY, missiles.get(i).radius, green);
                         if (missiles.get(i).team == 1) {
@@ -975,7 +970,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= lasers.size() - 1; i++) {
-                if (lasers.get(i).exists) {
+                if (lasers.get(i).exists && lasers.get(i).visible) {
                     if (lasers.get(i).centerPosX + lasers.get(i).radius >= offsetX / scaleX && lasers.get(i).centerPosX - lasers.get(i).radius <= offsetX / scaleX + extraOffsetX && lasers.get(i).centerPosY + lasers.get(i).radius >= offsetY / scaleY && lasers.get(i).centerPosY - lasers.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                         if (lasers.get(i).team == 1) {
                             canvas.drawBitmap(bitLaser, lasers.get(i).appearance, null);
@@ -987,7 +982,7 @@ public class GameScreen extends View {
             }
 
             for (int i = 0; i <= explosions.size() - 1; i++) {
-                if (explosions.get(i).active) {
+                if (explosions.get(i).active && explosions.get(i).visible) {
                     if (explosions.get(i).centerPosX + explosions.get(i).radius >= offsetX / scaleX && explosions.get(i).centerPosX - explosions.get(i).radius <= offsetX / scaleX + extraOffsetX && explosions.get(i).centerPosY + explosions.get(i).radius >= offsetY / scaleY && explosions.get(i).centerPosY - explosions.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                         canvas.drawBitmap(bitExplosionLow[explosions.get(i).frame], explosions.get(i).appearance, null);
                     }
@@ -1465,159 +1460,3 @@ public class GameScreen extends View {
         }, 16);
     }
 }
-
-/*generation = 0;
-        String fitnessFile = "fitnessc.txt";
-        String gen_pattern = "gen(\\d+)";
-        String ship_pattern = "ship(\\d+)";
-        Pattern gen_regex = Pattern.compile(gen_pattern);
-        Pattern ship_regex = Pattern.compile(ship_pattern);
-
-        File[] files = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (Objects.equals(file.getName(), fitnessFile)){
-                    fitness = file;
-                }
-                Matcher matcher = gen_regex.matcher(file.getName());
-                if (matcher.find()) {
-                    String genNumber = matcher.group(1);
-                    if (genNumber == null) {
-                        throw new IllegalArgumentException("Gen Number was null.");
-                    }
-                    if (Integer.parseInt(genNumber) > generation) {
-                        generation = Integer.parseInt(genNumber);
-                    }
-                }
-            }
-        }
-        if (fitness == null){
-            System.out.println("Fitness file not found, creating new one.");
-            fitness = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fitnessFile);
-        }*/
-
-    /*generateGame();
-        List<String[]> data = new ArrayList<>();
-        for (int i = 0; i <= ships.size() - 1; i++) {
-            if (generation == 0) {
-                ships.get(i).destinationFinder.attacker = new NeuralNetwork(2, 2, 1);
-            } else {
-                for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
-                    Matcher matcher = gen_regex.matcher(file.getName());
-                    if (matcher.find()) {
-                        String genNumber = matcher.group(1);
-                        if (genNumber == null) {
-                            throw new IllegalArgumentException("Gen Number was null.");
-                        }
-                        if (Integer.parseInt(genNumber) == generation) {
-                            matcher = ship_regex.matcher(file.getName());
-                            if (matcher.find()) {
-                                String shipNumber = matcher.group(1);
-                                if (shipNumber == null) {
-                                    throw new IllegalArgumentException("Ship Number was null.");
-                                }
-                                if (Integer.parseInt(shipNumber) == i) {
-                                    System.out.println("Loading ship " + i);
-                                    data.clear();
-                                    BufferedReader reader;
-                                    try {
-                                        reader = new BufferedReader(new FileReader(file));
-                                        String line;
-                                        while ((line = reader.readLine()) != null) {
-                                            data.add(line.split(","));
-                                        }
-
-                                        ships.get(i).destinationFinder.attacker = new NeuralNetwork(data);
-
-                                        reader.close();
-                                    } catch (FileNotFoundException e) {
-                                        throw new IllegalArgumentException("File not found.");
-                                    } catch (IOException e) {
-                                        throw new IllegalArgumentException("IO Exception.");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
-
-/*time += 16;
-                    if (time >= 100000) {
-                        paused = true;
-
-                        population.clear();
-                        population.addAll(ships);
-                        population.addAll(deadShips);
-
-                        double avgFitness = 0;
-                        ArrayList<double[]> standardDeviations = new ArrayList<>();
-                        for (int i = 0; i <= population.size() - 1; i++) {
-                            population.get(i).calculateFitness();
-                            avgFitness += population.get(i).fitness;
-                            standardDeviations.add(population.get(i).destinationFinder.attacker.getAllWeightsAndBiases());
-                        }
-                        avgFitness /= population.size();
-
-                        double[] averageWeightsAndBiases = new double[standardDeviations.get(0).length];
-                        for (int i = 0; i <= standardDeviations.size() - 1; i++) {
-                            for (int j = 0; j <= standardDeviations.get(i).length - 1; j++) {
-                                averageWeightsAndBiases[j] += standardDeviations.get(i)[j];
-                            }
-                        }
-                        for (int i = 0; i <= averageWeightsAndBiases.length - 1; i++) {
-                            averageWeightsAndBiases[i] /= standardDeviations.size();
-                        }
-
-                        double norm = 0;
-                        for (int i = 0; i <= standardDeviations.size() - 1; i++) {
-                            for (int j = 0; j <= standardDeviations.get(i).length - 1; j++) {
-                                standardDeviations.get(i)[j] = Math.sqrt(Math.pow(standardDeviations.get(i)[j] - averageWeightsAndBiases[j], 2) / population.size());
-                                norm += Math.pow(standardDeviations.get(i)[j], 2);
-                            }
-                        }
-                        norm = Math.sqrt(norm);
-
-                        try {
-                            FileOutputStream fileinput = new FileOutputStream(fitness, true);
-                            fileinput.write((generation + "," + avgFitness + "," + norm + "\n").getBytes());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        String gen_pattern = "gen(\\d+)";
-                        Pattern gen_regex = Pattern.compile(gen_pattern);
-
-                        for (File file : Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles()) {
-                            Matcher matcher = gen_regex.matcher(file.getName());
-                            if (matcher.find()) {
-                                String genNumber = matcher.group(1);
-                                if (genNumber == null) {
-                                    throw new IllegalArgumentException("Gen Number was null.");
-                                }
-                                if (Integer.parseInt(genNumber) % 20 != 0) {
-                                    file.delete();
-                                }
-                            }
-                        }
-
-                        Random random = new Random();
-                        double crossoverRate = 0.9;
-                        double mutationRate = 0.025;
-                        for (int i = 0; i <= population.size() - 1; i++) {
-                            NeuralNetwork child;
-                            if (random.nextDouble() < crossoverRate) {
-                                Ship parent1 = Utilities.rouletteWheelSelection(population);
-                                Ship parent2 = Utilities.rouletteWheelSelection(population);
-                                child = NeuralNetwork.merge(parent1.destinationFinder.attacker, parent2.destinationFinder.attacker);
-                                child.applyMutation(mutationRate);
-                            } else {
-                                child = Utilities.rouletteWheelSelection(population).destinationFinder.attacker;
-                                child.applyMutation(mutationRate);
-                            }
-                            System.out.println("Child " + i + " created");
-                            child.saveWeightsAndBiases(generation + 1, String.valueOf(i));
-                        }
-                        Main.restart = true;
-                    }*/

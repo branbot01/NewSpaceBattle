@@ -13,7 +13,7 @@ class Explosion {
     float width, height;
     float midX, midY;
     float radius, scale;
-    boolean active;
+    boolean active, visible;
     Matrix appearance = new Matrix();
     GameObject explodingObj;
 

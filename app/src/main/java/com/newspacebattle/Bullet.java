@@ -8,6 +8,7 @@ class Bullet extends GameObject {
     final static float SIZE = Main.screenY / GameScreen.circleRatio / 6f / 2, MAX_SPEED = 600;
     private float scale, damage;
     private int timeLeft;
+    boolean visible;
     private Ship ownShip;
 
     //Constructor method

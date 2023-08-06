@@ -195,8 +195,10 @@ class EnemyAI {
                         flagShip.stop();
                         flagShip.setDestination(x, y);
                     } else {
-                        flagShip.destinationFinder.destX = x;
-                        flagShip.destinationFinder.destY = y;
+                        if (!(x + flagShip.radius >= GameScreen.mapSizeX / 2f || x - flagShip.radius <= -GameScreen.mapSizeX / 2f || y + flagShip.radius >= GameScreen.mapSizeY / 2f || y - flagShip.radius <= -GameScreen.mapSizeY / 2f)) {
+                            flagShip.destinationFinder.destX = x;
+                            flagShip.destinationFinder.destY = y;
+                        }
                     }
                     break;
                 }
@@ -224,8 +226,6 @@ class EnemyAI {
                 }
             }
 
-            System.out.println("team: " + team + ", highestThreat: " + highestThreat);
-
             if (highestThreat < -2 && Utilities.distanceFormula(flagShip.centerPosX, flagShip.centerPosY, highestThreatPosX, highestThreatPosY) < flagShip.radius * 20) {
                 for (int i = 0; i < fleets.size(); i++) {
                     if (fleets.get(i).getThird() || fleets.get(i).getSecond().destination) {
@@ -249,8 +249,10 @@ class EnemyAI {
                     flagShip.stop();
                     flagShip.setDestination(x, y);
                 } else {
-                    flagShip.destinationFinder.destX = x;
-                    flagShip.destinationFinder.destY = y;
+                    if (!(x + flagShip.radius >= GameScreen.mapSizeX / 2f || x - flagShip.radius <= -GameScreen.mapSizeX / 2f || y + flagShip.radius >= GameScreen.mapSizeY / 2f || y - flagShip.radius <= -GameScreen.mapSizeY / 2f)) {
+                        flagShip.destinationFinder.destX = x;
+                        flagShip.destinationFinder.destY = y;
+                    }
                 }
             }
         } catch (Exception e) {

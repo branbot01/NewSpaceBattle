@@ -105,6 +105,22 @@
         app:maxImageSize="48dp"
         app:srcCompat="@drawable/ic_formationbutton" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/buildButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="buildMenu"
+        android:visibility="visible"
+        app:backgroundTint="#FFFFFF"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@+id/formationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="48dp"
+        app:srcCompat="@drawable/ic_flagship" />
+
     <View
         android:id="@+id/bottomFormationBar"
         android:layout_width="wrap_content"
@@ -413,24 +429,8 @@
         app:backgroundTint="#FFFFFF"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/shipModeButton"
+        app:layout_constraintEnd_toStartOf="@+id/harvestButton"
         app:srcCompat="@drawable/ic_scout" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/buildButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="56dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="buildMenu"
-        android:visibility="invisible"
-        app:backgroundTint="#FFFFFF"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/attackButton"
-        app:srcCompat="@drawable/ic_flagship" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/harvestButton"
