@@ -554,4 +554,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/exit" />
 
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="91dp"
+        android:layout_height="33dp"
+        android:background="@color/colorAccent"
+        android:onClick="back_button"
+        android:text="@string/back_button"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

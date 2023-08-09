@@ -920,10 +920,10 @@ public class GameScreen extends View {
             canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2, -mapSizeX / 2, mapSizeY / 2, red);
             canvas.drawLine(mapSizeX / 2, -mapSizeY / 2, mapSizeX / 2, mapSizeY / 2, red);
 
-        /*for (int i = 1; i < grid_size; i++) {
+        for (int i = 1; i < grid_size; i++) {
             canvas.drawLine(-mapSizeX / 2 + i * mapSizeX / grid_size, -mapSizeY / 2, -mapSizeX / 2 + i * mapSizeX / grid_size, mapSizeY / 2, green);
             canvas.drawLine(-mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, mapSizeX / 2, -mapSizeY / 2 + i * mapSizeY / grid_size, green);
-        }*/
+        }
 
         /*for (int i = 0; i < GameScreen.grid_size; i++) {
             for (int j = 0; j < GameScreen.grid_size; j++) {
@@ -1450,7 +1450,7 @@ public class GameScreen extends View {
                 followShips();
                 if (!gameOver){
                     determineVictory();
-                    if (gameOver){
+                    if (gameOver && !botsOnly){
                         blackboards[0].addToLog("All fleets now visible.");
                     }
                 }

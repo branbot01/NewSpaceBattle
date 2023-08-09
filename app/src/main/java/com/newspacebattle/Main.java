@@ -47,7 +47,7 @@ public class Main extends AppCompatActivity {
     ScrollView scroller;
     Button special, normal, dockedShips, buildShips, currentFormations, buildFormation, quitButton, guideButton;
     Button cancelSpaceStation, cancelBattleShip, cancelLaserCruiser, cancelBomber, cancelFighter, cancelScout, cancelResourceCollector;
-    Button play, guide, exit;
+    Button play, guide, exit, backButton;
     Button difficulty_easy, difficulty_medium, difficulty_hard, enemy_1, enemy_2, enemy_3, small_map, medium_map, large_map;
     SeekBar initialResourcesBar;
     TextView resourceBarDisplay;
@@ -62,6 +62,7 @@ public class Main extends AppCompatActivity {
     TextView numFormations, team1Blackboard;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
     View decorView, gameView, bar, formationBar, guideView;
+    MediaPlayer music;
 
     private ScaleGestureDetector mScaleDetector;
 
@@ -87,6 +88,10 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         setContentView(R.layout.title_screen);
+
+        music = MediaPlayer.create(getApplicationContext(), R.raw.space_battle_menu_music);
+        music.setLooping(true);
+        music.start();
     }
 
     //When the app is resumed
@@ -98,12 +103,18 @@ public class Main extends AppCompatActivity {
             pauseButton(null);
         }
         GameScreen.paused = false;
+        if (music != null) {
+            music.start();
+        }
     }
 
     //If app is left running
     protected void onPause() {
         super.onPause();
         GameScreen.paused = true;
+        if (music != null) {
+            music.pause();
+        }
     }
 
     public void pauseButton(View view) {
@@ -159,11 +170,12 @@ public class Main extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void play(View view){
+    public void play(View view) {
         title = findViewById(R.id.gametitle);
         play = findViewById(R.id.play);
         guide = findViewById(R.id.guide);
         exit = findViewById(R.id.exit);
+        backButton = findViewById(R.id.backButton);
         gamemodeBackground = findViewById(R.id.gamemodeBackground);
         gamemodeTitle = findViewById(R.id.gamemodeTitle);
         gamemode_classicTitle = findViewById(R.id.gamemode_classicTitle);
@@ -177,6 +189,7 @@ public class Main extends AppCompatActivity {
         play.setVisibility(View.INVISIBLE);
         guide.setVisibility(View.INVISIBLE);
         exit.setVisibility(View.INVISIBLE);
+        backButton.setVisibility(View.VISIBLE);
         gamemodeBackground.setVisibility(View.VISIBLE);
         gamemodeTitle.setVisibility(View.VISIBLE);
         gamemode_classicTitle.setVisibility(View.VISIBLE);
@@ -188,17 +201,17 @@ public class Main extends AppCompatActivity {
 
     }
 
-    public void classicButton(View view){
+    public void classicButton(View view) {
         parameterView();
         GameScreen.classic = true;
     }
 
-    public void annihilationButton(View view){
+    public void annihilationButton(View view) {
         parameterView();
         GameScreen.classic = false;
     }
 
-    public void parameterView(){
+    public void parameterView() {
         gamemodeBackground.setVisibility(View.INVISIBLE);
         gamemodeTitle.setVisibility(View.INVISIBLE);
         gamemode_classicTitle.setVisibility(View.INVISIBLE);
@@ -257,6 +270,7 @@ public class Main extends AppCompatActivity {
         GameScreen.initialResources = 10000;
         initialResourcesBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 progressChangedValue = i;
@@ -288,67 +302,71 @@ public class Main extends AppCompatActivity {
         playGame.setVisibility(View.VISIBLE);
     }
 
-    public void difficulty_easy(View view){
+    public void difficulty_easy(View view) {
         difficulty_easy.setTextColor(Color.RED);
         difficulty_medium.setTextColor(Color.BLACK);
-        difficulty_hard.setTextColor(Color.BLACK);
-        GameScreen.difficulty = 0;
-    }
-
-    public void difficulty_medium(View view){
-        difficulty_easy.setTextColor(Color.BLACK);
-        difficulty_medium.setTextColor(Color.RED);
         difficulty_hard.setTextColor(Color.BLACK);
         GameScreen.difficulty = 1;
     }
 
-    public void difficulty_hard(View view){
+    public void difficulty_medium(View view) {
         difficulty_easy.setTextColor(Color.BLACK);
-        difficulty_medium.setTextColor(Color.BLACK);
-        difficulty_hard.setTextColor(Color.RED);
+        difficulty_medium.setTextColor(Color.RED);
+        difficulty_hard.setTextColor(Color.BLACK);
         GameScreen.difficulty = 2;
     }
 
-    public void enemy_1(View view){
+    public void difficulty_hard(View view) {
+        difficulty_easy.setTextColor(Color.BLACK);
+        difficulty_medium.setTextColor(Color.BLACK);
+        difficulty_hard.setTextColor(Color.RED);
+        GameScreen.difficulty = 3;
+    }
+
+    public void enemy_1(View view) {
         enemy_1.setTextColor(Color.RED);
         enemy_2.setTextColor(Color.BLACK);
         enemy_3.setTextColor(Color.BLACK);
         GameScreen.teams = 2;
     }
 
-    public void enemy_2(View view){
+    public void enemy_2(View view) {
         enemy_1.setTextColor(Color.BLACK);
         enemy_2.setTextColor(Color.RED);
         enemy_3.setTextColor(Color.BLACK);
         GameScreen.teams = 3;
     }
 
-    public void enemy_3(View view){
+    public void enemy_3(View view) {
         enemy_1.setTextColor(Color.BLACK);
         enemy_2.setTextColor(Color.BLACK);
         enemy_3.setTextColor(Color.RED);
         GameScreen.teams = 4;
     }
 
-    public void small_map(View view){
+    public void small_map(View view) {
         small_map.setTextColor(Color.RED);
         medium_map.setTextColor(Color.BLACK);
         large_map.setTextColor(Color.BLACK);
         GameScreen.grid_size = 8;
     }
 
-    public void medium_map(View view){
+    public void medium_map(View view) {
         small_map.setTextColor(Color.BLACK);
         medium_map.setTextColor(Color.RED);
         large_map.setTextColor(Color.BLACK);
         GameScreen.grid_size = 20;
     }
 
-    public void large_map(View view){
+    public void large_map(View view) {
         small_map.setTextColor(Color.BLACK);
         medium_map.setTextColor(Color.BLACK);
         large_map.setTextColor(Color.RED);
         GameScreen.grid_size = 32;
+    }
+
+    public void back_button(View view) {
+        setContentView(R.layout.title_screen);
     }
 
     //Upon pressing play, sets up game
@@ -378,6 +396,10 @@ public class Main extends AppCompatActivity {
     public void showGameScreen() {
         startUp.postDelayed(() -> {
             if (loaded) {
+                music.stop();
+                music = MediaPlayer.create(getApplicationContext(), R.raw.space_battle_music);
+                music.setLooping(true);
+                music.start();
                 formationSelected = 0;
                 mScaleDetector = new ScaleGestureDetector(getApplicationContext(), new ScaleListener());
                 setContentView(gameScreen);
@@ -401,14 +423,14 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
+                /*if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
                     buildMenu.setVisibility(View.INVISIBLE);
-                }
+                }*/
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);
@@ -613,9 +635,9 @@ public class Main extends AppCompatActivity {
                 if (formation == null) {
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
-                            if (selectShips.get(i) instanceof Scout){
+                            if (selectShips.get(i) instanceof Scout) {
                                 ((Scout) selectShips.get(i)).scouting = false;
-                            } else if (selectShips.get(i) instanceof ResourceCollector){
+                            } else if (selectShips.get(i) instanceof ResourceCollector) {
                                 ((ResourceCollector) selectShips.get(i)).harvesting = false;
                                 ((ResourceCollector) selectShips.get(i)).unloading = false;
                             }
@@ -727,9 +749,9 @@ public class Main extends AppCompatActivity {
                         if (formation == null) {
                             for (int i = 0; i <= selectShips.size() - 1; i++) {
                                 if (selectShips.get(i).movable && !(selectShips.get(i) instanceof SpaceStation)) {
-                                    if (selectShips.get(i) instanceof Scout){
+                                    if (selectShips.get(i) instanceof Scout) {
                                         ((Scout) selectShips.get(i)).scouting = false;
-                                    } else if (selectShips.get(i) instanceof ResourceCollector){
+                                    } else if (selectShips.get(i) instanceof ResourceCollector) {
                                         ((ResourceCollector) selectShips.get(i)).harvesting = false;
                                         ((ResourceCollector) selectShips.get(i)).unloading = false;
                                     }
@@ -771,16 +793,16 @@ public class Main extends AppCompatActivity {
         return true;
     }
 
-    public static void checkBorders(){
-        if (GameScreen.offsetX / GameScreen.scaleX < -GameScreen.mapSizeX / 2){
+    public static void checkBorders() {
+        if (GameScreen.offsetX / GameScreen.scaleX < -GameScreen.mapSizeX / 2) {
             GameScreen.offsetX = (int) (-GameScreen.mapSizeX / 2 * GameScreen.scaleX);
-        } else if ((Main.screenX + GameScreen.offsetX) / GameScreen.scaleX > GameScreen.mapSizeX / 2){
+        } else if ((Main.screenX + GameScreen.offsetX) / GameScreen.scaleX > GameScreen.mapSizeX / 2) {
             GameScreen.offsetX = (int) (GameScreen.mapSizeX / 2 * GameScreen.scaleX - Main.screenX);
         }
 
-        if (GameScreen.offsetY / GameScreen.scaleY < -GameScreen.mapSizeY / 2){
+        if (GameScreen.offsetY / GameScreen.scaleY < -GameScreen.mapSizeY / 2) {
             GameScreen.offsetY = (int) (-GameScreen.mapSizeY / 2 * GameScreen.scaleY);
-        } else if ((Main.screenY + GameScreen.offsetY) / GameScreen.scaleY > GameScreen.mapSizeY / 2){
+        } else if ((Main.screenY + GameScreen.offsetY) / GameScreen.scaleY > GameScreen.mapSizeY / 2) {
             GameScreen.offsetY = (int) (GameScreen.mapSizeY / 2 * GameScreen.scaleY - Main.screenY);
         }
     }
@@ -982,7 +1004,7 @@ public class Main extends AppCompatActivity {
         }
     }
 
-    public boolean anyAutoAttack(){
+    public boolean anyAutoAttack() {
         boolean anyAutoAttack = false;
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             if (selectShips.get(i).autoAttack) {
@@ -997,7 +1019,7 @@ public class Main extends AppCompatActivity {
     public void shipAutoAttack(View view) {
         clearButtonsToWhite();
 
-        if (!anyAutoAttack()){
+        if (!anyAutoAttack()) {
             shipMode.setImageResource(R.drawable.ic_aggressive);
             for (int i = 0; i <= selectShips.size() - 1; i++) {
                 if (selectShips.get(i).canAttack) {
@@ -1200,8 +1222,8 @@ public class Main extends AppCompatActivity {
         buildBar(true);
     }
 
-    public void buildBar(boolean hiddenOrNot){
-        if (hiddenOrNot){
+    public void buildBar(boolean hiddenOrNot) {
+        if (hiddenOrNot) {
             for (int i = 0; i < GameScreen.flagShips.size(); i++) {
                 if (GameScreen.flagShips.get(i).team == 1) {
                     selectShips.add(GameScreen.flagShips.get(i));
@@ -1371,7 +1393,7 @@ public class Main extends AppCompatActivity {
             }
         }
         formationSelected++;
-        if (formationSelected == GameScreen.formationsTeam1.size()) {
+        if (formationSelected >= GameScreen.formationsTeam1.size()) {
             formationSelected = 0;
         }
     }
@@ -1385,15 +1407,15 @@ public class Main extends AppCompatActivity {
         buildBar(false);
     }
 
-    public void disbandFormation(View view){
+    public void disbandFormation(View view) {
         Formation formation = isFormationSelected();
-        if (formation != null){
+        if (formation != null) {
             formation.disbandFormation();
-            if (GameScreen.formationsTeam1.contains(formation)){
+            if (GameScreen.formationsTeam1.contains(formation)) {
                 GameScreen.formationsTeam1.remove(formation);
-            } else if (GameScreen.formationsTeam2.contains(formation)){
+            } else if (GameScreen.formationsTeam2.contains(formation)) {
                 GameScreen.formationsTeam2.remove(formation);
-            } else if (GameScreen.formationsTeam3.contains(formation)){
+            } else if (GameScreen.formationsTeam3.contains(formation)) {
                 GameScreen.formationsTeam3.remove(formation);
             } else GameScreen.formationsTeam4.remove(formation);
         }
@@ -1429,21 +1451,6 @@ public class Main extends AppCompatActivity {
         shipBar(true);
 
         GameScreen.formationsTeam1.add(new Formation(selectShips, Formation.CUSTOM_FORMATION));
-    }
-
-    public FlagShip checkIfOneFlagship() {
-        int flagShipCount = 0;
-        FlagShip flagShip = null;
-        for (int i = 0; i <= selectShips.size() - 1; i++) {
-            if (selectShips.get(i) instanceof FlagShip) {
-                flagShipCount++;
-                flagShip = (FlagShip) selectShips.get(i);
-            }
-        }
-        if (flagShipCount == 1) {
-            return flagShip;
-        }
-        return null;
     }
 
     public static Formation isFormationSelected() {
@@ -1542,156 +1549,184 @@ public class Main extends AppCompatActivity {
     }
 
     public void buildSpaceStation(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingSpaceStation = true;
+                flagShip.countSpaceStation++;
+                break;
+            }
         }
-        flagShip.buildingSpaceStation = true;
-        flagShip.countSpaceStation++;
     }
 
     public void buildBattleShip(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingBattleShip = true;
+                flagShip.countBattleShip++;
+                break;
+            }
         }
-        flagShip.buildingBattleShip = true;
-        flagShip.countBattleShip++;
     }
 
     public void buildLaserCruiser(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingLaserCruiser = true;
+                flagShip.countLaserCruiser++;
+                break;
+            }
         }
-        flagShip.buildingLaserCruiser = true;
-        flagShip.countLaserCruiser++;
     }
 
     public void buildBomber(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingBomber = true;
+                flagShip.countBomber++;
+                break;
+            }
         }
-        flagShip.buildingBomber = true;
-        flagShip.countBomber++;
     }
 
     public void buildFighter(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingFighter = true;
+                flagShip.countFighter++;
+                break;
+            }
         }
-        flagShip.buildingFighter = true;
-        flagShip.countFighter++;
     }
 
     public void buildScout(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingScout = true;
+                flagShip.countScout++;
+                break;
+            }
         }
-        flagShip.buildingScout = true;
-        flagShip.countScout++;
     }
 
     public void buildResourceCollector(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                flagShip.buildingResourceCollector = true;
+                flagShip.countResourceCollector++;
+                break;
+            }
         }
-        flagShip.buildingResourceCollector = true;
-        flagShip.countResourceCollector++;
     }
 
     public void cancelSpaceStation(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countSpaceStation <= 1){
-            flagShip.stopBuilding("SpaceStation");
-            flagShip.countSpaceStation = 0;
-        } else {
-            flagShip.countSpaceStation--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countSpaceStation <= 1) {
+                    flagShip.stopBuilding("SpaceStation");
+                    flagShip.countSpaceStation = 0;
+                } else {
+                    flagShip.countSpaceStation--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelBattleShip(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countBattleShip <= 1){
-            flagShip.stopBuilding("BattleShip");
-            flagShip.countBattleShip = 0;
-        } else {
-            flagShip.countBattleShip--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countBattleShip <= 1) {
+                    flagShip.stopBuilding("BattleShip");
+                    flagShip.countBattleShip = 0;
+                } else {
+                    flagShip.countBattleShip--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelLaserCruiser(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countLaserCruiser <= 1){
-            flagShip.stopBuilding("LaserCruiser");
-            flagShip.countLaserCruiser = 0;
-        } else {
-            flagShip.countLaserCruiser--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countLaserCruiser <= 1) {
+                    flagShip.stopBuilding("LaserCruiser");
+                    flagShip.countLaserCruiser = 0;
+                } else {
+                    flagShip.countLaserCruiser--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelBomber(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countBomber <= 1){
-            flagShip.stopBuilding("Bomber");
-            flagShip.countBomber = 0;
-        } else {
-            flagShip.countBomber--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countBomber <= 1) {
+                    flagShip.stopBuilding("Bomber");
+                    flagShip.countBomber = 0;
+                } else {
+                    flagShip.countBomber--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelFighter(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countFighter <= 1){
-            flagShip.stopBuilding("Fighter");
-            flagShip.countFighter = 0;
-        } else {
-            flagShip.countFighter--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countFighter <= 1) {
+                    flagShip.stopBuilding("Fighter");
+                    flagShip.countFighter = 0;
+                } else {
+                    flagShip.countFighter--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelScout(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countScout <= 1){
-            flagShip.stopBuilding("Scout");
-            flagShip.countScout = 0;
-        } else {
-            flagShip.countScout--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            if (GameScreen.flagShips.get(i).team == 1) {
+                FlagShip flagShip = GameScreen.flagShips.get(i);
+                if (flagShip.countScout <= 1) {
+                    flagShip.stopBuilding("Scout");
+                    flagShip.countScout = 0;
+                } else {
+                    flagShip.countScout--;
+                }
+                break;
+            }
         }
     }
 
     public void cancelResourceCollector(View view) {
-        FlagShip flagShip = checkIfOneFlagship();
-        if (flagShip == null) {
-            return;
-        }
-        if (flagShip.countResourceCollector <= 1){
-            flagShip.stopBuilding("ResourceCollector");
-            flagShip.countResourceCollector = 0;
-        } else {
-            flagShip.countResourceCollector--;
+        for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+            FlagShip flagShip = GameScreen.flagShips.get(i);
+            if (flagShip.team == 1) {
+                if (flagShip.countResourceCollector <= 1) {
+                    flagShip.stopBuilding("ResourceCollector");
+                    flagShip.countResourceCollector = 0;
+                } else {
+                    flagShip.countResourceCollector--;
+                }
+                break;
+            }
         }
     }
 }

@@ -26,6 +26,7 @@
     <string name="resources_title">RESOURCES</string>
     <string name="blackhole_title">BLACK HOLE</string>
     <string name="bots_title">BOTS ONLY</string>
+    <string name="back_button">Back</string>
     <string name="start">Tap To Start</string>
     <string name="next">NEXT</string>
     <string name="SpecialOptions">SPECIAL</string>

@@ -10,8 +10,9 @@ import kotlin.Triple;
 
 class EnemyAI {
     int team, numResourceCollectors, numScouts;
+    int flagShipX = 0, flagShipY = 0;
     float resCentroidX, resCentroidY;
-    double buildFleetWeight;
+    double buildFleetWeight, aggression;
     boolean buildingFleet;
 
     FlagShip flagShip = null;
@@ -32,6 +33,8 @@ class EnemyAI {
         if (teamSize() == 0) {
             return;
         }
+
+        this.aggression = (Math.random() + 1);
 
         if (team == 1) {
             formations = GameScreen.formationsTeam1;
@@ -150,7 +153,17 @@ class EnemyAI {
                 return;
             }
 
-            flagShip.countResourceCollector = 5 - numResourceCollectors;
+            if (GameScreen.difficulty == 1) {
+                flagShip.countResourceCollector = 3 - numResourceCollectors;
+            } else if (GameScreen.difficulty == 2) {
+                flagShip.countResourceCollector = 4 - numResourceCollectors;
+            } else {
+                if (GameScreen.resources[team - 1] < 50000) {
+                    flagShip.countResourceCollector = 5 - numResourceCollectors;
+                } else {
+                    flagShip.countResourceCollector = 0;
+                }
+            }
             flagShip.countScout = 1 - numScouts;
 
             if (flagShip.countResourceCollector == 0) {
@@ -239,19 +252,21 @@ class EnemyAI {
                     flagShip.stop();
                 }
 
-                float angle = (float) Utilities.anglePoints(flagShip.centerPosX, flagShip.centerPosY, highestThreatPosX, highestThreatPosY) + 180;
-                if (angle > 360) {
-                    angle -= 360;
-                }
-                float x = (float) Utilities.circleAngleX(angle, flagShip.centerPosX, flagShip.radius * 4);
-                float y = (float) Utilities.circleAngleY(angle, flagShip.centerPosY, flagShip.radius * 4);
-                if (!flagShip.destination) {
-                    flagShip.stop();
-                    flagShip.setDestination(x, y);
-                } else {
-                    if (!(x + flagShip.radius >= GameScreen.mapSizeX / 2f || x - flagShip.radius <= -GameScreen.mapSizeX / 2f || y + flagShip.radius >= GameScreen.mapSizeY / 2f || y - flagShip.radius <= -GameScreen.mapSizeY / 2f)) {
-                        flagShip.destinationFinder.destX = x;
-                        flagShip.destinationFinder.destY = y;
+                if (GameScreen.difficulty >= 2) {
+                    float angle = (float) Utilities.anglePoints(flagShip.centerPosX, flagShip.centerPosY, highestThreatPosX, highestThreatPosY) + 180;
+                    if (angle > 360) {
+                        angle -= 360;
+                    }
+                    float x = (float) Utilities.circleAngleX(angle, flagShip.centerPosX, flagShip.radius * 4);
+                    float y = (float) Utilities.circleAngleY(angle, flagShip.centerPosY, flagShip.radius * 4);
+                    if (!flagShip.destination) {
+                        flagShip.stop();
+                        flagShip.setDestination(x, y);
+                    } else {
+                        if (!(x + flagShip.radius >= GameScreen.mapSizeX / 2f || x - flagShip.radius <= -GameScreen.mapSizeX / 2f || y + flagShip.radius >= GameScreen.mapSizeY / 2f || y - flagShip.radius <= -GameScreen.mapSizeY / 2f)) {
+                            flagShip.destinationFinder.destX = x;
+                            flagShip.destinationFinder.destY = y;
+                        }
                     }
                 }
             }
@@ -267,6 +282,15 @@ class EnemyAI {
                     float posX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
                     float posY = (-GameScreen.mapSizeY / 2f + j * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f;
                     threats[j][i] = blackboard.enemyGrid[j][i] * 10000 / Utilities.distanceFormula(posX, posY, flagShip.centerPosX, flagShip.centerPosY);
+
+                    for (int ship = 0; ship < GameScreen.flagShips.size(); ship++) {
+                        if (GameScreen.flagShips.get(ship) == this.flagShip) {
+                            if (GameScreen.flagShips.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.flagShips.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.flagShips.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.flagShips.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
+                                flagShipX = i;
+                                flagShipY = j;
+                            }
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -282,7 +306,24 @@ class EnemyAI {
             } else if (newFleetWeight < 8) {
                 newFleetWeight = 8;
             }
-            buildFleet(newFleetWeight, defaultFleet);
+            double chance = Math.random();
+            if (GameScreen.difficulty == 1){
+                if (chance < 0.1)
+                    buildFleet(newFleetWeight, defaultFleet);
+            } else if (GameScreen.difficulty == 2) {
+                if (chance < 0.4)
+                    buildFleet(newFleetWeight, defaultFleet);
+            } else {
+                buildFleetWeight = 20;
+                try {
+                    flagShip.countFighter = 20;
+                    flagShip.countBomber = 20;
+                    flagShip.countLaserCruiser = 20;
+                    flagShip.countBattleShip = 20;
+                } catch (Exception e) {
+                    System.out.println("Error in assessFreeShips1: " + e);
+                }
+            }
             return;
         }
 
@@ -304,43 +345,6 @@ class EnemyAI {
                 fleets.add(new Triple<>(newShips, formation, false));
                 formations.add(formation);
                 freeShips.clear();
-
-                int flagShipX = 0, flagShipY = 0;
-                outer:
-                for (int i = 0; i < GameScreen.grid_size; i++) {
-                    for (int j = 0; j < GameScreen.grid_size; j++) {
-                        for (int ship = 0; ship < GameScreen.ships.size(); ship++) {
-                            if (GameScreen.ships.get(ship) == this.flagShip) {
-                                if (GameScreen.ships.get(ship).centerPosX >= -GameScreen.mapSizeX / 2 + i * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosX <= -GameScreen.mapSizeX / 2 + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY >= -GameScreen.mapSizeY / 2 + j * GameScreen.mapSizeY / GameScreen.grid_size && GameScreen.ships.get(ship).centerPosY <= -GameScreen.mapSizeY / 2 + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) {
-                                    flagShipX = i;
-                                    flagShipY = j;
-                                    break outer;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                outer:
-                for (int i = flagShipX - 1; i <= flagShipX + 1; i++) {
-                    inner:
-                    for (int j = flagShipY - 1; j <= flagShipY + 1; j++) {
-                        for (int k = 0; k < blackholeCoords.size(); k++) {
-                            if (blackholeCoords.get(k).first == i && blackholeCoords.get(k).second == j) {
-                                break inner;
-                            }
-                        }
-                        try {
-                            if (blackboard.friendlyGrid[j][i] == 0) {
-                                float posX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
-                                float posY = (-GameScreen.mapSizeY / 2f + j * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f;
-                                formation.setDestination(posX, posY);
-                                break outer;
-                            }
-                        } catch (IndexOutOfBoundsException ignored) {
-                        }
-                    }
-                }
             } else if (flagShip.countFighter + flagShip.countBomber + flagShip.countLaserCruiser + flagShip.countBattleShip == 0) {
                 int newFleetWeight = (int) Math.log(GameScreen.game_tick);
                 if (newFleetWeight > 20) {
@@ -348,7 +352,16 @@ class EnemyAI {
                 } else if (newFleetWeight < 8) {
                     newFleetWeight = 8;
                 }
-                buildFleet(newFleetWeight, defaultFleet);
+                double chance = Math.random();
+                if (GameScreen.difficulty == 1){
+                    if (chance < 0.1)
+                        buildFleet(newFleetWeight, defaultFleet);
+                } else if (GameScreen.difficulty == 2) {
+                    if (chance < 0.4)
+                        buildFleet(newFleetWeight, defaultFleet);
+                } else {
+                    buildFleet(newFleetWeight, defaultFleet);
+                }
             }
         } catch (Exception e) {
             System.out.println("Error in assessFreeShips: " + e);
@@ -418,42 +431,82 @@ class EnemyAI {
                 }
             }
 
+            float highestThreatPosX = 0, highestThreatPosY = 0;
+            double highestThreat = 0;
+            double threatWeight = 0;
+            for (int i = 0; i < GameScreen.grid_size; i++) {
+                for (int j = 0; j < GameScreen.grid_size; j++) {
+                    if (threats[j][i] < highestThreat) {
+                        highestThreat = threats[j][i];
+                        highestThreatPosX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
+                        highestThreatPosY = (-GameScreen.mapSizeY / 2f + j * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f;
+                        threatWeight = blackboard.enemyGrid[j][i];
+                    }
+                }
+            }
 
-            if (defensiveFleetWeight > enemyFleetWeight) {
-                int highestThreatX = 0, highestThreatY = 0;
-                double highestThreat = 0;
-                double threatWeight = 0;
-                for (int i = 0; i < GameScreen.grid_size; i++) {
-                    for (int j = 0; j < GameScreen.grid_size; j++) {
-                        if (threats[j][i] < highestThreat) {
-                            highestThreat = threats[j][i];
-                            highestThreatX = i;
-                            highestThreatY = j;
-                            threatWeight = blackboard.enemyGrid[j][i];
+            if (defensiveFleetWeight > enemyFleetWeight * aggression) {
+                if (!(threatWeight == 0 || highestThreat == 0)) {
+                    for (int i = 0; i < fleets.size(); i++) {
+                        if (fleets.get(i).getThird()) {
+                            continue;
+                        }
+
+                        double individualFleetWeight = 0;
+                        ArrayList<Ship> ships = fleets.get(i).getFirst();
+                        for (int j = 0; j < ships.size(); j++) {
+                            individualFleetWeight += ships.get(j).shipWeight;
+                        }
+
+                        if (individualFleetWeight >= threatWeight) {
+                            fleets.get(i).getSecond().setDestination(highestThreatPosX, highestThreatPosY);
+                            fleets.set(i, new Triple<>(fleets.get(i).getFirst(), fleets.get(i).getSecond(), true));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (int l = 0; l < fleets.size(); l++){
+                if (fleets.get(l).getThird() || fleets.get(l).getSecond().destination){
+                    continue;
+                }
+
+                double minDistance = Double.MAX_VALUE;
+                float minPosX = 0, minPosY = 0;
+                outer:
+                for (int i = flagShipX - 1; i <= flagShipX + 1; i++) {
+                    inner:
+                    for (int j = flagShipY - 1; j <= flagShipY + 1; j++) {
+                        for (int k = 0; k < blackholeCoords.size(); k++) {
+                            if (blackholeCoords.get(k).first == i && blackholeCoords.get(k).second == j) {
+                                break inner;
+                            }
+                        }
+                        try {
+                            float posX = (-GameScreen.mapSizeX / 2f + i * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (i + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f;
+                            float posY = (-GameScreen.mapSizeY / 2f + j * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (j + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f;
+                            if (threatWeight == 0 || highestThreat == 0) {
+                                double chance = Math.random();
+                                if (blackboard.friendlyGrid[j][i] == 0 && chance < 0.1) {
+                                    fleets.get(l).getSecond().setDestination(posX, posY);
+                                    break outer;
+                                }
+                            } else {
+                                double distance = Utilities.distanceFormula(posX, posY, highestThreatPosX, highestThreatPosY);
+                                if (distance < minDistance && blackboard.friendlyGrid[j][i] == 0) {
+                                    minDistance = distance;
+                                    minPosX = posX;
+                                    minPosY = posY;
+                                }
+                            }
+                        } catch (IndexOutOfBoundsException ignored) {
                         }
                     }
                 }
 
-                if (threatWeight == 0 || highestThreat == 0) {
-                    return;
-                }
-
-                for (int i = 0; i < fleets.size(); i++) {
-                    if (fleets.get(i).getThird()) {
-                        continue;
-                    }
-
-                    double individualFleetWeight = 0;
-                    ArrayList<Ship> ships = fleets.get(i).getFirst();
-                    for (int j = 0; j < ships.size(); j++) {
-                        individualFleetWeight += ships.get(j).shipWeight;
-                    }
-
-                    if (individualFleetWeight >= threatWeight) {
-                        fleets.get(i).getSecond().setDestination((-GameScreen.mapSizeX / 2f + highestThreatX * GameScreen.mapSizeX / GameScreen.grid_size + -GameScreen.mapSizeX / 2f + (highestThreatX + 1) * GameScreen.mapSizeX / GameScreen.grid_size) / 2f, (-GameScreen.mapSizeY / 2f + highestThreatY * GameScreen.mapSizeY / GameScreen.grid_size + -GameScreen.mapSizeY / 2f + (highestThreatY + 1) * GameScreen.mapSizeY / GameScreen.grid_size) / 2f);
-                        fleets.set(i, new Triple<>(fleets.get(i).getFirst(), fleets.get(i).getSecond(), true));
-                        break;
-                    }
+                if (minDistance != Double.MAX_VALUE && minPosX != fleets.get(l).getSecond().destX && minPosY != fleets.get(l).getSecond().destY) {
+                    fleets.get(l).getSecond().setDestination(minPosX, minPosY);
                 }
             }
         } catch (Exception e) {
@@ -508,18 +561,5 @@ class EnemyAI {
             System.out.println("Error in teamSize: " + e);
         }
         return teamSize;
-    }
-
-    public String toString() {
-        String teamNumber = "Team: " + team;
-        String teamResources = "Team Resources: " + GameScreen.resources[team - 1];
-        String buildingStatus = "buildingSpaceStation: " + flagShip.buildingSpaceStation + ", " + flagShip.countSpaceStation + " \n" +
-                "buildingResourceCollector: " + flagShip.buildingResourceCollector + ", " + flagShip.countResourceCollector + " \n" +
-                "buildingScout: " + flagShip.buildingScout + ", " + flagShip.countScout + " \n" +
-                "buildingFighter: " + flagShip.buildingFighter + ", " + flagShip.countFighter + " \n" +
-                "buildingBomber: " + flagShip.buildingBomber + ", " + flagShip.countBomber + " \n" +
-                "buildingLaserCruiser: " + flagShip.buildingLaserCruiser + ", " + flagShip.countLaserCruiser + " \n" +
-                "buildingBattleShip: " + flagShip.buildingBattleShip + ", " + flagShip.countBattleShip + " \n";
-        return teamNumber + "\n" + teamResources + "\n" + buildingStatus;
     }
 }

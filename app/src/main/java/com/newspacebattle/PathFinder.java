@@ -128,12 +128,15 @@ class PathFinder {
         while (ship.exists && ship.attacking) {
             try {
                 if (enemies.size() == 0) {
-                    ship.attacking = false;
                     ship.stop();
                     return;
                 }
                 if (!enemies.get(0).exists) {
                     enemies.remove(0);
+                    if (enemies.size() == 0) {
+                        ship.stop();
+                        return;
+                    }
                 }
                 destX = enemies.get(0).centerPosX;
                 destY = enemies.get(0).centerPosY;
@@ -321,7 +324,7 @@ class PathFinder {
     //Checks how close ship is to the destination
     private void checkDestination() {
         double stopDistance = ship.radius / 2;
-        if (pointOrObj && targetObj != null) {
+        if (pointOrObj) {
             destX = targetObj.centerPosX;
             destY = targetObj.centerPosY;
             stopDistance = (ship.radius + targetObj.radius) * 2;
