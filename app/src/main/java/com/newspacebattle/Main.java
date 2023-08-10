@@ -32,7 +32,7 @@ public class Main extends AppCompatActivity {
 
     static int screenX, screenY, movedX, movedY, formationSelected;
     static float miniX, miniY;
-    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart;
+    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart, victoryDefeat_pressed;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
@@ -61,7 +61,7 @@ public class Main extends AppCompatActivity {
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
     TextView numFormations, team1Blackboard;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
-    View decorView, gameView, bar, formationBar, guideView;
+    View decorView, gameView, bar, formationBar, guideView, victoryDefeat;
     MediaPlayer music;
 
     private ScaleGestureDetector mScaleDetector;
@@ -168,6 +168,10 @@ public class Main extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    public void victoryDefeat(View view){
+        victoryDefeat_pressed = true;
     }
 
     public void play(View view) {
@@ -423,14 +427,26 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                /*if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
+                if (GameScreen.gameOver && !GameScreen.botsOnly){
+                    if (!victoryDefeat_pressed){
+                        victoryDefeat.setVisibility(View.VISIBLE);
+                        if (GameScreen.victory){
+                            victoryDefeat.setBackground(getDrawable(R.drawable.ic_victory));
+                        } else {
+                            victoryDefeat.setBackground(getDrawable(R.drawable.ic_defeat));
+                        }
+                    } else {
+                        victoryDefeat.setVisibility(View.INVISIBLE);
+                    }
+                }
+                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
                     buildMenu.setVisibility(View.INVISIBLE);
-                }*/
+                }
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);
@@ -883,6 +899,7 @@ public class Main extends AppCompatActivity {
         circleFormation = findViewById(R.id.circleFormation);
         customFormation = findViewById(R.id.customFormation);
         numFormations = findViewById(R.id.numFormations);
+        victoryDefeat = findViewById(R.id.victoryDefeat);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected

@@ -16,11 +16,13 @@ class PathFinder {
     private final Ship ship;
     private GameObject targetObj;
     ArrayList<Ship> enemies;
+    ArrayList<GameObject> nearbyObjects;
 
     //Constructor method
     PathFinder(Ship ship) {
         this.ship = ship;
         enemies = new ArrayList<>();
+        nearbyObjects = new ArrayList<>();
     }
 
     //Go to these coordinates
@@ -140,12 +142,10 @@ class PathFinder {
                 }
                 destX = enemies.get(0).centerPosX;
                 destY = enemies.get(0).centerPosY;
-                PointObject direction = pathFind();
+                pathFind();
                 if (driveTime >= ship.driveTime) {
                     driveTime = 0;
-                    tempX = (float) direction.x;
-                    tempY = (float) direction.y;
-                    driveShip(direction.x, direction.y);
+                    driveShip(tempX, tempY);
                 }
                 driveTime += 5;
                 shootTime += 5;
@@ -164,21 +164,17 @@ class PathFinder {
     private void startFinder() {
         new Thread(() -> {
             Looper.prepare();
-            PointObject direction = pathFind();
-            tempX = (float) direction.x;
-            tempY = (float) direction.y;
+            pathFind();
             ship.degrees = (float) Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY);
-            driveShip(direction.x, direction.y);
+            driveShip(tempX, tempY);
             checkDestination();
             Utilities.delay(500);
             int time = 0;
             while (ship.exists && ship.destination) {
                 if (time >= 500) {
                     time = 0;
-                    direction = pathFind();
-                    tempX = (float) direction.x;
-                    tempY = (float) direction.y;
-                    driveShip(direction.x, direction.y);
+                    pathFind();
+                    driveShip(tempX, tempY);
                 }
                 checkDestination();
                 Utilities.delay(1);
@@ -187,10 +183,8 @@ class PathFinder {
         }).start();
     }
 
-    private PointObject pathFind() {
-        PointObject direction = new PointObject(destX, destY);
-        ArrayList<GameObject> nearbyObjects = new ArrayList<>();
-
+    private void pathFind() {
+        nearbyObjects.clear();
         try {
             for (int i = 0; i < GameScreen.objects.size(); i++) {
                 GameObject obj = GameScreen.objects.get(i);
@@ -247,7 +241,9 @@ class PathFinder {
             }
 
             if (nearbyObjects.size() == 0) {
-                return direction;
+                tempX = destX;
+                tempY = destY;
+                return;
             }
 
             final int MAX_POINTS = 16;
@@ -295,7 +291,9 @@ class PathFinder {
                     }
                 }
                 if (index == -1) {
-                    return direction;
+                    tempX = destX;
+                    tempY = destY;
+                    return;
                 }
             } else {
                 boolean allFalse = true;
@@ -306,19 +304,20 @@ class PathFinder {
                     }
                 }
                 if (allFalse) {
-                    return direction;
+                    tempX = destX;
+                    tempY = destY;
+                    return;
                 }
                 do {
                     index = (int) (Math.random() * MAX_POINTS);
                 } while (!possiblePoints[index]);
             }
             float angle = ship.degrees + (float) (index * (360 / MAX_POINTS));
-            direction.x = Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
-            direction.y = Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
+            tempX = (float) Utilities.circleAngleX(angle, ship.centerPosX, ship.avoidanceRadius);
+            tempY = (float) Utilities.circleAngleY(angle, ship.centerPosY, ship.avoidanceRadius);
         } catch (Exception e) {
             System.out.println("Error in pathFind: " + e);
         }
-        return direction;
     }
 
     //Checks how close ship is to the destination

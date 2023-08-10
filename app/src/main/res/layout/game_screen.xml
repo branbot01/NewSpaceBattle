@@ -1079,4 +1079,16 @@
         app:layout_constraintEnd_toStartOf="@+id/cancelScout"
         app:layout_constraintTop_toBottomOf="@+id/progressResourceCollector" />
 
+    <View
+        android:id="@+id/victoryDefeat"
+        android:layout_width="350dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="224dp"
+        android:background="@drawable/ic_defeat"
+        android:onClick="victoryDefeat"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
