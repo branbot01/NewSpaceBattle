@@ -453,9 +453,8 @@ public class Main extends AppCompatActivity {
                             selectShips.remove(selectShips.get(i));
                         }
                     }
-                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, flagShipCount = 0, scoutCount = 0;
+                    int spaceStationCount = 0, resourceCollectorCount = 0, dockableShipsCount = 0, scoutCount = 0;
                     SpaceStation spaceStation = null;
-                    FlagShip flagShip = null;
                     for (int i = 0; i <= selectShips.size() - 1; i++) {
                         if (selectShips.get(i) instanceof SpaceStation) {
                             spaceStationCount++;
@@ -469,10 +468,6 @@ public class Main extends AppCompatActivity {
                         }
                         if (selectShips.get(i).dockable) {
                             dockableShipsCount++;
-                        }
-                        if (selectShips.get(i) instanceof FlagShip) {
-                            flagShipCount++;
-                            flagShip = (FlagShip) selectShips.get(i);
                         }
                     }
                     if (spaceStationCount == 1) {
@@ -489,7 +484,13 @@ public class Main extends AppCompatActivity {
                     if (dockableShipsCount == 0) {
                         dock.setAlpha(0.5f);
                     }
-                    if (flagShipCount == 1) {
+                    FlagShip flagShip = null;
+                    for (int i = 0; i < GameScreen.flagShips.size(); i++) {
+                        if (GameScreen.flagShips.get(i).team == 1) {
+                            flagShip = GameScreen.flagShips.get(i);
+                        }
+                    }
+                    if (flagShip != null) {
                         if (flagShip.buildingResourceCollector) {
                             progressResourceCollector.setProgress((int) (flagShip.costCounter[6] / (double) (ResourceCollector.cost) * 100));
                         } else {
