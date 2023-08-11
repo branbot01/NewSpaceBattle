@@ -27,7 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 //Main class handles ui elements like the menus and buttons
-public class Main extends AppCompatActivity {
+public class Main extends AppCompatActivity{
 
     static int screenX, screenY, movedX, movedY, formationSelected;
     static float miniX, miniY;
@@ -55,6 +55,11 @@ public class Main extends AppCompatActivity {
     View title, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
     TextView parameterTitle, difficulty, enemies, galaxysize, resources, blackhole, bots;
+    TextView guideShipButton, guideFormationsButton, guideMiscellaneousButton, guideMenusButton;
+    TextView guideResourceCollectorButton, guideScoutButton, guideFighterButton, guideBomberButton, guideLaserCruiserButton, guideBattleShipButton, guideFlagShipButton, guideSpaceStationButton;
+    TextView guideRectangleFormationButton, guideVFormationButton, guideCircleFormationButton, guideCustomFormationButton;
+    TextView guideResourcesButton, guideSensorsButton, guideStarMapButton, guideBlackHoleButton;
+    TextView guideNormalMenuButton, guideSpecialMenuButton, guideCurrentFormationsMenuButton, guideBuildMenuButton;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -86,11 +91,17 @@ public class Main extends AppCompatActivity {
 
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
+        getGuideView();
         setContentView(R.layout.title_screen);
 
         music = MediaPlayer.create(getApplicationContext(), R.raw.space_battle_menu_music);
         music.setLooping(true);
         music.start();
+    }
+
+    public void getGuideView(){
+        setContentView(R.layout.guide);
+        guideView = findViewById(R.id.guide);
     }
 
     //When the app is resumed
@@ -158,9 +169,242 @@ public class Main extends AppCompatActivity {
     }
 
     public void guideButton(View view) {
-        setContentView(R.layout.guide);
-        guideView = findViewById(R.id.guide);
-        setContentView(R.layout.title_screen);
+        if (!loaded){
+            Button play = findViewById(R.id.play);
+            Button guide = findViewById(R.id.guide);
+            Button exit = findViewById(R.id.exit);
+            play.setVisibility(View.INVISIBLE);
+            guide.setVisibility(View.INVISIBLE);
+            exit.setVisibility(View.INVISIBLE);
+        }
+        addContentView(guideView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
+
+        guideShipButton = findViewById(R.id.guideShipButton);
+        guideFormationsButton = findViewById(R.id.guideFormationButton);
+        guideMiscellaneousButton = findViewById(R.id.guideMiscellaneousButton);
+        guideMenusButton = findViewById(R.id.guideMenusButton);
+
+        guideResourceCollectorButton = findViewById(R.id.guideResourceCollectorButton);
+        guideScoutButton = findViewById(R.id.guideScoutButton);
+        guideFighterButton = findViewById(R.id.guideFighterButton);
+        guideBomberButton = findViewById(R.id.guideBomberButton);
+        guideLaserCruiserButton = findViewById(R.id.guideLaserCruiserButton);
+        guideBattleShipButton = findViewById(R.id.guideBattleShipButton);
+        guideFlagShipButton = findViewById(R.id.guideFlagShipButton);
+        guideSpaceStationButton = findViewById(R.id.guideSpaceStationButton);
+
+        guideRectangleFormationButton = findViewById(R.id.guideRectangleFormationButton);
+        guideVFormationButton = findViewById(R.id.guideVFormationButton);
+        guideCircleFormationButton = findViewById(R.id.guideCircleFormationButton);
+        guideCustomFormationButton = findViewById(R.id.guideCustomFormationButton);
+
+        guideResourcesButton = findViewById(R.id.guideResourcesButton);
+        guideSensorsButton = findViewById(R.id.guideSensorsButton);
+        guideStarMapButton = findViewById(R.id.guideStarMapButton);
+        guideBlackHoleButton = findViewById(R.id.guideBlackHoleButton);
+
+        guideNormalMenuButton = findViewById(R.id.guideNormalMenuButton);
+        guideSpecialMenuButton = findViewById(R.id.guideSpecialMenuButton);
+        guideCurrentFormationsMenuButton = findViewById(R.id.guideCurrentFormationsMenuButton);
+        guideBuildMenuButton = findViewById(R.id.guideBuildMenuButton);
+
+        toggleOuterGuide(true);
+    }
+
+    public void guideBackButton(View view){
+        if (guideShipButton.getVisibility() == View.VISIBLE){
+            back_button(null);
+        } else if (guideResourceCollectorButton.getVisibility() == View.VISIBLE){
+            toggleShipsGuide(false);
+            toggleOuterGuide(true);
+        } else if (guideRectangleFormationButton.getVisibility() == View.VISIBLE){
+            toggleFormationsGuide(false);
+            toggleOuterGuide(true);
+        } else if (guideResourcesButton.getVisibility() == View.VISIBLE){
+            toggleMiscellaneousGuide(false);
+            toggleOuterGuide(true);
+        } else if (guideNormalMenuButton.getVisibility() == View.VISIBLE){
+            toggleMenusGuide(false);
+            toggleOuterGuide(true);
+        }
+    }
+
+    public void toggleOuterGuide(boolean visible){
+        if (visible){
+            guideShipButton.setVisibility(View.VISIBLE);
+            guideFormationsButton.setVisibility(View.VISIBLE);
+            guideMiscellaneousButton.setVisibility(View.VISIBLE);
+            guideMenusButton.setVisibility(View.VISIBLE);
+        } else {
+            guideShipButton.setVisibility(View.INVISIBLE);
+            guideFormationsButton.setVisibility(View.INVISIBLE);
+            guideMiscellaneousButton.setVisibility(View.INVISIBLE);
+            guideMenusButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleShipsGuide(boolean visible){
+        if (visible){
+            guideResourceCollectorButton.setVisibility(View.VISIBLE);
+            guideScoutButton.setVisibility(View.VISIBLE);
+            guideFighterButton.setVisibility(View.VISIBLE);
+            guideBomberButton.setVisibility(View.VISIBLE);
+            guideLaserCruiserButton.setVisibility(View.VISIBLE);
+            guideBattleShipButton.setVisibility(View.VISIBLE);
+            guideFlagShipButton.setVisibility(View.VISIBLE);
+            guideSpaceStationButton.setVisibility(View.VISIBLE);
+        } else {
+            guideResourceCollectorButton.setVisibility(View.INVISIBLE);
+            guideScoutButton.setVisibility(View.INVISIBLE);
+            guideFighterButton.setVisibility(View.INVISIBLE);
+            guideBomberButton.setVisibility(View.INVISIBLE);
+            guideLaserCruiserButton.setVisibility(View.INVISIBLE);
+            guideBattleShipButton.setVisibility(View.INVISIBLE);
+            guideFlagShipButton.setVisibility(View.INVISIBLE);
+            guideSpaceStationButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleFormationsGuide(boolean visible){
+        if (visible){
+            guideRectangleFormationButton.setVisibility(View.VISIBLE);
+            guideVFormationButton.setVisibility(View.VISIBLE);
+            guideCircleFormationButton.setVisibility(View.VISIBLE);
+            guideCustomFormationButton.setVisibility(View.VISIBLE);
+        } else {
+            guideRectangleFormationButton.setVisibility(View.INVISIBLE);
+            guideVFormationButton.setVisibility(View.INVISIBLE);
+            guideCircleFormationButton.setVisibility(View.INVISIBLE);
+            guideCustomFormationButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleMiscellaneousGuide(boolean visible){
+        if (visible){
+            guideResourcesButton.setVisibility(View.VISIBLE);
+            guideSensorsButton.setVisibility(View.VISIBLE);
+            guideStarMapButton.setVisibility(View.VISIBLE);
+            guideBlackHoleButton.setVisibility(View.VISIBLE);
+        } else {
+            guideResourcesButton.setVisibility(View.INVISIBLE);
+            guideSensorsButton.setVisibility(View.INVISIBLE);
+            guideStarMapButton.setVisibility(View.INVISIBLE);
+            guideBlackHoleButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleMenusGuide(boolean visible){
+        if (visible){
+            guideNormalMenuButton.setVisibility(View.VISIBLE);
+            guideSpecialMenuButton.setVisibility(View.VISIBLE);
+            guideCurrentFormationsMenuButton.setVisibility(View.VISIBLE);
+            guideBuildMenuButton.setVisibility(View.VISIBLE);
+        } else {
+            guideNormalMenuButton.setVisibility(View.INVISIBLE);
+            guideSpecialMenuButton.setVisibility(View.INVISIBLE);
+            guideCurrentFormationsMenuButton.setVisibility(View.INVISIBLE);
+            guideBuildMenuButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void guideShipsButton(View view){
+        toggleOuterGuide(false);
+        toggleShipsGuide(true);
+    }
+
+    public void guideFormationsButton(View view){
+        toggleOuterGuide(false);
+        toggleFormationsGuide(true);
+    }
+
+    public void guideMiscellaneousButton(View view){
+        toggleOuterGuide(false);
+        toggleMiscellaneousGuide(true);
+    }
+
+    public void guideMenusButton(View view){
+        toggleOuterGuide(false);
+        toggleMenusGuide(true);
+    }
+
+    public void guideResourceCollectorButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideScoutButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideFighterButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideBomberButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideLaserCruiserButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideBattleShipButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideFlagShipButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideSpaceStationButton(View view){
+        toggleShipsGuide(false);
+    }
+
+    public void guideRectangleFormationButton(View view){
+        toggleFormationsGuide(false);
+    }
+
+    public void guideVFormationButton(View view){
+        toggleFormationsGuide(false);
+    }
+
+    public void guideCircleFormationButton(View view){
+        toggleFormationsGuide(false);
+    }
+
+    public void guideCustomFormationButton(View view){
+        toggleFormationsGuide(false);
+    }
+
+    public void guideResourcesButton(View view){
+        toggleMiscellaneousGuide(false);
+    }
+
+    public void guideSensorsButton(View view){
+        toggleMiscellaneousGuide(false);
+    }
+
+    public void guideStarMapButton(View view){
+        toggleMiscellaneousGuide(false);
+    }
+
+    public void guideBlackHoleButton(View view){
+        toggleMiscellaneousGuide(false);
+    }
+
+    public void guideNormalMenuButton(View view){
+        toggleMenusGuide(false);
+    }
+
+    public void guideSpecialMenuButton(View view){
+        toggleMenusGuide(false);
+    }
+
+    public void guideCurrentFormationsMenuButton(View view){
+        toggleMenusGuide(false);
+    }
+
+    public void guideBuildMenuButton(View view){
+        toggleMenusGuide(false);
     }
 
     //If user hits back button
@@ -169,7 +413,7 @@ public class Main extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void victoryDefeat(View view){
+    public void victoryDefeat(View view) {
         victoryDefeat_pressed = true;
     }
 
@@ -369,7 +613,11 @@ public class Main extends AppCompatActivity {
     }
 
     public void back_button(View view) {
-        setContentView(R.layout.title_screen);
+        if (!loaded) {
+            setContentView(R.layout.title_screen);
+        } else {
+            ((ViewGroup) gameScreen.getParent()).removeView(guideView);
+        }
     }
 
     //Upon pressing play, sets up game
@@ -426,10 +674,10 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                if (GameScreen.gameOver && !GameScreen.botsOnly){
-                    if (!victoryDefeat_pressed){
+                if (GameScreen.gameOver && !GameScreen.botsOnly) {
+                    if (!victoryDefeat_pressed) {
                         victoryDefeat.setVisibility(View.VISIBLE);
-                        if (GameScreen.victory){
+                        if (GameScreen.victory) {
                             victoryDefeat.setBackground(getDrawable(R.drawable.ic_victory));
                         } else {
                             victoryDefeat.setBackground(getDrawable(R.drawable.ic_defeat));
@@ -438,14 +686,14 @@ public class Main extends AppCompatActivity {
                         victoryDefeat.setVisibility(View.INVISIBLE);
                     }
                 }
-                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
+                /*if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
                     buildMenu.setVisibility(View.INVISIBLE);
-                }
+                }*/
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);
@@ -614,11 +862,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void blackBoardClick(View view) {
-        scroller.post(new Runnable() {
-            public void run() {
-                scroller.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
+        scroller.post(() -> scroller.fullScroll(ScrollView.FOCUS_DOWN));
     }
 
     public void showBlackboard(View view) {
@@ -998,7 +1242,6 @@ public class Main extends AppCompatActivity {
         following = false;
 
         for (int i = 0; i <= selectShips.size() - 1; i++) {
-            selectShips.get(i).health = 0;
             if (selectShips.get(i) instanceof SpaceStation) {
                 GameScreen.resources[selectShips.get(i).team - 1] += SpaceStation.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
             } else if (selectShips.get(i) instanceof BattleShip) {
@@ -1015,6 +1258,7 @@ public class Main extends AppCompatActivity {
                 GameScreen.resources[selectShips.get(i).team - 1] += ResourceCollector.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
                 GameScreen.resources[selectShips.get(i).team - 1] += ((ResourceCollector) selectShips.get(i)).resources;
             }
+            selectShips.get(i).health = 0;
         }
 
         shipBar(false);

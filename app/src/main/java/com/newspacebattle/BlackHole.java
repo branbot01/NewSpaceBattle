@@ -58,9 +58,9 @@ class BlackHole extends GameObject {
         appearance.preScale(scaleFactor, scaleFactor);
         appearance.postTranslate(positionX, positionY);
 
-        outerLayer.setRotate(outerLayerDegrees, midX, midY);
-        outerLayer.postTranslate(positionX, positionY);
-        outerLayer.preScale(scaleFactor, scaleFactor);
+        outerLayer.setRotate(outerLayerDegrees, centerPosX + radius * 1.5f, centerPosY + radius * 1.5f);
+        outerLayer.preScale(scaleFactor * 1.5f, scaleFactor * 1.5f);
+        outerLayer.postTranslate(positionX - radius * 0.5f, positionY - radius * 0.5f);
     }
 
     //Pulls all nearby ships in and destroys them

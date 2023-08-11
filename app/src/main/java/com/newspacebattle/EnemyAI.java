@@ -146,8 +146,18 @@ class EnemyAI {
         }
         try {
             if (!flagShip.exists) {
+                String teamColor = "";
+                if (team == 1) {
+                    teamColor = "Blue";
+                } else if (team == 2) {
+                    teamColor = "Red";
+                } else if (team == 3) {
+                    teamColor = "Yellow";
+                } else if (team == 4) {
+                    teamColor = "Green";
+                }
                 for (int i = 0; i < GameScreen.blackboards.length; i++) {
-                    GameScreen.blackboards[i].addToLog("Team " + team + "'s flagship has been destroyed!");
+                    GameScreen.blackboards[i].addToLog(teamColor + "'s flagship has been destroyed!");
                 }
                 flagShip = null;
                 return;

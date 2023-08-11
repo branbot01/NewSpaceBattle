@@ -154,7 +154,7 @@ class PathFinder {
                     ship.accelerationY = ship.accelerate * (float) Math.cos(Utilities.anglePoints(ship.centerPosX, ship.centerPosY, tempX, tempY) * Math.PI / 180);
                 }
             } catch (Exception e) {
-                System.out.println("Error in startAttacker, : " + enemies.size());
+                System.out.println("Error in startAttacker, : " + e);
             }
             Utilities.delay(5);
         }
