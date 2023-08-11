@@ -15,7 +15,6 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import static android.view.View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -32,7 +31,7 @@ public class Main extends AppCompatActivity {
 
     static int screenX, screenY, movedX, movedY, formationSelected;
     static float miniX, miniY;
-    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart;
+    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart, victoryDefeat_pressed;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
@@ -61,7 +60,7 @@ public class Main extends AppCompatActivity {
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
     TextView numFormations, team1Blackboard;
     ProgressBar progressResourceCollector, progressScout, progressFighter, progressBomber, progressLaserCruiser, progressBattleShip, progressSpaceStation;
-    View decorView, gameView, bar, formationBar, guideView;
+    View decorView, gameView, bar, formationBar, guideView, victoryDefeat;
     MediaPlayer music;
 
     private ScaleGestureDetector mScaleDetector;
@@ -168,6 +167,10 @@ public class Main extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
+    }
+
+    public void victoryDefeat(View view){
+        victoryDefeat_pressed = true;
     }
 
     public void play(View view) {
@@ -423,14 +426,26 @@ public class Main extends AppCompatActivity {
         }
         selectionChecker.postDelayed(() -> {
             if (!GameScreen.paused) {
-                /*if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
+                if (GameScreen.gameOver && !GameScreen.botsOnly){
+                    if (!victoryDefeat_pressed){
+                        victoryDefeat.setVisibility(View.VISIBLE);
+                        if (GameScreen.victory){
+                            victoryDefeat.setBackground(getDrawable(R.drawable.ic_victory));
+                        } else {
+                            victoryDefeat.setBackground(getDrawable(R.drawable.ic_defeat));
+                        }
+                    } else {
+                        victoryDefeat.setVisibility(View.INVISIBLE);
+                    }
+                }
+                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
                     buildMenu.setVisibility(View.INVISIBLE);
-                }*/
+                }
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);
@@ -820,7 +835,7 @@ public class Main extends AppCompatActivity {
         formationBar = findViewById(R.id.bottomFormationBar);
         move = findViewById(R.id.moveButton);
         stop = findViewById(R.id.stopButton);
-        destroy = findViewById(R.id.destroyButton);
+        destroy = findViewById(R.id.salvageButton);
         select = findViewById(R.id.select);
         formation = findViewById(R.id.formationButton);
         attack = findViewById(R.id.attackButton);
@@ -883,6 +898,7 @@ public class Main extends AppCompatActivity {
         circleFormation = findViewById(R.id.circleFormation);
         customFormation = findViewById(R.id.customFormation);
         numFormations = findViewById(R.id.numFormations);
+        victoryDefeat = findViewById(R.id.victoryDefeat);
     }
 
     //Either hides or shows the ship options bar depending if any ships are selected
@@ -977,12 +993,28 @@ public class Main extends AppCompatActivity {
         clearSelectionReferences();
     }
 
-    //Destroys selected ships
-    public void destroyShip(View view) {
+    //Salvages selected ships
+    public void salvageShip(View view) {
         following = false;
 
         for (int i = 0; i <= selectShips.size() - 1; i++) {
             selectShips.get(i).health = 0;
+            if (selectShips.get(i) instanceof SpaceStation) {
+                GameScreen.resources[selectShips.get(i).team - 1] += SpaceStation.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof BattleShip) {
+                GameScreen.resources[selectShips.get(i).team - 1] += BattleShip.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof LaserCruiser) {
+                GameScreen.resources[selectShips.get(i).team - 1] += LaserCruiser.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof Bomber) {
+                GameScreen.resources[selectShips.get(i).team - 1] += Bomber.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof Fighter) {
+                GameScreen.resources[selectShips.get(i).team - 1] += Fighter.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof Scout) {
+                GameScreen.resources[selectShips.get(i).team - 1] += Scout.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+            } else if (selectShips.get(i) instanceof ResourceCollector) {
+                GameScreen.resources[selectShips.get(i).team - 1] += ResourceCollector.cost * 0.5 * selectShips.get(i).health / selectShips.get(i).MAX_HEALTH;
+                GameScreen.resources[selectShips.get(i).team - 1] += ((ResourceCollector) selectShips.get(i)).resources;
+            }
         }
 
         shipBar(false);

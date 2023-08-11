@@ -373,14 +373,14 @@
         app:srcCompat="@drawable/ic_followicon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/destroyButton"
+        android:id="@+id/salvageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="56dp"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="destroyShip"
+        android:onClick="salvageShip"
         android:visibility="invisible"
         app:backgroundTint="@android:color/white"
         app:fabSize="mini"
@@ -744,7 +744,7 @@
         app:backgroundTint="@android:color/white"
         app:fabCustomSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/destroyButton"
+        app:layout_constraintEnd_toStartOf="@+id/salvageButton"
         app:srcCompat="@drawable/ic_resourcecollector" />
 
     <TextView
@@ -1078,5 +1078,17 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/cancelScout"
         app:layout_constraintTop_toBottomOf="@+id/progressResourceCollector" />
+
+    <View
+        android:id="@+id/victoryDefeat"
+        android:layout_width="350dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="224dp"
+        android:background="@drawable/ic_defeat"
+        android:onClick="victoryDefeat"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
