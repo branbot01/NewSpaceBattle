@@ -1,5 +1,7 @@
 package com.newspacebattle;
 
+import android.graphics.Matrix;
+
 /**
  * Created by Dylan on 2018-06-30. Defines a black hole object.
  */
@@ -7,6 +9,8 @@ class BlackHole extends GameObject {
 
     private final int scaleFactor = 20;
     final float pullDistance = scaleFactor * 0.2083f;
+    int outerLayerDegrees;
+    Matrix outerLayer = new Matrix();
 
     //Constructor method
     BlackHole(int x, int y) {
@@ -21,21 +25,30 @@ class BlackHole extends GameObject {
         centerPosX = positionX + midX;
         centerPosY = positionY + midY;
         radius = width / 2;
-        degrees = 0;
+        degrees = 360;
+        outerLayerDegrees = 360;
     }
 
     //Updates the object's properties
     void update() {
         pullShips();
         setRotation();
+        setRotationOuterLayer();
         rotate();
     }
 
     //Determines the black hole's angle
     private void setRotation() {
-        degrees += 4;
-        if (degrees == 360) {
-            degrees = 0;
+        degrees -= 4;
+        if (degrees == 0) {
+            degrees = 360;
+        }
+    }
+
+    private void setRotationOuterLayer(){
+        outerLayerDegrees -= 2;
+        if (outerLayerDegrees == 0) {
+            outerLayerDegrees = 360;
         }
     }
 
@@ -44,6 +57,10 @@ class BlackHole extends GameObject {
         appearance.setRotate(degrees, midX, midY);
         appearance.preScale(scaleFactor, scaleFactor);
         appearance.postTranslate(positionX, positionY);
+
+        outerLayer.setRotate(outerLayerDegrees, midX, midY);
+        outerLayer.postTranslate(positionX, positionY);
+        outerLayer.preScale(scaleFactor, scaleFactor);
     }
 
     //Pulls all nearby ships in and destroys them

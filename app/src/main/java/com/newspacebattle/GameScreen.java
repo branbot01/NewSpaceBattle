@@ -51,7 +51,7 @@ public class GameScreen extends View {
     static ArrayList<Explosion> explosions = new ArrayList<>();
 
     static Bitmap bitFlagShip, enFlagShip1, enFlagShip2, enFlagShip3;
-    static Bitmap bitArrow, bitHarvestArrow, bitBlackHole, bitAsteroid, bitStar;
+    static Bitmap bitArrow, bitHarvestArrow, bitBlackHole1, bitBlackHole2, bitAsteroid, bitStar;
     static Bitmap bitResCollector, enResCollector1, enResCollector2, enResCollector3;
     static Bitmap bitFighter, enFighter1, enFighter2, enFighter3;
     static Bitmap bitBattleShip, enBattleShip1, enBattleShip2, enBattleShip3;
@@ -73,7 +73,8 @@ public class GameScreen extends View {
 
         Thread bitLoader = new Thread(() -> {
             bitArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_greenarrow)), Main.screenX / 6, Main.screenY / 9, true);
-            bitBlackHole = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackhole)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+            bitBlackHole1 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholelayer1)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+            bitBlackHole2 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholelayer2)), (int) (Main.screenX ), (int) (Main.screenY / circleRatio), true);
             bitHarvestArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_yellowarrow)), Main.screenX / 6, Main.screenY / 9, true);
             bitAsteroid = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_asteroid)), (int) (Main.screenX / 4.5), (int) (Main.screenY / circleRatio / 4.5), true);
             bitStar = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_star)), Main.screenX / 6, (int) (Main.screenY / 6 / circleRatio), true);
@@ -939,7 +940,8 @@ public class GameScreen extends View {
 
             for (int i = 0; i <= blackHole.size() - 1; i++) {
                 if (blackHole.get(i).centerPosX + blackHole.get(i).radius >= offsetX / scaleX && blackHole.get(i).centerPosX - blackHole.get(i).radius <= offsetX / scaleX + extraOffsetX && blackHole.get(i).centerPosY + blackHole.get(i).radius >= offsetY / scaleY && blackHole.get(i).centerPosY - blackHole.get(i).radius <= offsetY / scaleY + extraOffsetY) {
-                    canvas.drawBitmap(bitBlackHole, blackHole.get(i).appearance, null);
+                    canvas.drawBitmap(bitBlackHole1, blackHole.get(i).appearance, null);
+                    canvas.drawBitmap(bitBlackHole2, blackHole.get(i).outerLayer, null);
                 }
             }
 
