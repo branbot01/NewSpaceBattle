@@ -370,7 +370,7 @@
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/shipModeButton"
-        app:srcCompat="@drawable/followicon" />
+        app:srcCompat="@drawable/ic_followicon" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/destroyButton"
@@ -386,7 +386,7 @@
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/followButton"
-        app:srcCompat="@drawable/explosion" />
+        app:srcCompat="@drawable/ic_salvage" />
 
     <Button
         android:id="@+id/specialButton"
@@ -464,7 +464,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dockMenuButton"
         app:rippleColor="@android:color/holo_blue_dark"
-        app:srcCompat="@drawable/ic_spacestation" />
+        app:srcCompat="@drawable/ic_dockbutton" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/dockMenuButton"
@@ -480,7 +480,7 @@
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_fighter" />
+        app:srcCompat="@drawable/ic_dockmenubutton" />
 
     <Button
         android:id="@+id/dockedShipsButton"
