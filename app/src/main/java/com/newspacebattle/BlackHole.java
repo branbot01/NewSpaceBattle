@@ -9,8 +9,9 @@ class BlackHole extends GameObject {
 
     private final int scaleFactor = 20;
     final float pullDistance = scaleFactor * 0.2083f;
-    int outerLayerDegrees;
-    Matrix outerLayer = new Matrix();
+    int outerLayerDegrees, middleLayer1Degrees, middleLayer2Degrees, middleLayer3Degrees;
+    Matrix outerLayer = new Matrix(), middleLayer1 = new Matrix(), middleLayer2 = new Matrix(), middleLayer3 = new Matrix();
+
 
     //Constructor method
     BlackHole(int x, int y) {
@@ -27,6 +28,10 @@ class BlackHole extends GameObject {
         radius = width / 2;
         degrees = 360;
         outerLayerDegrees = 360;
+        middleLayer1Degrees = 0;
+        middleLayer2Degrees = 0;
+        middleLayer3Degrees = 0;
+
     }
 
     //Updates the object's properties
@@ -34,6 +39,9 @@ class BlackHole extends GameObject {
         pullShips();
         setRotation();
         setRotationOuterLayer();
+        setRotationMiddleLayer1();
+        setRotationMiddleLayer2();
+        setRotationMiddleLayer3();
         rotate();
     }
 
@@ -46,9 +54,42 @@ class BlackHole extends GameObject {
     }
 
     private void setRotationOuterLayer(){
-        outerLayerDegrees -= 2;
+        outerLayerDegrees -= 1;
         if (outerLayerDegrees == 0) {
             outerLayerDegrees = 360;
+        }
+    }
+
+    private void setRotationMiddleLayer1(){
+        if (middleLayer1Degrees == 360) {
+            middleLayer1Degrees = 0;
+            middleLayer1Degrees += 2;
+        }else if(middleLayer1Degrees >= 120 && middleLayer1Degrees <= 240){
+            middleLayer1Degrees += 6;
+        }else{
+            middleLayer1Degrees += 2;
+        }
+    }
+
+    private void setRotationMiddleLayer2(){
+        if (middleLayer2Degrees == 360) {
+            middleLayer2Degrees = 0;
+            middleLayer2Degrees += 2;
+        }else if(middleLayer2Degrees >= 70 && middleLayer2Degrees <= 190){
+            middleLayer2Degrees += 6;
+        }else{
+            middleLayer2Degrees += 2;
+        }
+    }
+
+    private void setRotationMiddleLayer3(){
+        if (middleLayer3Degrees == 360) {
+            middleLayer3Degrees = 0;
+            middleLayer3Degrees += 6;
+        }else if(middleLayer3Degrees <= 60 || middleLayer3Degrees >= 300 ){
+            middleLayer3Degrees += 6;
+        }else{
+            middleLayer3Degrees += 2;
         }
     }
 
@@ -61,6 +102,18 @@ class BlackHole extends GameObject {
         outerLayer.setRotate(outerLayerDegrees, centerPosX + radius * 1.5f, centerPosY + radius * 1.5f);
         outerLayer.preScale(scaleFactor * 1.5f, scaleFactor * 1.5f);
         outerLayer.postTranslate(positionX - radius * 0.5f, positionY - radius * 0.5f);
+
+        middleLayer1.setRotate(middleLayer1Degrees, centerPosX + radius * 1.5f, centerPosY + radius * 1.5f);
+        middleLayer1.preScale(scaleFactor * 1.5f, scaleFactor * 1.5f);
+        middleLayer1.postTranslate(positionX - radius * 0.5f, positionY - radius * 0.5f);
+
+        middleLayer2.setRotate(middleLayer2Degrees, centerPosX + radius * 1.5f, centerPosY + radius * 1.5f);
+        middleLayer2.preScale(scaleFactor * 1.5f, scaleFactor * 1.5f);
+        middleLayer2.postTranslate(positionX - radius * 0.5f, positionY - radius * 0.5f);
+
+        middleLayer3.setRotate(middleLayer3Degrees, centerPosX + radius * 1.5f, centerPosY + radius * 1.5f);
+        middleLayer3.preScale(scaleFactor * 1.5f, scaleFactor * 1.5f);
+        middleLayer3.postTranslate(positionX - radius * 0.5f, positionY - radius * 0.5f);
     }
 
     //Pulls all nearby ships in and destroys them

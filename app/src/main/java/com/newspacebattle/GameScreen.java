@@ -51,7 +51,7 @@ public class GameScreen extends View {
     static ArrayList<Explosion> explosions = new ArrayList<>();
 
     static Bitmap bitFlagShip, enFlagShip1, enFlagShip2, enFlagShip3;
-    static Bitmap bitArrow, bitHarvestArrow, bitBlackHole1, bitBlackHole2, bitAsteroid, bitStar;
+    static Bitmap bitArrow, bitHarvestArrow, bitBlackHole1, bitBlackHole2, bitBlackHoleMiddle1, bitBlackHoleMiddle2, bitBlackHoleMiddle3, bitAsteroid, bitStar;
     static Bitmap bitResCollector, enResCollector1, enResCollector2, enResCollector3;
     static Bitmap bitFighter, enFighter1, enFighter2, enFighter3;
     static Bitmap bitBattleShip, enBattleShip1, enBattleShip2, enBattleShip3;
@@ -74,7 +74,10 @@ public class GameScreen extends View {
         Thread bitLoader = new Thread(() -> {
             bitArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_greenarrow)), Main.screenX / 6, Main.screenY / 9, true);
             bitBlackHole1 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholelayer1)), Main.screenX, (int) (Main.screenY / circleRatio), true);
-            bitBlackHole2 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholelayer2)), (int) (Main.screenX ), (int) (Main.screenY / circleRatio), true);
+            bitBlackHole2 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholelayer2)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+            bitBlackHoleMiddle1 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholemiddlelayer1)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+            bitBlackHoleMiddle2 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholemiddlelayer2)), Main.screenX, (int) (Main.screenY / circleRatio), true);
+            bitBlackHoleMiddle3 = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_blackholemiddlelayer3)), Main.screenX, (int) (Main.screenY / circleRatio), true);
             bitHarvestArrow = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_yellowarrow)), Main.screenX / 6, Main.screenY / 9, true);
             bitAsteroid = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_asteroid)), (int) (Main.screenX / 4.5), (int) (Main.screenY / circleRatio / 4.5), true);
             bitStar = Bitmap.createScaledBitmap(drawableToBitmap(getResources().getDrawable(R.drawable.ic_star)), Main.screenX / 6, (int) (Main.screenY / 6 / circleRatio), true);
@@ -942,6 +945,9 @@ public class GameScreen extends View {
                 if (blackHole.get(i).centerPosX + blackHole.get(i).radius >= offsetX / scaleX && blackHole.get(i).centerPosX - blackHole.get(i).radius <= offsetX / scaleX + extraOffsetX && blackHole.get(i).centerPosY + blackHole.get(i).radius >= offsetY / scaleY && blackHole.get(i).centerPosY - blackHole.get(i).radius <= offsetY / scaleY + extraOffsetY) {
                     canvas.drawBitmap(bitBlackHole1, blackHole.get(i).appearance, null);
                     canvas.drawBitmap(bitBlackHole2, blackHole.get(i).outerLayer, null);
+                    canvas.drawBitmap(bitBlackHoleMiddle1, blackHole.get(i).middleLayer1, null);
+                    canvas.drawBitmap(bitBlackHoleMiddle2, blackHole.get(i).middleLayer2, null);
+                    canvas.drawBitmap(bitBlackHoleMiddle3, blackHole.get(i).middleLayer3, null);
                 }
             }
 
