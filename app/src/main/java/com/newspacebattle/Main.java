@@ -29,9 +29,9 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 //Main class handles ui elements like the menus and buttons
 public class Main extends AppCompatActivity{
 
-    static int screenX, screenY, movedX, movedY, formationSelected;
+    static int screenX, screenY, movedX, movedY, formationSelected, guidePage;
     static float miniX, miniY;
-    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart, victoryDefeat_pressed;
+    static boolean pressed, startSelection, selection, startAttack, following, loaded, minimapOn, restart, victoryDefeat_pressed, guideActive;
     static ArrayList<Ship> selectShips = new ArrayList<>(), enemySelect = new ArrayList<>();
     static int uiOptions;
     static Handler refresh = new Handler(), startUp = new Handler(), selectionChecker = new Handler();
@@ -59,7 +59,12 @@ public class Main extends AppCompatActivity{
     TextView guideResourceCollectorButton, guideScoutButton, guideFighterButton, guideBomberButton, guideLaserCruiserButton, guideBattleShipButton, guideFlagShipButton, guideSpaceStationButton;
     TextView guideRectangleFormationButton, guideVFormationButton, guideCircleFormationButton, guideCustomFormationButton;
     TextView guideResourcesButton, guideSensorsButton, guideStarMapButton, guideBlackHoleButton;
-    TextView guideNormalMenuButton, guideSpecialMenuButton, guideCurrentFormationsMenuButton, guideBuildMenuButton;
+    TextView guideNormalMenuButton, guideSpecialMenuButton, guideCurrentFormationsMenuButton;
+    TextView guideMoveButton, guideStopButton, guideTargetButton, guideAutoAttackButton, guideFollowButton, guideSalvageButton, guideMenuButton;
+    TextView guideAutoScoutButton, guideGetResourcesButton, guideDockButton, guideDockedShipsMenuButton;
+    TextView guideBackToNormalButton, guideNextFormationButton, guideDisbandFormationButton;
+    TextView guideDescription;
+    View guideImage;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -169,6 +174,14 @@ public class Main extends AppCompatActivity{
     }
 
     public void guideButton(View view) {
+        if (!guideActive){
+            guideActive = true;
+        } else {
+            return;
+        }
+
+        guidePage = 0;
+
         if (!loaded){
             Button play = findViewById(R.id.play);
             Button guide = findViewById(R.id.guide);
@@ -206,7 +219,26 @@ public class Main extends AppCompatActivity{
         guideNormalMenuButton = findViewById(R.id.guideNormalMenuButton);
         guideSpecialMenuButton = findViewById(R.id.guideSpecialMenuButton);
         guideCurrentFormationsMenuButton = findViewById(R.id.guideCurrentFormationsMenuButton);
-        guideBuildMenuButton = findViewById(R.id.guideBuildMenuButton);
+
+        guideMoveButton = findViewById(R.id.guideMoveButton);
+        guideStopButton = findViewById(R.id.guideStopButton);
+        guideTargetButton = findViewById(R.id.guideTargetButton);
+        guideAutoAttackButton = findViewById(R.id.guideAutoAttackButton);
+        guideFollowButton = findViewById(R.id.guideFollowButton);
+        guideSalvageButton = findViewById(R.id.guideSalvageButton);
+        guideMenuButton = findViewById(R.id.guideMenuButton);
+
+        guideAutoScoutButton = findViewById(R.id.guideAutoScoutButton);
+        guideGetResourcesButton = findViewById(R.id.guideGetResourcesButton);
+        guideDockButton = findViewById(R.id.guideDockButton);
+        guideDockedShipsMenuButton = findViewById(R.id.guideDockedShipsMenuButton);
+
+        guideBackToNormalButton = findViewById(R.id.guideBackToNormalButton);
+        guideNextFormationButton = findViewById(R.id.guideNextFormationButton);
+        guideDisbandFormationButton = findViewById(R.id.guideDisbandFormationButton);
+
+        guideDescription = findViewById(R.id.guideDescription);
+        guideImage = findViewById(R.id.guideImage);
 
         toggleOuterGuide(true);
     }
@@ -214,6 +246,7 @@ public class Main extends AppCompatActivity{
     public void guideBackButton(View view){
         if (guideShipButton.getVisibility() == View.VISIBLE){
             back_button(null);
+            guideActive = false;
         } else if (guideResourceCollectorButton.getVisibility() == View.VISIBLE){
             toggleShipsGuide(false);
             toggleOuterGuide(true);
@@ -226,6 +259,43 @@ public class Main extends AppCompatActivity{
         } else if (guideNormalMenuButton.getVisibility() == View.VISIBLE){
             toggleMenusGuide(false);
             toggleOuterGuide(true);
+        } else if (guideMoveButton.getVisibility() == View.VISIBLE){
+            toggleNormalMenuGuide(false);
+            toggleMenusGuide(true);
+        } else if (guideAutoScoutButton.getVisibility() == View.VISIBLE){
+            toggleSpecialMenuGuide(false);
+            toggleMenusGuide(true);
+        } else if (guideBackToNormalButton.getVisibility() == View.VISIBLE){
+            toggleCurrentFormationsGuide(false);
+            toggleMenusGuide(true);
+        } else if (guidePage == 1) {
+            toggleShipsGuide(true);
+            toggleGuideEntry(false);
+        } else if (guidePage == 2) {
+            toggleFormationsGuide(true);
+            toggleGuideEntry(false);
+        } else if (guidePage == 3) {
+            toggleMiscellaneousGuide(true);
+            toggleGuideEntry(false);
+        } else if (guidePage == 4) {
+            toggleNormalMenuGuide(true);
+            toggleGuideEntry(false);
+        } else if (guidePage == 5) {
+            toggleSpecialMenuGuide(true);
+            toggleGuideEntry(false);
+        } else if (guidePage == 6) {
+            toggleCurrentFormationsGuide(true);
+            toggleGuideEntry(false);
+        }
+    }
+
+    public void toggleGuideEntry(boolean visible){
+        if (visible){
+            guideDescription.setVisibility(View.VISIBLE);
+            guideImage.setVisibility(View.VISIBLE);
+        } else {
+            guideDescription.setVisibility(View.INVISIBLE);
+            guideImage.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -298,12 +368,56 @@ public class Main extends AppCompatActivity{
             guideNormalMenuButton.setVisibility(View.VISIBLE);
             guideSpecialMenuButton.setVisibility(View.VISIBLE);
             guideCurrentFormationsMenuButton.setVisibility(View.VISIBLE);
-            guideBuildMenuButton.setVisibility(View.VISIBLE);
         } else {
             guideNormalMenuButton.setVisibility(View.INVISIBLE);
             guideSpecialMenuButton.setVisibility(View.INVISIBLE);
             guideCurrentFormationsMenuButton.setVisibility(View.INVISIBLE);
-            guideBuildMenuButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleNormalMenuGuide(boolean visible){
+        if (visible){
+            guideMoveButton.setVisibility(View.VISIBLE);
+            guideStopButton.setVisibility(View.VISIBLE);
+            guideTargetButton.setVisibility(View.VISIBLE);
+            guideAutoAttackButton.setVisibility(View.VISIBLE);
+            guideFollowButton.setVisibility(View.VISIBLE);
+            guideSalvageButton.setVisibility(View.VISIBLE);
+            guideMenuButton.setVisibility(View.VISIBLE);
+        } else {
+            guideMoveButton.setVisibility(View.INVISIBLE);
+            guideStopButton.setVisibility(View.INVISIBLE);
+            guideTargetButton.setVisibility(View.INVISIBLE);
+            guideAutoAttackButton.setVisibility(View.INVISIBLE);
+            guideFollowButton.setVisibility(View.INVISIBLE);
+            guideSalvageButton.setVisibility(View.INVISIBLE);
+            guideMenuButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleSpecialMenuGuide(boolean visible){
+        if (visible){
+            guideAutoScoutButton.setVisibility(View.VISIBLE);
+            guideGetResourcesButton.setVisibility(View.VISIBLE);
+            guideDockButton.setVisibility(View.VISIBLE);
+            guideDockedShipsMenuButton.setVisibility(View.VISIBLE);
+        } else {
+            guideAutoScoutButton.setVisibility(View.INVISIBLE);
+            guideGetResourcesButton.setVisibility(View.INVISIBLE);
+            guideDockButton.setVisibility(View.INVISIBLE);
+            guideDockedShipsMenuButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void toggleCurrentFormationsGuide(boolean visible){
+        if (visible){
+            guideBackToNormalButton.setVisibility(View.VISIBLE);
+            guideNextFormationButton.setVisibility(View.VISIBLE);
+            guideDisbandFormationButton.setVisibility(View.VISIBLE);
+        } else {
+            guideBackToNormalButton.setVisibility(View.INVISIBLE);
+            guideNextFormationButton.setVisibility(View.INVISIBLE);
+            guideDisbandFormationButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -329,82 +443,235 @@ public class Main extends AppCompatActivity{
 
     public void guideResourceCollectorButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.resource_collector_description);
+        guideImage.setBackgroundResource(R.drawable.ic_resourcecollector);
     }
 
     public void guideScoutButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.scout_description);
+        guideImage.setBackgroundResource(R.drawable.ic_scout);
     }
 
     public void guideFighterButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.fighter_description);
+        guideImage.setBackgroundResource(R.drawable.ic_fighter);
     }
 
     public void guideBomberButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.bomber_description);
+        guideImage.setBackgroundResource(R.drawable.ic_bomber);
     }
 
     public void guideLaserCruiserButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.laser_cruiser_description);
+        guideImage.setBackgroundResource(R.drawable.ic_lasercruiser);
     }
 
     public void guideBattleShipButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.battleship_description);
+        guideImage.setBackgroundResource(R.drawable.ic_battleship);
     }
 
     public void guideFlagShipButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.flagship_description);
+        guideImage.setBackgroundResource(R.drawable.ic_flagship);
     }
 
     public void guideSpaceStationButton(View view){
         toggleShipsGuide(false);
+        guidePage = 1;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.space_station_description);
+        guideImage.setBackgroundResource(R.drawable.ic_dockbutton);
     }
 
     public void guideRectangleFormationButton(View view){
         toggleFormationsGuide(false);
+        guidePage = 2;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.rectangle_formation);
     }
 
     public void guideVFormationButton(View view){
         toggleFormationsGuide(false);
+        guidePage = 2;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.v_formation);
     }
 
     public void guideCircleFormationButton(View view){
         toggleFormationsGuide(false);
+        guidePage = 2;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.circle_formation);
     }
 
     public void guideCustomFormationButton(View view){
         toggleFormationsGuide(false);
+        guidePage = 2;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.custom_formation);
     }
 
     public void guideResourcesButton(View view){
         toggleMiscellaneousGuide(false);
+        guidePage = 3;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.resources_text);
     }
 
     public void guideSensorsButton(View view){
         toggleMiscellaneousGuide(false);
+        guidePage = 3;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.sensors_text);
     }
 
     public void guideStarMapButton(View view){
         toggleMiscellaneousGuide(false);
+        guidePage = 3;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.star_map_text);
     }
 
     public void guideBlackHoleButton(View view){
         toggleMiscellaneousGuide(false);
+        guidePage = 3;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.black_hole_text);
     }
 
     public void guideNormalMenuButton(View view){
         toggleMenusGuide(false);
+        toggleNormalMenuGuide(true);
     }
 
     public void guideSpecialMenuButton(View view){
         toggleMenusGuide(false);
+        toggleSpecialMenuGuide(true);
     }
 
     public void guideCurrentFormationsMenuButton(View view){
         toggleMenusGuide(false);
+        toggleCurrentFormationsGuide(true);
     }
 
-    public void guideBuildMenuButton(View view){
-        toggleMenusGuide(false);
+    public void guideMoveButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.move_button_description);
+    }
+
+    public void guideStopButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.stop_button_description);
+    }
+
+    public void guideTargetButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.target_button_description);
+    }
+
+    public void guideAutoAttackButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.autoattack_button_description);
+    }
+
+    public void guideFollowButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.view_button_description);
+    }
+
+    public void guideSalvageButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.salvage_button_description);
+    }
+
+    public void guideMenuButton(View view){
+        toggleNormalMenuGuide(false);
+        guidePage = 4;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.menu_button_description);
+    }
+
+    public void guideAutoScoutButton(View view){
+        toggleSpecialMenuGuide(false);
+        guidePage = 5;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.auto_scout_button);
+    }
+
+    public void guideGetResourcesButton(View view){
+        toggleSpecialMenuGuide(false);
+        guidePage = 5;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.resource_collector_button);
+    }
+
+    public void guideDockButton(View view){
+        toggleSpecialMenuGuide(false);
+        guidePage = 5;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.dock_button);
+    }
+
+    public void guideDockedShipsMenuButton(View view){
+        toggleSpecialMenuGuide(false);
+        guidePage = 5;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.docked_ships_menu_button);
+    }
+
+    public void guideBackToNormalButton(View view){
+        toggleCurrentFormationsGuide(false);
+        guidePage = 6;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.back_button_description);
+    }
+
+    public void guideNextFormationButton(View view){
+        toggleCurrentFormationsGuide(false);
+        guidePage = 6;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.next_formation_button_description);
+    }
+
+    public void guideDisbandFormationButton(View view){
+        toggleCurrentFormationsGuide(false);
+        guidePage = 6;
+        toggleGuideEntry(true);
+        guideDescription.setText(R.string.disband_formation_button_description);
     }
 
     //If user hits back button
