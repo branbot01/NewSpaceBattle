@@ -186,9 +186,11 @@ public class Main extends AppCompatActivity{
             Button play = findViewById(R.id.play);
             Button guide = findViewById(R.id.guide);
             Button exit = findViewById(R.id.exit);
+            View gameTitle = findViewById(R.id.gametitle);
             play.setVisibility(View.INVISIBLE);
             guide.setVisibility(View.INVISIBLE);
             exit.setVisibility(View.INVISIBLE);
+            gameTitle.setVisibility(View.INVISIBLE);
         }
         addContentView(guideView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
 

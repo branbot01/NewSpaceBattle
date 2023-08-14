@@ -334,7 +334,18 @@ class EnemyAI {
                     System.out.println("Error in assessFreeShips1: " + e);
                 }
             }
+            try {
+                flagShip.autoAttack = true;
+            } catch (Exception e) {
+                System.out.println("Error in assessFreeShips2: " + e);
+            }
             return;
+        } else {
+            try {
+                flagShip.autoAttack = false;
+            } catch (Exception e) {
+                System.out.println("Error in assessFreeShips3: " + e);
+            }
         }
 
         try {
