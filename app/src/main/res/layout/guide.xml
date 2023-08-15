@@ -817,6 +817,17 @@
         app:layout_constraintStart_toStartOf="@+id/guideBackground" />
 
     <View
+        android:id="@+id/guideImageWhiteCircle"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/ic_whitecircleicon"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/guideSalvageButton"
+        app:layout_constraintEnd_toEndOf="@+id/guideBackground"
+        app:layout_constraintStart_toStartOf="@+id/guideBackground" />
+
+    <View
         android:id="@+id/guideImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
