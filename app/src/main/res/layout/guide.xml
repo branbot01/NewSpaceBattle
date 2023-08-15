@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39" />
+        app:layout_constraintVertical_bias="0.31" />
 
     <TextView
         android:id="@+id/guideShipButton"
@@ -803,12 +803,13 @@
 
     <TextView
         android:id="@+id/guideDescription"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="185dp"
+        android:layout_height="224dp"
+        android:layout_marginBottom="70dp"
         android:fontFamily="monospace"
         android:textAlignment="textStart"
         android:textColor="@color/design_default_color_background"
+        android:textSize="11sp"
         android:typeface="monospace"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/guideBackground"
@@ -819,7 +820,7 @@
         android:id="@+id/guideImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="100dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/guideSalvageButton"
         app:layout_constraintEnd_toEndOf="@+id/guideBackground"

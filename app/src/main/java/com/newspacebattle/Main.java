@@ -64,7 +64,7 @@ public class Main extends AppCompatActivity{
     TextView guideAutoScoutButton, guideGetResourcesButton, guideDockButton, guideDockedShipsMenuButton;
     TextView guideBackToNormalButton, guideNextFormationButton, guideDisbandFormationButton;
     TextView guideDescription;
-    View guideImage;
+    View guideImage, guideBackground;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -194,6 +194,8 @@ public class Main extends AppCompatActivity{
         }
         addContentView(guideView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
 
+        guideBackground = findViewById(R.id.guideBackground);
+
         guideShipButton = findViewById(R.id.guideShipButton);
         guideFormationsButton = findViewById(R.id.guideFormationButton);
         guideMiscellaneousButton = findViewById(R.id.guideMiscellaneousButton);
@@ -295,9 +297,11 @@ public class Main extends AppCompatActivity{
         if (visible){
             guideDescription.setVisibility(View.VISIBLE);
             guideImage.setVisibility(View.VISIBLE);
+            guideBackground.setBackgroundResource(R.drawable.ic_guidemenubackground2);
         } else {
             guideDescription.setVisibility(View.INVISIBLE);
             guideImage.setVisibility(View.INVISIBLE);
+            guideBackground.setBackgroundResource(R.drawable.ic_guidemenubackground1);
         }
     }
 
@@ -504,7 +508,7 @@ public class Main extends AppCompatActivity{
         guidePage = 1;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.space_station_description);
-        guideImage.setBackgroundResource(R.drawable.ic_dockbutton);
+        guideImage.setBackgroundResource(R.drawable.ic_fullspacestation);
     }
 
     public void guideRectangleFormationButton(View view){
@@ -512,6 +516,7 @@ public class Main extends AppCompatActivity{
         guidePage = 2;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.rectangle_formation);
+        guideImage.setBackgroundResource(R.drawable.ic_rectangleformation);
     }
 
     public void guideVFormationButton(View view){
@@ -519,6 +524,7 @@ public class Main extends AppCompatActivity{
         guidePage = 2;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.v_formation);
+        guideImage.setBackgroundResource(R.drawable.ic_vformation);
     }
 
     public void guideCircleFormationButton(View view){
@@ -526,6 +532,7 @@ public class Main extends AppCompatActivity{
         guidePage = 2;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.circle_formation);
+        guideImage.setBackgroundResource(R.drawable.ic_circleformation);
     }
 
     public void guideCustomFormationButton(View view){
@@ -533,6 +540,7 @@ public class Main extends AppCompatActivity{
         guidePage = 2;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.custom_formation);
+        guideImage.setBackgroundResource(R.drawable.ic_customformationbutton);
     }
 
     public void guideResourcesButton(View view){
@@ -540,6 +548,7 @@ public class Main extends AppCompatActivity{
         guidePage = 3;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.resources_text);
+        guideImage.setBackgroundResource(R.drawable.ic_asteroid);
     }
 
     public void guideSensorsButton(View view){
@@ -561,6 +570,7 @@ public class Main extends AppCompatActivity{
         guidePage = 3;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.black_hole_text);
+        guideImage.setBackgroundResource(R.drawable.ic_blackholefull);
     }
 
     public void guideNormalMenuButton(View view){
