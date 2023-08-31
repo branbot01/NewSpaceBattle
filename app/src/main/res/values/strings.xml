@@ -3,6 +3,7 @@
     <string name="play_button">PLAY</string>
     <string name="guide_button">GUIDE</string>
     <string name="exit_button">EXIT</string>
+    <string name="quit_button">QUIT</string>
     <string name="gamemode_title">GAME MODE</string>
     <string name="gamemode_classic">CLASSIC</string>
     <string name="gamemode_classic_explanation">Destroy the enemy\'s flagship to claim victory. Be sure to defend your own flagship, or be prepared to suffer defeat.
@@ -25,7 +26,7 @@
     <string name="galaxysize_title">GALAXY SIZE</string>
     <string name="resources_title">RESOURCES</string>
     <string name="blackhole_title">BLACK HOLE</string>
-    <string name="bots_title">SPECTATOR MODE</string>
+    <string name="bots_title">SPECTATOR</string>
     <string name="back_button">Back</string>
     <string name="start">Tap To Start</string>
     <string name="next">NEXT</string>

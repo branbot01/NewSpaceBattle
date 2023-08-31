@@ -64,7 +64,7 @@ public class Main extends AppCompatActivity{
     TextView guideAutoScoutButton, guideGetResourcesButton, guideDockButton, guideDockedShipsMenuButton;
     TextView guideBackToNormalButton, guideNextFormationButton, guideDisbandFormationButton;
     TextView guideDescription;
-    View guideImage, guideBackground;
+    View guideImage, guideBackground, guideImageWhiteCircle;
     GameScreen gameScreen;
     TextView resourceCount, numResourceCollectors, numScouts, numFighters, numBombers;
     TextView costResourceCollector, costScout, costFighter, costBomber, costLaserCruiser, costBattleShip, costSpaceStation;
@@ -243,6 +243,7 @@ public class Main extends AppCompatActivity{
 
         guideDescription = findViewById(R.id.guideDescription);
         guideImage = findViewById(R.id.guideImage);
+        guideImageWhiteCircle = findViewById(R.id.guideImageWhiteCircle);
 
         toggleOuterGuide(true);
     }
@@ -302,6 +303,8 @@ public class Main extends AppCompatActivity{
             guideDescription.setVisibility(View.INVISIBLE);
             guideImage.setVisibility(View.INVISIBLE);
             guideBackground.setBackgroundResource(R.drawable.ic_guidemenubackground1);
+            guideImageWhiteCircle.setVisibility(View.INVISIBLE);
+            guideImage.setZ(0);
         }
     }
 
@@ -556,6 +559,7 @@ public class Main extends AppCompatActivity{
         guidePage = 3;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.sensors_text);
+        guideImage.setBackgroundResource(R.drawable.ic_guidesensorpicture);
     }
 
     public void guideStarMapButton(View view){
@@ -563,6 +567,7 @@ public class Main extends AppCompatActivity{
         guidePage = 3;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.star_map_text);
+        guideImage.setBackgroundResource(R.drawable.ic_mapbutton);
     }
 
     public void guideBlackHoleButton(View view){
@@ -593,6 +598,9 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.move_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_greenarrow);
+        guideImage.setRotation(45);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideStopButton(View view){
@@ -600,6 +608,8 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.stop_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_stop);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideTargetButton(View view){
@@ -607,6 +617,8 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.target_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_attack);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideAutoAttackButton(View view){
@@ -614,6 +626,8 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.autoattack_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_aggressive);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideFollowButton(View view){
@@ -621,6 +635,8 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.view_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_followicon);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideSalvageButton(View view){
@@ -628,6 +644,8 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.salvage_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_salvage);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideMenuButton(View view){
@@ -635,6 +653,7 @@ public class Main extends AppCompatActivity{
         guidePage = 4;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.menu_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_guidenormalbutton);
     }
 
     public void guideAutoScoutButton(View view){
@@ -642,6 +661,8 @@ public class Main extends AppCompatActivity{
         guidePage = 5;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.auto_scout_button);
+        guideImage.setBackgroundResource(R.drawable.ic_scout);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideGetResourcesButton(View view){
@@ -649,6 +670,8 @@ public class Main extends AppCompatActivity{
         guidePage = 5;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.resource_collector_button);
+        guideImage.setBackgroundResource(R.drawable.ic_resourcecollector);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideDockButton(View view){
@@ -656,6 +679,8 @@ public class Main extends AppCompatActivity{
         guidePage = 5;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.dock_button);
+        guideImage.setBackgroundResource(R.drawable.ic_dockbutton);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideDockedShipsMenuButton(View view){
@@ -663,6 +688,8 @@ public class Main extends AppCompatActivity{
         guidePage = 5;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.docked_ships_menu_button);
+        guideImage.setBackgroundResource(R.drawable.ic_dockmenubutton);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideBackToNormalButton(View view){
@@ -670,6 +697,9 @@ public class Main extends AppCompatActivity{
         guidePage = 6;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.back_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_greenarrow);
+        guideImage.setRotation(45);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideNextFormationButton(View view){
@@ -677,6 +707,8 @@ public class Main extends AppCompatActivity{
         guidePage = 6;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.next_formation_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_nextformation);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     public void guideDisbandFormationButton(View view){
@@ -684,6 +716,8 @@ public class Main extends AppCompatActivity{
         guidePage = 6;
         toggleGuideEntry(true);
         guideDescription.setText(R.string.disband_formation_button_description);
+        guideImage.setBackgroundResource(R.drawable.ic_disbandformation);
+        guideImageWhiteCircle.setVisibility(View.VISIBLE);
     }
 
     //If user hits back button
