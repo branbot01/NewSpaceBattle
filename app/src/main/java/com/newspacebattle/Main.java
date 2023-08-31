@@ -52,7 +52,7 @@ public class Main extends AppCompatActivity{
     TextView resourceBarDisplay;
     CheckBox blackholeCheck, botsOnlyCheck;
     Button playGame;
-    View title, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
+    View titleBackground, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
     TextView parameterTitle, difficulty, enemies, galaxysize, resources, blackhole, bots;
     TextView guideShipButton, guideFormationsButton, guideMiscellaneousButton, guideMenusButton;
@@ -186,7 +186,7 @@ public class Main extends AppCompatActivity{
             Button play = findViewById(R.id.play);
             Button guide = findViewById(R.id.guide);
             Button exit = findViewById(R.id.exit);
-            View gameTitle = findViewById(R.id.gametitle);
+            View gameTitle = findViewById(R.id.gametitleBackground);
             play.setVisibility(View.INVISIBLE);
             guide.setVisibility(View.INVISIBLE);
             exit.setVisibility(View.INVISIBLE);
@@ -697,7 +697,7 @@ public class Main extends AppCompatActivity{
     }
 
     public void play(View view) {
-        title = findViewById(R.id.gametitle);
+        titleBackground = findViewById(R.id.gametitleBackground);
         play = findViewById(R.id.play);
         guide = findViewById(R.id.guide);
         exit = findViewById(R.id.exit);
@@ -711,7 +711,7 @@ public class Main extends AppCompatActivity{
         gamemodeClassicExplanation = findViewById(R.id.gamemodeClassicExplanation);
         gamemodeAnnihilationExplanation = findViewById(R.id.gamemodeAnnihilationExplanation);
 
-        title.setVisibility(View.INVISIBLE);
+        titleBackground.setVisibility(View.INVISIBLE);
         play.setVisibility(View.INVISIBLE);
         guide.setVisibility(View.INVISIBLE);
         exit.setVisibility(View.INVISIBLE);
