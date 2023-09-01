@@ -566,4 +566,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <View
+        android:id="@+id/logo"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="@drawable/ic_title"
+        app:layout_constraintBottom_toBottomOf="@+id/gametitleBackground"
+        app:layout_constraintEnd_toEndOf="@+id/gametitleBackground"
+        app:layout_constraintStart_toStartOf="@+id/gametitleBackground"
+        app:layout_constraintTop_toTopOf="@+id/gametitleBackground" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
