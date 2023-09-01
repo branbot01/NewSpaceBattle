@@ -52,7 +52,7 @@ public class Main extends AppCompatActivity{
     TextView resourceBarDisplay;
     CheckBox blackholeCheck, botsOnlyCheck;
     Button playGame;
-    View titleBackground, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
+    View titleBackground, logo, gamemodeBackground, classicButton, annihilationButton, parameterBackground;
     TextView gamemodeTitle, gamemode_classicTitle, gamemode_annihilationTitle, gamemodeClassicExplanation, gamemodeAnnihilationExplanation;
     TextView parameterTitle, difficulty, enemies, galaxysize, resources, blackhole, bots;
     TextView guideShipButton, guideFormationsButton, guideMiscellaneousButton, guideMenusButton;
@@ -249,6 +249,7 @@ public class Main extends AppCompatActivity{
     }
 
     public void guideBackButton(View view){
+        guideImage.setRotation(0);
         if (guideShipButton.getVisibility() == View.VISIBLE){
             back_button(null);
             guideActive = false;
@@ -746,6 +747,7 @@ public class Main extends AppCompatActivity{
         gamemodeAnnihilationExplanation = findViewById(R.id.gamemodeAnnihilationExplanation);
 
         titleBackground.setVisibility(View.INVISIBLE);
+        logo.setVisibility(View.INVISIBLE);
         play.setVisibility(View.INVISIBLE);
         guide.setVisibility(View.INVISIBLE);
         exit.setVisibility(View.INVISIBLE);

@@ -380,7 +380,7 @@ public class GameScreen extends View {
 
         Main.selectShips.clear();
         for (int i = 0; i <= ships.size() - 1; i++) {
-            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2/* && ships.get(i).team == 1*/) {
+            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2 && ships.get(i).team == 1) {
                 oneWasSelected = true;
                 Main.selectShips.add(ships.get(i));
                 ships.get(i).selected = true;
@@ -424,7 +424,7 @@ public class GameScreen extends View {
         ArrayList<Ship> victims = new ArrayList<>();
 
         for (int i = 0; i <= ships.size() - 1; i++) {
-            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2) {
+            if (ships.get(i).centerPosX >= x1 && ships.get(i).centerPosX <= x2 && ships.get(i).centerPosY >= y1 && ships.get(i).centerPosY <= y2 && ships.get(i).team != 1 && ships.get(i).visible) {
                 if (!ships.get(i).selected) {
                     ships.get(i).attSelected = true;
                     victims.add(ships.get(i));

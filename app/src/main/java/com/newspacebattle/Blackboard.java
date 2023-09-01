@@ -21,7 +21,7 @@ class Blackboard {
         if (teamSize() == 0) {
             return;
         }
-        addToLog("Welcome to SpaceBattle!");
+        addToLog("Welcome to Space Command!");
 
         new Thread(() -> {
             while (teamSize() > 0) {
