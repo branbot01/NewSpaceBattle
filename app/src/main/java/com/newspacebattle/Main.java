@@ -1,13 +1,16 @@
 package com.newspacebattle;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Interpolator;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.*;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -97,7 +100,7 @@ public class Main extends AppCompatActivity{
         setContentView(R.layout.game_screen);
         gameView = findViewById(R.id.game_screen);
         getGuideView();
-        setContentView(R.layout.title_screen);
+        setTitleScreen();
 
         music = MediaPlayer.create(getApplicationContext(), R.raw.space_battle_menu_music);
         music.setLooping(true);
@@ -107,6 +110,33 @@ public class Main extends AppCompatActivity{
     public void getGuideView(){
         setContentView(R.layout.guide);
         guideView = findViewById(R.id.guide);
+    }
+
+    public void setTitleScreen(){
+        setContentView(R.layout.title_screen);
+        titleBackground = findViewById(R.id.gametitleBackground);
+        titleBackground.animate().rotationBy(-360).setDuration(3000).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                // do nothing
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                titleBackground.animate().rotationBy(-360).setDuration(3000).setInterpolator(new LinearInterpolator()).setListener(this);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                // do nothing
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+                // do nothing
+            }
+        }).start();
+
     }
 
     //When the app is resumed
@@ -191,6 +221,8 @@ public class Main extends AppCompatActivity{
             guide.setVisibility(View.INVISIBLE);
             exit.setVisibility(View.INVISIBLE);
             gameTitle.setVisibility(View.INVISIBLE);
+            logo = findViewById(R.id.logo);
+            logo.setVisibility(View.INVISIBLE);
         }
         addContentView(guideView, new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT));
 
@@ -733,6 +765,7 @@ public class Main extends AppCompatActivity{
 
     public void play(View view) {
         titleBackground = findViewById(R.id.gametitleBackground);
+        logo = findViewById(R.id.logo);
         play = findViewById(R.id.play);
         guide = findViewById(R.id.guide);
         exit = findViewById(R.id.exit);
@@ -929,7 +962,7 @@ public class Main extends AppCompatActivity{
 
     public void back_button(View view) {
         if (!loaded) {
-            setContentView(R.layout.title_screen);
+            setTitleScreen();
         } else {
             ((ViewGroup) gameScreen.getParent()).removeView(guideView);
         }
@@ -1001,14 +1034,14 @@ public class Main extends AppCompatActivity{
                         victoryDefeat.setVisibility(View.INVISIBLE);
                     }
                 }
-                /*if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
+                if ((GameScreen.gameOver && !GameScreen.victory) || GameScreen.botsOnly){
                     shipBar(false);
                     formationBar(false);
                     buildBar(false);
                     select.setVisibility(View.INVISIBLE);
                     formation.setVisibility(View.INVISIBLE);
                     buildMenu.setVisibility(View.INVISIBLE);
-                }*/
+                }
                 if (GameScreen.blackboards[0].newMessage) {
                     team1Blackboard.setText(GameScreen.blackboards[0].getLog());
                     blackBoardClick(null);
