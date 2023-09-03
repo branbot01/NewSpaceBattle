@@ -7,7 +7,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.newspacebattle"
+        applicationId "com.spacecommandincorporated.android.abc"
         minSdk 24
         targetSdk 33
         versionCode 1

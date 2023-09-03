@@ -73,7 +73,6 @@
     <string name="guideBackToNormalMenuButton">BACK TO NORMAL MENU</string>
     <string name="guideNextFormationButton">NEXT FORMATION</string>
     <string name="guideDisbandFormationButton">DISBAND FORMATION</string>
-
     <string name="resource_collector_description">
 RESOURCE COLLECTOR:\n
 hit points: 1000\n
@@ -82,7 +81,6 @@ cost: 10000\n
 The resource collector is a small-size ship with no weaponry. It collects resources from the\n
 nearest asteroid and delivers them to the flagship. It has a maximum resource storage of 2500.
 </string>
-
     <string name="scout_description">
 SCOUT:\n
 hit points: 1000\n
@@ -93,7 +91,6 @@ the scout visits asteroid clusters in search of the enemy. If enemies are found,
 sensor range for as long as possible and relays the enemy position to the flagship via the\n
 minimap.
 </string>
-
     <string name="fighter_description">
 FIGHTER:\n
 hit points: 3000\n
@@ -102,7 +99,6 @@ cost: 5000\n
 The fighter is a small-size, fast ship equipped with two forward-facing guns. Although it is\n
 somewhat weak on its own, the fighter can be formidable in groups.
 </string>
-
     <string name="bomber_description">
 BOMBER:\n
 hit points: 3000\n
@@ -111,7 +107,6 @@ cost: 7000\n
 The bomber is a small ship equipped with two forward-facing missile launchers. Although\n
 slower and less maneuverable than the fighters, the bomber compensates with higher firepower.
 </string>
-
     <string name="laser_cruiser_description">
 LASER CRUISER:\n
 hit points: 7500\n
@@ -120,7 +115,6 @@ cost: 19000\n
 The laser cruiser is a medium-size ship equipped with two forward-facing laser emitters. Its high\n
 firepower makes it a dangerous threat despite its lower hit points.
 </string>
-
     <string name="battleship_description">
 BATTLESHIP:\n
 hit points: 20000\n
@@ -130,7 +124,6 @@ The battleship is a large-size ship equipped with two forward-facing guns and tw
 missile launchers. One battleship has the strength to match a fleet of ships, and its varied\n
 weaponry gives it the ability to engage multiple enemies simultaneously.
 </string>
-
     <string name="flagship_description">
 FLAGSHIP:\n
 hit points: 30000\n
@@ -140,7 +133,6 @@ The flagship is a large-size ship equipped with four forward-facing guns. The fl
 fleet commander and ship builder, so a great priority should be placed on defending the flagship.\n
 In classic mode, losing the flagship means game over.
 </string>
-
     <string name="space_station_description">
 SPACE STATION:\n
 hit points: 40000\n
@@ -149,126 +141,104 @@ cost: 50000\n
 The space station is an large-size immobile ship that can hold small ships within. Ships docked\n
 within the space station are repaired to full hit points.
 </string>
-
     <string name="rectangle_formation">
     RECTANGLE FORMATION:\n
     Consists of 1-2 horizontal rows of ships. Large and medium ships take position in\n
     the middle, and small ships take position on the outside.
 </string>
-
     <string name="v_formation">
     V FORMATION:\n
     Consists of one inverted V shape. Small ships move to the front rows, and medium\n
     and large ships move to the back rows.
 </string>
-
     <string name="circle_formation">
     CIRCLE FORMATION:\n
     Consists of one large circle shape. Small ships move to the front of the circle, and\n
     medium and large ships move to the back of the circle.
 </string>
-
     <string name="custom_formation">
     CUSTOM FORMATION:\n
     Creates a formation in the shape of the ships that are currently selected.
 </string>
-
     <string name="resources_text">
     RESOURCES:\n
     The flagship uses resources to build ships. Resources deplete as ships are constructed.
 </string>
-
     <string name="sensors_text">
     SENSORS:\n
     Each ship has its own limited sensor radius, which is seen as a gray ring when ships are selected.
     Sensors allow ships to see enemy ships.
 </string>
-
     <string name="star_map_text">
     STAR MAP:\n
     The star map displays the locations of all visible ships. Blue ships will appear as green dots.
     Enemies that are within sensor range will appear as red dots. Enemies that were once visible but
     have since moved out of sensor range will have their last known position appear as a magenta dot.
 </string>
-
     <string name="black_hole_text">
     BLACK HOLE:\n
     If selected as a parameter, a black hole will appear at the centre of the star map. Its strong
     gravitational pull affects everything nearby. Beware, as large ships are especially susceptible and
     will be pulled in fast. A slingshot maneuver around the black hole is not encouraged!
 </string>
-
     <string name="move_button_description">
     MOVE BUTTON: \n
     Press the move button, then press a location on the screen to move the selected ships(s)\n
     to that location. Pressing the move button twice will open the star map. Pressing a\n
     location on the star map will move the selected ship(s) to that location.
 </string>
-
     <string name="stop_button_description">
     STOP BUTTON: \n
     Press the stop button to halt the movement of the selected ship(s). For scouts and\n
     resource collectors, this will stop their automatic scouting and resource collecting duties.
 </string>
-
     <string name="target_button_description">
     TARGET BUTTON: \n
     Press the target button, then select an enemy ship for the selected ship to attack.
 </string>
-
     <string name="autoattack_button_description">
     AUTO ATTACK BUTTON: \n
     Pressing the auto attack button toggles auto attack on (red) and off (yellow). Ships with\n
     auto attack toggled on will automatically target and attack the closest enemy ship.
 </string>
-
     <string name="view_button_description">
     VIEW BUTTON: \n
     Press the view button to centre the screen on the selected ship(s).
 </string>
-
     <string name="salvage_button_description">
     SALVAGE BUTTON: \n
     Pressing the salvage button will destroy the selected ship(s). An amount of resources\n
     proportional to the original cost and remaining health will be returned.
 </string>
-
     <string name="menu_button_description">
     MENU BUTTON: \n
     Press the menu button to toggle between normal and special menu.
 </string>
-
     <string name="dock_button">
         DOCK BUTTON: \n
     Pressing the dock button will make the selected ships(s) dock at the nearest space station if eligible.
 </string>
-
     <string name="docked_ships_menu_button">
         DOCKED SHIPS MENU BUTTON: \n
     If a space station is selected, pressing the docked ships menu button will open the docked ships menu.
 </string>
-
     <string name="resource_collector_button">
         RESOURCE COLLECTOR BUTTON: \n
     If a resource collector is selected, pressing the resource collector button will toggle the ship to begin collecting resources and delivering resources to the flagship.
 </string>
-
     <string name="auto_scout_button">
         AUTO SCOUT BUTTON: \n
     If a scout is selected, pressing the auto scout button will toggle the ship to begin searching for enemies.
 </string>
-
     <string name="back_button_description">
     BACK BUTTON: \n
     Press this button to access the normal and special menus.
 </string>
-
     <string name="next_formation_button_description">
     NEXT FORMATION BUTTON: \n
     Pressing the next formation button will rotate through the available formations, selecting the\n
     ships and centering the screen on the formation.
 </string>
-
     <string name="disband_formation_button_description">
     DISBAND FORMATION BUTTON: \n
     If a formation is selected, pressing the disband formation button will remove the ships from the\n
