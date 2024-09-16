@@ -1,0 +1,1 @@
+New Space Battle, officially titled Space Command on the Google Play Store, is an Android mobile strategy game set in space. Created on Android Studio in Java. Contributers: Dylan Rapanan, Brandon Rapanan
